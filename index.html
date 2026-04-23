@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab Ndeso - Tracking Mode</title>
+    <title>Grab Ndeso - Exclusive Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
         .input-mewah { border: 2px solid #F3F4F6; transition: all 0.3s; }
-        .input-mewah:focus { border-color: #10B981; outline: none; }
-        .animasi-up { animation: slideUp 0.4s ease-out; }
+        .input-mewah:focus { border-color: #10B981; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); outline: none; }
+        .animasi-up { animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-[#F9FAFB] pb-32">
@@ -35,19 +37,31 @@
     <div id="modal-checkout" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-end justify-center">
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 animasi-up text-left">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
-            <h3 class="text-2xl font-extrabold text-gray-800 mb-2 text-center text-left">Data Antar</h3>
+            <h3 class="text-2xl font-extrabold text-gray-800 mb-2 text-center">Data Antar</h3>
+            <p class="text-xs text-gray-400 text-center mb-8 font-semibold">Cek kembali pesanan anda</p>
+            
             <div class="space-y-4">
                 <input type="text" id="f-nama" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
-                <input type="number" id="f-wa" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp">
-                <textarea id="f-alamat" rows="2" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
-                <div class="bg-green-50 p-4 rounded-2xl flex justify-between border border-green-100">
-                    <span class="text-xs font-bold text-green-600">ONGKIR FLAT</span>
-                    <span class="font-black text-green-600">Rp 5.000</span>
+                <input type="number" id="f-wa" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (Aktif)">
+                <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
+                
+                <div id="box-total" class="hidden space-y-3 fade-in">
+                    <div class="bg-green-50 border-2 border-green-100 p-5 rounded-[2rem]">
+                        <div class="flex justify-between text-[10px] font-extrabold text-green-600 uppercase mb-2">
+                            <span>Ongkir Flat</span>
+                            <span>Rp 5.000</span>
+                        </div>
+                        <div class="flex justify-between items-center border-t border-green-100 pt-2">
+                            <p class="text-xs font-black text-gray-800 uppercase">Total Bayar</p>
+                            <p id="txt-total-akhir" class="font-black text-green-600 text-xl tracking-tighter">Rp 0</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <div class="mt-8 flex gap-3">
                 <button onclick="tutupModal()" class="flex-1 py-4 text-gray-400 font-bold">Batal</button>
-                <button onclick="kirimOrderan()" class="flex-[2] bg-green-600 text-white py-4 rounded-2xl font-black text-sm shadow-xl">GAS PESAN!</button>
+                <button onclick="kirimOrderan()" class="flex-[2] bg-green-600 text-white py-4 rounded-2xl font-black text-sm shadow-xl active:scale-95 transition">KONFIRMASI PESANAN</button>
             </div>
         </div>
     </div>
@@ -58,7 +72,7 @@
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl">🛒</div>
                 <p id="total-harga-bar" class="font-extrabold text-lg leading-none">Rp 0</p>
             </div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-tighter">Checkout</button>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-tighter">Bayar</button>
         </div>
     </div>
 
@@ -68,6 +82,7 @@
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let keranjang = [];
+        const ONGKIR = 5000;
 
         async function loadMenu() {
             const container = document.getElementById('daftar-menu');
@@ -76,14 +91,14 @@
                 container.innerHTML = '';
                 data.forEach(item => {
                     container.innerHTML += `
-                        <div class="bg-white rounded-[2.5rem] p-3 shadow-sm border border-gray-50 flex flex-col">
-                            <img src="${item.foto_url || 'https://via.placeholder.com'}" class="w-full h-32 object-cover rounded-[2rem] mb-3">
-                            <div class="px-2">
-                                <h3 class="font-bold text-[11px] text-gray-800 leading-tight mb-1">${item.nama_makanan}</h3>
-                                <p class="text-green-600 font-black text-xs">Rp ${item.harga.toLocaleString('id-ID')}</p>
+                        <div class="bg-white rounded-[2.5rem] p-3 shadow-sm border border-gray-50 flex flex-col group">
+                            <img src="${item.foto_url || 'https://via.placeholder.com/300'}" class="w-full h-36 object-cover rounded-[2rem] mb-3 group-hover:scale-105 transition duration-500">
+                            <div class="flex-grow px-2">
+                                <h3 class="font-bold text-xs text-gray-800 leading-tight">${item.nama_makanan}</h3>
+                                <p class="text-green-600 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
                             <button onclick="masukKeranjang('${item.nama_makanan}', ${item.harga})" 
-                                class="w-full mt-3 bg-gray-50 text-green-600 py-2 rounded-xl text-[9px] font-black uppercase">
+                                class="w-full mt-4 bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest">
                                 + Tambah
                             </button>
                         </div>`;
@@ -94,8 +109,20 @@
         function masukKeranjang(nama, harga) {
             keranjang.push({ nama, harga });
             document.getElementById('cart-bar').classList.remove('hidden');
-            const total = keranjang.reduce((s, i) => s + i.harga, 0);
-            document.getElementById('total-harga-bar').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+            const totalProduk = keranjang.reduce((s, i) => s + i.harga, 0);
+            document.getElementById('total-harga-bar').innerText = `Rp ${totalProduk.toLocaleString('id-ID')}`;
+        }
+
+        function cekAlamat() {
+            const alamat = document.getElementById('f-alamat').value;
+            const boxTotal = document.getElementById('box-total');
+            const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
+            if (alamat.length > 2) {
+                boxTotal.classList.remove('hidden');
+                document.getElementById('txt-total-akhir').innerText = `Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}`;
+            } else {
+                boxTotal.classList.add('hidden');
+            }
         }
 
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
@@ -103,39 +130,51 @@
 
         async function kirimOrderan() {
             const nama = document.getElementById('f-nama').value;
+            const wa = document.getElementById('f-wa').value;
             const alamat = document.getElementById('f-alamat').value;
-            if (!nama || !alamat) return alert("Isi nama & alamat dulu!");
+            if (!nama || !wa || !alamat) return alert("Lengkapi data dulu!");
 
+            const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
             const { data } = await sb.from('pesanan_ojek').insert([{ 
-                nama_pembeli: nama, alamat_kirim: alamat, status: 'pending' 
+                nama_pembeli: nama, alamat_kirim: alamat, no_wa: wa, status: 'pending', total_harga: totalMakan 
             }]).select();
 
             if (data) {
                 tutupModal();
-                tampilkanHalamanTracking(data[0].id, 'pending');
+                tampilkanHalamanTracking(data[0].id, 'pending', totalMakan);
                 keranjang = []; 
             }
         }
 
-        function tampilkanHalamanTracking(id, statusAwal) {
+        function tampilkanHalamanTracking(id, statusAwal, totalMakan) {
             document.getElementById('konten-utama').innerHTML = `
-                <div class="mt-8 bg-white p-10 rounded-[3.5rem] shadow-2xl text-center border border-gray-50">
-                    <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 text-5xl">🥘</div>
-                    <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter">${statusAwal}</h3>
-                    
-                    <div class="relative h-2 bg-gray-100 rounded-full mb-16 mt-16 mx-4">
+                <div class="mt-4 bg-white p-8 rounded-[3rem] shadow-2xl border border-gray-50 text-center">
+                    <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">🥡</div>
+                    <h3 id="txt-status" class="text-2xl font-black text-gray-800 italic uppercase tracking-tighter">${statusAwal}</h3>
+                    <div class="relative h-1.5 bg-gray-100 rounded-full mb-10 mt-12 mx-4">
                         <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
-                        <div id="motor" class="absolute -top-12 text-5xl transition-all duration-700" style="left:0%">🛵</div>
+                        <div id="motor" class="absolute -top-10 text-4xl transition-all duration-700" style="left:0%">🛵</div>
                     </div>
 
-                    <p id="txt-desc" class="text-xs text-gray-400 font-bold mb-10 px-4">Sabar ya lur, driver lagi gas pol menuju rumahmu!</p>
-
-                    <button onclick="window.location.reload()" class="bg-gray-100 text-gray-500 w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition">Kembali ke Menu</button>
+                    <div class="bg-gray-50 rounded-3xl p-5 mb-8 border border-dashed border-gray-200 text-left">
+                        <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-2 uppercase">
+                            <span>Makan</span>
+                            <span class="text-gray-800">Rp ${totalMakan.toLocaleString('id-ID')}</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-4 border-b border-gray-200 pb-2 uppercase">
+                            <span>Ongkir</span>
+                            <span class="text-green-600">Rp 5.000</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-1">
+                            <span class="text-xs font-black text-gray-800 uppercase">Total</span>
+                            <span class="text-xl font-black text-green-600 tracking-tighter">Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                    <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest">Menu Utama</button>
                 </div>
             `;
             document.getElementById('cart-bar').classList.add('hidden');
             geserMotor(statusAwal);
-
             sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
         }
 
@@ -156,8 +195,8 @@
             if (n) {
                 sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
                 .then(({data}) => {
-                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status);
-                    else alert("Gak ada pesanan nama itu!");
+                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, data[0].total_harga || 0);
+                    else alert("Gak ada!");
                 });
             }
         }
