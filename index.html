@@ -77,7 +77,7 @@
 
     <div id="modal-qris" class="fixed inset-0 bg-black/80 z-[80] hidden flex items-center justify-center p-6" onclick="tutupQRIS()">
         <div class="bg-white p-4 rounded-3xl max-w-sm w-full shadow-2xl relative animations-up" onclick="event.stopPropagation()">
-            <img src="QRIS.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS Pembayaran">
+            <img src="qris.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS Pembayaran">
             <p class="text-[10px] font-bold text-center text-gray-400 uppercase tracking-widest mb-1">Total Tagihan</p>
             <p id="txt-qris-total" class="text-center font-black text-2xl text-green-600 tracking-tighter mb-4">Rp 0</p>
             <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95">Tutup QRIS</button>
@@ -208,41 +208,16 @@
             sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
         }
 
-     function geserMotor(stat) {
-    const m = document.getElementById('motor');
-    const b = document.getElementById('bar-progress');
-    const t = document.getElementById('txt-status');
-    if (!m) return;
-
-    t.innerText = stat.toUpperCase();
-    
-    // Setel ulang posisi biar gak kepotong (Top dikurangi biar turun sedikit)
-    m.style.transition = "all 1s cubic-bezier(0.4, 0, 0.2, 1)";
-    
-    if(stat === 'pending') { 
-        m.style.left = '0%'; 
-        b.style.width = '10%'; 
-        m.innerHTML = "🛵"; 
-        m.className = "absolute -top-8 text-4xl"; // Ukuran pas & turun dikit
-    }
-    if(stat === 'proses') { 
-        m.style.left = '40%'; 
-        b.style.width = '45%'; 
-        m.innerHTML = "👨‍🍳"; 
-        m.className = "absolute -top-8 text-4xl animate-bounce"; // Lagi masak goyang-goyang
-    }
-    if(stat === 'dikirim') { 
-        m.style.left = '80%'; 
-        b.style.width = '85%'; 
-        m.innerHTML = "🏍️💨"; 
-        m.className = "absolute -top-8 text-4xl"; // Motor ngebut
-    }
-    if(stat === 'selesai') { 
-        m.style.left = '90%'; 
-        b.style.width = '100%'; 
-        m.innerHTML = "🏠"; 
-        m.className = "absolute -top-8 text-4xl"; // Sampai rumah}
-} }
+        function geserMotor(stat) {
+            const m = document.getElementById('motor');
+            const b = document.getElementById('bar-progress');
+            const t = document.getElementById('txt-status');
+            if (!m) return;
+            t.innerText = stat.toUpperCase();
+            if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; m.innerHTML = "🛵"; }
+            if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; m.innerHTML = "👨‍🍳"; }
+            if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
+            if(stat === 'selesai') { m.style.left = '92%'; b.style.width = '100%'; m.innerHTML = "🏠"; }
         }
 
         function tanyaStatus() {
