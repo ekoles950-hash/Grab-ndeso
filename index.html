@@ -208,7 +208,7 @@
             sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
         }
 
-        function geserMotor(stat) {
+     function geserMotor(stat) {
     const m = document.getElementById('motor');
     const b = document.getElementById('bar-progress');
     const t = document.getElementById('txt-status');
@@ -241,8 +241,7 @@
         m.style.left = '90%'; 
         b.style.width = '100%'; 
         m.innerHTML = "🏠"; 
-        m.className = "absolute -top-8 text-4xl"; // Sampai rumah
-    }
+        m.className = "absolute -top-8 text-4xl"; // Sampai rumah}
 } }
         }
 
