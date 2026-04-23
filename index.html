@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab Ndeso - Exclusive</title>
+    <title>Grab Ndeso - Exclusive Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -17,18 +17,18 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-[#F9FAFB] pb-32">
+<body class="bg-[#F9FAFB] pb-32 text-left">
 
     <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <div class="bg-green-600 p-2.5 rounded-2xl text-white shadow-lg shadow-green-100 text-xl">🛵</div>
-            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter">GRAB<span class="text-green-600 italic">NDESO</span></h1>
+            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic">Grab<span class="text-green-600">Ndeso</span></h1>
         </div>
-        <button onclick="tanyaStatus()" class="text-[10px] font-extrabold text-green-600 border-2 border-green-600 px-5 py-2.5 rounded-full uppercase tracking-widest">Lacak</button>
+        <button onclick="tanyaStatus()" class="text-[10px] font-extrabold text-green-600 border-2 border-green-600 px-5 py-2.5 rounded-full uppercase tracking-widest active:scale-95 transition">Lacak</button>
     </nav>
 
-    <div id="konten-utama" class="max-w-md mx-auto p-5 text-left">
-        <div id="daftar-menu" class="grid grid-cols-2 gap-4 text-left">
+    <div id="konten-utama" class="max-w-md mx-auto p-5">
+        <div id="daftar-menu" class="grid grid-cols-2 gap-4">
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
         </div>
@@ -37,32 +37,32 @@
     <div id="modal-checkout" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-end justify-center">
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 text-left overflow-y-auto max-h-[95vh] animasi-up">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
-            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter">Data Pesanan</h3>
+            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter">Detail Antar</h3>
             
             <div class="space-y-4">
                 <input type="text" id="f-nama" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
                 <input type="number" id="f-wa" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (081xxx)">
                 <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
                 
-                <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider">Metode Pembayaran</p>
+                <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider">Metode Bayar</p>
                 <div class="grid grid-cols-2 gap-3 pb-2">
-                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-5 rounded-2xl text-center shadow-sm">
+                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-5 rounded-2xl shadow-sm">
                         <span class="text-2xl">💵</span>
-                        <p class="text-[10px] font-black mt-2 uppercase tracking-widest">COD (Cash)</p>
+                        <p class="text-[10px] font-black mt-2 uppercase">COD (CASH)</p>
                     </div>
-                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-5 rounded-2xl text-center shadow-sm">
+                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-5 rounded-2xl shadow-sm">
                         <span class="text-2xl">📱</span>
-                        <p class="text-[10px] font-black mt-2 uppercase tracking-widest">Transfer/QRIS</p>
+                        <p class="text-[10px] font-black mt-2 uppercase tracking-widest">QRIS/TRANSFER</p>
                     </div>
                 </div>
 
                 <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem]">
                     <div class="flex justify-between items-center pb-2">
-                        <span class="text-xs font-extrabold text-green-600 uppercase tracking-widest">Ongkir</span>
+                        <span class="text-xs font-extrabold text-green-600 uppercase">Ongkir Flat</span>
                         <span class="text-green-600 font-bold text-sm">Rp 5.000</span>
                     </div>
                     <div class="flex justify-between items-center border-t border-green-100 pt-3">
-                        <p class="text-xs font-black text-gray-800 uppercase tracking-wider">Total Bayar</p>
+                        <p class="text-xs font-black text-gray-800 uppercase">Total Bayar</p>
                         <p id="txt-total-akhir" class="font-black text-green-600 text-2xl tracking-tighter">Rp 0</p>
                     </div>
                 </div>
@@ -70,29 +70,26 @@
 
             <div class="mt-10 flex gap-4">
                 <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm active:scale-95">Batal</button>
-                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition">PESAN SEKARANG!</button>
+                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition">KONFIRMASI</button>
             </div>
         </div>
     </div>
 
     <div id="modal-qris" class="fixed inset-0 bg-black/80 z-[80] hidden flex items-center justify-center p-6" onclick="tutupQRIS()">
         <div class="bg-white p-4 rounded-3xl max-w-sm w-full shadow-2xl relative" onclick="event.stopPropagation()">
-            <img src="QRIS.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS Pembayaran">
-            <p class="text-[10px] font-bold text-center text-gray-400 uppercase tracking-widest mb-1">Total Tagihan</p>
+            <img src="QRIS.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS">
             <p id="txt-qris-total" class="text-center font-black text-2xl text-green-600 tracking-tighter mb-4">Rp 0</p>
-            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95">Tutup QRIS</button>
+            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Tutup</button>
         </div>
     </div>
 
     <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50 animasi-up">
-        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl shadow-gray-400 flex justify-between items-center max-w-md mx-auto border border-white/10 relative overflow-hidden">
-            <div class="flex items-center gap-4 relative z-10">
-                <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-green-900">🛒</div>
-                <div>
-                    <p id="total-harga-bar" class="font-extrabold text-xl leading-none">Rp 0</p>
-                </div>
+        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div>
+                <p id="total-harga-bar" class="font-extrabold text-2xl leading-none">Rp 0</p>
             </div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 transition uppercase tracking-tighter relative z-10">Checkout</button>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 transition uppercase tracking-tighter">Checkout</button>
         </div>
     </div>
 
@@ -112,13 +109,13 @@
                 container.innerHTML = '';
                 data.forEach(item => {
                     container.innerHTML += `
-                        <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-50 flex flex-col group text-left">
-                            <img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[1.5rem] mb-3 group-hover:scale-105 transition duration-500">
+                        <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left">
+                            <img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
                             <div class="flex-grow px-2">
                                 <h3 class="font-bold text-[11px] text-gray-800 leading-tight">${item.nama_makanan}</h3>
                                 <p class="text-green-600 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
-                            <button onclick="masukKeranjang('${item.nama_makanan}', ${item.harga})" class="w-full mt-4 bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase active:bg-green-600 active:text-white transition tracking-widest">+ Tambah</button>
+                            <button onclick="masukKeranjang('${item.nama_makanan}', ${item.harga})" class="w-full mt-4 bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest">+ Tambah</button>
                         </div>`;
                 });
             }
@@ -127,8 +124,9 @@
         function masukKeranjang(nama, harga) {
             keranjang.push({ nama, harga });
             document.getElementById('cart-bar').classList.remove('hidden');
-            const totalProduk = keranjang.reduce((s, i) => s + i.harga, 0);
-            document.getElementById('total-harga-bar').innerText = `Rp ${(totalProduk + ONGKIR).toLocaleString('id-ID')}`;
+            // Menampilkan harga makanan murni saja di bar hitam
+            const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
+            document.getElementById('total-harga-bar').innerText = `Rp ${totalMakan.toLocaleString('id-ID')}`;
         }
 
         function pilihMetode(m) {
@@ -158,12 +156,14 @@
             const nama = document.getElementById('f-nama').value;
             const wa = document.getElementById('f-wa').value;
             const alamat = document.getElementById('f-alamat').value;
-            if (!nama || !alamat) return alert("Isi data dulu Bos!");
+            if (!nama || !alamat) return alert("Lengkapi data antarmu Juragan!");
+
             const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
             const { data } = await sb.from('pesanan_ojek').insert([{ 
                 nama_pembeli: nama, alamat_kirim: alamat, no_wa: wa, 
                 status: 'pending', total_harga: totalMakan, metode_bayar: metodeBayar 
             }]).select();
+
             if (data) {
                 tutupModal();
                 tampilkanHalamanTracking(data[0].id, 'pending', totalMakan, metodeBayar);
@@ -189,7 +189,8 @@
                         </div>
                         <p class="text-[9px] font-bold text-gray-400 mt-1.5 uppercase text-left">Metode: ${metode}</p>
                     </div>
-                    ${metode === 'QRIS' ? `<button onclick="bukaQRIS(${totalMakan})" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-xs mb-4 shadow-xl uppercase tracking-widest">📱 TAMPILKAN QRIS BAYAR</button>` : ''}
+
+                    ${metode === 'QRIS' ? `<button onclick="bukaQRIS(${totalMakan})" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-xs mb-4 shadow-xl uppercase tracking-widest">📱 TAMPILKAN QRIS</button>` : ''}
                     <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4.5 rounded-2xl font-black text-[10px] uppercase shadow-xl tracking-widest">Menu Utama</button>
                 </div>
             `;
@@ -218,7 +219,7 @@
                 sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
                 .then(({data}) => {
                     if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, data[0].total_harga || 0, data[0].metode_bayar || 'COD');
-                    else alert("Gak ada!");
+                    else alert("Gak ada pesanan atas nama itu!");
                 });
             }
         }
