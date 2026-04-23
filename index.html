@@ -22,41 +22,44 @@
     <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <div class="bg-green-600 p-2.5 rounded-2xl text-white shadow-lg shadow-green-100 text-xl">🛵</div>
-            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic">Grab<span class="text-green-600">Ndeso</span></h1>
+            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic text-left">Grab<span class="text-green-600">Ndeso</span></h1>
         </div>
         <button onclick="tanyaStatus()" class="text-[10px] font-extrabold text-green-600 border-2 border-green-600 px-5 py-2.5 rounded-full uppercase tracking-widest active:scale-95 transition">Lacak</button>
     </nav>
 
     <div id="konten-utama" class="max-w-md mx-auto p-5 text-left">
-        <div id="daftar-menu" class="grid grid-cols-2 gap-4 text-left"></div>
+        <div id="daftar-menu" class="grid grid-cols-2 gap-4 text-left">
+            <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
+            <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
+        </div>
     </div>
 
     <div id="modal-checkout" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-end justify-center">
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 text-left overflow-y-auto max-h-[95vh] animasi-up">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
-            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter">Data Antar</h3>
+            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter text-left">Data Antar</h3>
             
-            <div class="space-y-4">
+            <div class="space-y-4 text-left">
                 <input type="text" id="f-nama" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
                 <input type="number" id="f-wa" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (081xxx)">
                 <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
                 
-                <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider">Metode Pembayaran</p>
-                <div class="grid grid-cols-2 gap-3 pb-2">
+                <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider text-left">Metode Pembayaran</p>
+                <div class="grid grid-cols-2 gap-3 pb-2 text-left">
                     <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-5 rounded-2xl text-center shadow-sm">
-                        <span class="text-2xl">💵</span>
-                        <p class="text-[10px] font-black mt-2 uppercase">COD (CASH)</p>
+                        <span class="text-2xl text-center">💵</span>
+                        <p class="text-[10px] font-black mt-2 uppercase text-center">COD (CASH)</p>
                     </div>
                     <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-5 rounded-2xl text-center shadow-sm">
-                        <span class="text-2xl">📱</span>
-                        <p class="text-[10px] font-black mt-2 uppercase tracking-widest">Transfer/QRIS</p>
+                        <span class="text-2xl text-center">📱</span>
+                        <p class="text-[10px] font-black mt-2 uppercase text-center tracking-widest">QRIS/TRANSFER</p>
                     </div>
                 </div>
 
-                <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem]">
+                <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem] text-left">
                     <div class="flex justify-between items-center pb-2 text-left">
                         <span class="text-xs font-extrabold text-green-600 uppercase tracking-widest text-left">Ongkir</span>
-                        <span class="text-green-600 font-bold text-sm">Rp 5.000</span>
+                        <span class="text-green-600 font-bold text-sm text-left">Rp 5.000</span>
                     </div>
                     <div class="flex justify-between items-center border-t border-green-100 pt-3 text-left">
                         <p class="text-xs font-black text-gray-800 uppercase tracking-wider text-left">Total Bayar</p>
@@ -65,27 +68,29 @@
                 </div>
             </div>
 
-            <div class="mt-10 flex gap-4">
-                <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm active:scale-95">Batal</button>
-                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition">KONFIRMASI</button>
+            <div class="mt-10 flex gap-4 text-left">
+                <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm active:scale-95 text-center">Batal</button>
+                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition text-center">KONFIRMASI</button>
             </div>
         </div>
     </div>
 
     <div id="modal-qris" class="fixed inset-0 bg-black/80 z-[80] hidden flex items-center justify-center p-6" onclick="tutupQRIS()">
         <div class="bg-white p-4 rounded-3xl max-w-sm w-full shadow-2xl relative" onclick="event.stopPropagation()">
-            <img src="QRIS.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS Pembayaran">
-            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition">Tutup QRIS</button>
+            <img src="QRIS.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS">
+            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95">Tutup QRIS</button>
         </div>
     </div>
 
     <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50 animasi-up">
-        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative">
-            <div class="flex items-center gap-4 text-left">
+        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative overflow-hidden">
+            <div class="flex items-center gap-4 relative z-10">
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div>
-                <p id="total-harga-bar" class="font-extrabold text-2xl leading-none text-white text-left">Rp 0</p>
+                <div class="text-left">
+                    <p id="total-harga-bar" class="font-extrabold text-2xl leading-none text-white text-left">Rp 0</p>
+                </div>
             </div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 transition uppercase tracking-tighter">Checkout</button>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 transition uppercase tracking-tighter relative z-10">Checkout</button>
         </div>
     </div>
 
@@ -111,11 +116,13 @@
                                 <h3 class="font-bold text-[11px] text-gray-800 leading-tight text-left">${item.nama_makanan}</h3>
                                 <p class="text-green-600 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
+                            
                             <div class="mt-4 flex flex-col gap-1">
-                                <button id="btn-beli-${item.id}" onclick="showQty('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest active:bg-green-600 active:text-white transition">Beli</button>
+                                <button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest active:bg-green-600 active:text-white transition">Beli</button>
+                                
                                 <div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-gray-50 rounded-2xl p-1">
                                     <button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-white text-gray-400 rounded-xl font-bold shadow-sm active:scale-90">-</button>
-                                    <span id="qty-label-${item.id}" class="font-black text-xs text-gray-800">0</span>
+                                    <span id="qty-${item.id}" class="font-black text-xs text-gray-800 text-center">0</span>
                                     <button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-xl font-bold shadow-md active:scale-90">+</button>
                                 </div>
                             </div>
@@ -124,7 +131,7 @@
             }
         }
 
-        function showQty(id, nama, harga) {
+        function showQtyControl(id, nama, harga) {
             document.getElementById(`btn-beli-${id}`).classList.add('hidden');
             document.getElementById(`qty-control-${id}`).classList.remove('hidden');
             tambahItem(id, nama, harga);
@@ -152,7 +159,7 @@
         }
 
         function updateTampilan(id) {
-            const qtyLabel = document.getElementById(`qty-label-${id}`);
+            const qtyLabel = document.getElementById(`qty-${id}`);
             if (qtyLabel) qtyLabel.innerText = keranjang[id] ? keranjang[id].qty : 0;
 
             let totalMakan = 0;
@@ -193,7 +200,7 @@
             const nama = document.getElementById('f-nama').value;
             const wa = document.getElementById('f-wa').value;
             const alamat = document.getElementById('f-alamat').value;
-            if (!nama || !alamat) return alert("Lengkapi data antarmu!");
+            if (!nama || !alamat) return alert("Lengkapi data antarmu Juragan!");
 
             let totalMakan = 0;
             let listMenu = [];
@@ -216,4 +223,57 @@
 
         function tampilkanHalamanTracking(id, statusAwal, totalMakan, metode) {
             const totalBayar = totalMakan + ONGKIR;
-            document.getElementById('konten-utama').innerHTML =
+            document.getElementById('konten-utama').innerHTML = `
+                <div class="mt-4 bg-white p-8 rounded-[3.5rem] shadow-2xl border border-gray-50 text-center animasi-up">
+                    <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter text-center">${statusAwal}</h3>
+                    
+                    <div class="relative h-2 bg-gray-100 rounded-full mb-14 mt-14 mx-4">
+                        <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
+                        <div id="motor" class="absolute -top-8 text-4xl transition-all duration-700 flex items-center justify-center" style="left:0%; transform: translateX(-50%);">🛵</div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200 text-left">
+                        <div class="flex justify-between items-center text-left">
+                            <span class="text-xs font-black text-gray-800 uppercase tracking-widest text-left">Total Tagihan</span>
+                            <span class="text-2xl font-black text-green-600 tracking-tighter text-left">Rp ${totalBayar.toLocaleString('id-ID')}</span>
+                        </div>
+                        <p class="text-[9px] font-bold text-gray-400 mt-1.5 uppercase text-left">💳 Metode: ${metode}</p>
+                    </div>
+
+                    ${metode === 'QRIS' ? `<button onclick="bukaQRIS()" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-[10px] mb-4 shadow-xl uppercase tracking-widest">📱 TAMPILKAN QRIS BAYAR</button>` : ''}
+                    <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4.5 rounded-2xl font-black text-[10px] uppercase shadow-xl tracking-widest">Menu Utama</button>
+                </div>
+            `;
+            document.getElementById('cart-bar').classList.add('hidden');
+            geserMotor(statusAwal);
+            sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
+        }
+
+        function geserMotor(stat) {
+            const m = document.getElementById('motor');
+            const b = document.getElementById('bar-progress');
+            const t = document.getElementById('txt-status');
+            if (!m) return;
+            t.innerText = stat.toUpperCase();
+            m.style.transition = "all 1s cubic-bezier(0.4, 0, 0.2, 1)";
+            
+            if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; m.innerHTML = "🛵"; }
+            if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; m.innerHTML = "👨‍🍳"; }
+            if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
+            if(stat === 'selesai') { m.style.left = '92%'; b.style.width = '100%'; m.innerHTML = "🏠"; }
+        }
+
+        function tanyaStatus() {
+            const n = prompt("Cek Pesanan (Nama):");
+            if (n) {
+                sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
+                .then(({data}) => {
+                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, data[0].total_harga || 0, data[0].metode_bayar || 'COD');
+                    else alert("Gak ada pesanan atas nama itu!");
+                });
+            }
+        }
+        loadMenu();
+    </script>
+</body>
+</html>
