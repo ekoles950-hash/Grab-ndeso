@@ -76,7 +76,7 @@
     </div>
 
     <div id="modal-qris" class="fixed inset-0 bg-black/80 z-[80] hidden flex items-center justify-center p-6" onclick="tutupQRIS()">
-        <div class="bg-white p-4 rounded-3xl max-w-sm w-full shadow-2xl relative animations-up" onclick="event.stopPropagation()">
+        <div class="bg-white p-4 rounded-3xl max-w-sm w-full shadow-2xl relative" onclick="event.stopPropagation()">
             <img src="QRIS.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS Pembayaran">
             <p class="text-[10px] font-bold text-center text-gray-400 uppercase tracking-widest mb-1">Total Tagihan</p>
             <p id="txt-qris-total" class="text-center font-black text-2xl text-green-600 tracking-tighter mb-4">Rp 0</p>
@@ -90,7 +90,6 @@
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-green-900">🛒</div>
                 <div>
                     <p id="total-harga-bar" class="font-extrabold text-xl leading-none">Rp 0</p>
-                    <p class="text-[9px] text-gray-400 font-bold uppercase mt-1.5 tracking-widest">+ Ongkir 5rb Area Ndeso</p>
                 </div>
             </div>
             <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 transition uppercase tracking-tighter relative z-10">Checkout</button>
@@ -147,13 +146,9 @@
             }
         }
 
-        function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); document.getElementById('f-alamat').value = ''; document.getElementById('box-total').classList.add('hidden'); }
+        function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
-
-        // FUNGSI BUKA-TUTUP MODAL QRIS MEWAH
-        let currentTotalMakan = 0;
         function bukaQRIS(totalMakan) {
-            currentTotalMakan = totalMakan;
             document.getElementById('txt-qris-total').innerText = `Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}`;
             document.getElementById('modal-qris').classList.remove('hidden');
         }
@@ -164,13 +159,11 @@
             const wa = document.getElementById('f-wa').value;
             const alamat = document.getElementById('f-alamat').value;
             if (!nama || !alamat) return alert("Isi data dulu Bos!");
-
             const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
             const { data } = await sb.from('pesanan_ojek').insert([{ 
                 nama_pembeli: nama, alamat_kirim: alamat, no_wa: wa, 
                 status: 'pending', total_harga: totalMakan, metode_bayar: metodeBayar 
             }]).select();
-
             if (data) {
                 tutupModal();
                 tampilkanHalamanTracking(data[0].id, 'pending', totalMakan, metodeBayar);
@@ -181,26 +174,23 @@
         function tampilkanHalamanTracking(id, statusAwal, totalMakan, metode) {
             const totalBayar = totalMakan + ONGKIR;
             document.getElementById('konten-utama').innerHTML = `
-                <div class="mt-4 bg-white p-8 rounded-[3.5rem] shadow-2xl shadow-green-50/50 border border-gray-50 text-center animasi-up">
+                <div class="mt-4 bg-white p-8 rounded-[3.5rem] shadow-2xl border border-gray-50 text-center animasi-up">
                     <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter">${statusAwal}</h3>
-                    <div class="relative h-1.5 bg-gray-100 rounded-full mb-10 mt-12 mx-4 relative overflow-hidden">
+                    
+                    <div class="relative h-2 bg-gray-100 rounded-full mb-14 mt-14 mx-4">
                         <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
-                        <div id="motor" class="absolute -top-11 text-5xl transition-all duration-700" style="left:0%">🛵</div>
+                        <div id="motor" class="absolute -top-8 text-4xl transition-all duration-700 flex items-center justify-center" style="left:0%; transform: translateX(-50%);">🛵</div>
                     </div>
                     
                     <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200 text-left">
-                        <div class="flex justify-between items-center text-left">
+                        <div class="flex justify-between items-center">
                             <span class="text-xs font-black text-gray-800 uppercase tracking-widest text-left">Total Tagihan</span>
                             <span class="text-2xl font-black text-green-600 tracking-tighter text-left">Rp ${totalBayar.toLocaleString('id-ID')}</span>
                         </div>
-                        <p class="text-[9px] font-bold text-gray-400 mt-1.5 uppercase tracking-widest text-left">💳 Metode: <span class="font-black text-gray-600">${metode}</span></p>
+                        <p class="text-[9px] font-bold text-gray-400 mt-1.5 uppercase text-left">Metode: ${metode}</p>
                     </div>
-
-                    ${metode === 'QRIS' ? `
-                        <button onclick="bukaQRIS(${totalMakan})" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-xs active:scale-95 mb-4 shadow-xl shadow-blue-100 uppercase tracking-widest transition">📱 TAMPILKAN QRIS BAYAR</button>
-                    ` : ''}
-                    
-                    <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4.5 rounded-2xl font-black text-[10px] uppercase shadow-xl active:scale-95 transition tracking-widest">Menu Utama</button>
+                    ${metode === 'QRIS' ? `<button onclick="bukaQRIS(${totalMakan})" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-xs mb-4 shadow-xl uppercase tracking-widest">📱 TAMPILKAN QRIS BAYAR</button>` : ''}
+                    <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4.5 rounded-2xl font-black text-[10px] uppercase shadow-xl tracking-widest">Menu Utama</button>
                 </div>
             `;
             document.getElementById('cart-bar').classList.add('hidden');
@@ -214,6 +204,8 @@
             const t = document.getElementById('txt-status');
             if (!m) return;
             t.innerText = stat.toUpperCase();
+            m.style.transition = "all 1s cubic-bezier(0.4, 0, 0.2, 1)";
+            
             if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; m.innerHTML = "🛵"; }
             if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; m.innerHTML = "👨‍🍳"; }
             if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
