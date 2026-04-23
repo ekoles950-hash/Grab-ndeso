@@ -44,15 +44,21 @@
                 <input type="number" id="f-wa" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (0812...)">
                 <textarea id="f-alamat" rows="2" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
                 
-                <div class="bg-green-50 border-2 border-green-100 p-4 rounded-2xl flex justify-between items-center">
-                    <p class="text-xs font-extrabold text-green-600 uppercase">Ongkos Kirim</p>
-                    <p class="font-black text-green-600 text-lg">Rp 5.000</p>
+                <div class="bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl space-y-2">
+                    <div class="flex justify-between items-center">
+                        <p class="text-[10px] font-extrabold text-gray-400 uppercase">Ongkos Kirim</p>
+                        <p class="font-bold text-green-600 text-sm">Rp 5.000</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-gray-200">
+                        <p class="text-xs font-black text-gray-800 uppercase">Total Bayar</p>
+                        <p id="modal-total-akhir" class="font-black text-green-600 text-lg">Rp 0</p>
+                    </div>
                 </div>
             </div>
 
             <div class="mt-8 flex gap-3">
                 <button onclick="tutupModal()" class="flex-1 py-4 text-gray-400 font-bold text-sm">Batal</button>
-                <button onclick="kirimOrderan()" class="flex-[2] bg-green-600 text-white py-4 rounded-2xl font-black text-sm shadow-xl shadow-green-200">KONFIRMASI PESANAN</button>
+                <button onclick="kirimOrderan()" class="flex-[2] bg-green-600 text-white py-4 rounded-2xl font-black text-sm shadow-xl shadow-green-200 transition active:scale-95">KONFIRMASI PESANAN</button>
             </div>
         </div>
     </div>
@@ -62,11 +68,11 @@
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-green-900">🛒</div>
                 <div>
-                    <p id="total-harga" class="font-extrabold text-lg leading-none text-white">Rp 0</p>
-                    <p class="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-widest">+ Ongkir 5rb</p>
+                    <p id="total-harga-display" class="font-extrabold text-lg leading-none text-white text-xl">Rp 0</p>
+                    <p class="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-widest">Total Belanja</p>
                 </div>
             </div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs active:scale-95 transition-all uppercase tracking-tighter">Bayar</button>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs active:scale-95 transition-all uppercase tracking-tighter shadow-md">Bayar</button>
         </div>
     </div>
 
@@ -86,7 +92,7 @@
                 data.forEach(item => {
                     container.innerHTML += `
                         <div class="bg-white rounded-[2.5rem] p-3 shadow-sm border border-gray-50 flex flex-col group">
-                            <img src="${item.foto_url || 'https://via.placeholder.com/300'}" class="w-full h-36 object-cover rounded-[2rem] mb-3 group-hover:scale-105 transition duration-500">
+                            <img src="${item.foto_url || 'https://via.placeholder.com/300'}" class="w-full h-36 object-cover rounded-[2rem] mb-3 transition duration-500">
                             <div class="flex-grow px-2">
                                 <h3 class="font-bold text-xs text-gray-800 leading-tight">${item.nama_makanan}</h3>
                                 <p class="text-green-600 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
@@ -103,9 +109,15 @@
         function masukKeranjang(nama, harga) {
             keranjang.push({ nama, harga });
             document.getElementById('cart-bar').classList.remove('hidden');
+            
             const totalProduk = keranjang.reduce((s, i) => s + i.harga, 0);
             const totalAkhir = totalProduk + ONGKIR;
-            document.getElementById('total-harga').innerText = `Rp ${totalAkhir.toLocaleString('id-ID')}`;
+
+            // Di keranjang hitam, hanya harga makanan
+            document.getElementById('total-harga-display').innerText = `Rp ${totalProduk.toLocaleString('id-ID')}`;
+            
+            // Di modal, baru muncul total + ongkir
+            document.getElementById('modal-total-akhir').innerText = `Rp ${totalAkhir.toLocaleString('id-ID')}`;
         }
 
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
@@ -118,7 +130,6 @@
             if (!nama || !wa || !alamat) return alert("Lengkapi data dulu Bos!");
 
             const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
-            const detailMakan = keranjang.map(i => i.nama).join(", ");
 
             const { data } = await sb.from('pesanan_ojek').insert([{ 
                 nama_pembeli: nama, alamat_kirim: alamat, status: 'pending' 
@@ -139,7 +150,7 @@
                         <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">🥡</div>
                         <h3 id="txt-status" class="text-2xl font-black text-gray-800 italic uppercase tracking-tighter">${statusAwal}</h3>
                         
-                        <div class="relative h-1.5 bg-gray-100 rounded-full mb-10 mt-12">
+                        <div class="relative h-1.5 bg-gray-100 rounded-full mb-10 mt-12 mx-4">
                             <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
                             <div id="motor" class="absolute -top-10 text-4xl transition-all duration-700" style="left:0%">🛵</div>
                         </div>
@@ -148,15 +159,15 @@
                     <div class="bg-gray-50 rounded-3xl p-5 mb-8 border border-dashed border-gray-200">
                         <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-widest">
                             <span>Makan</span>
-                            <span class="text-gray-800">Rp ${totalMakan.toLocaleString('id-ID')}</span>
+                            <span class="text-gray-800 text-sm">Rp ${totalMakan.toLocaleString('id-ID')}</span>
                         </div>
                         <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-4 uppercase tracking-widest border-b border-gray-200 pb-2">
                             <span>Ongkir Flat</span>
-                            <span class="text-gray-800 text-green-600">Rp 5.000</span>
+                            <span class="text-green-600 text-sm">Rp 5.000</span>
                         </div>
                         <div class="flex justify-between items-center pt-2">
                             <span class="text-xs font-black text-gray-800 uppercase">Total Bayar</span>
-                            <span class="text-xl font-black text-green-600 tracking-tighter">Rp ${totalBayar.toLocaleString('id-ID')}</span>
+                            <span class="text-2xl font-black text-green-600 tracking-tighter">Rp ${totalBayar.toLocaleString('id-ID')}</span>
                         </div>
                     </div>
 
@@ -189,7 +200,7 @@
             if (n) {
                 sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
                 .then(({data}) => {
-                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, 0); // Note: 0 for history
+                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, 0);
                     else alert("Gak ketemu!");
                 });
             }
