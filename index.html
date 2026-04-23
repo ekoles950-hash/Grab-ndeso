@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab Ndeso - Exclusive Edition</title>
+    <title>Grab Ndeso - Exclusive</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .input-mewah { border: 2px solid #F3F4F6; transition: all 0.3s; }
         .input-mewah:focus { border-color: #10B981; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); outline: none; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -27,10 +26,7 @@
     </nav>
 
     <div id="konten-utama" class="max-w-md mx-auto p-5">
-        <h2 class="text-xl font-extrabold text-gray-800 mb-6 flex items-center gap-2">
-            Pesan Menu Favorit <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-lg">PROMO</span>
-        </h2>
-        
+        <h2 class="text-xl font-extrabold text-gray-800 mb-6 flex items-center gap-2">Menu Hari Ini</h2>
         <div id="daftar-menu" class="grid grid-cols-2 gap-4">
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
@@ -41,27 +37,15 @@
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 animasi-up">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
             <h3 class="text-2xl font-extrabold text-gray-800 mb-2 text-center">Detail Pengiriman</h3>
-            <p class="text-xs text-gray-400 text-center mb-8 font-semibold">Selesaikan pembayaran untuk kirim pesanan</p>
+            <p class="text-xs text-gray-400 text-center mb-8 font-semibold">Cek kembali pesanan anda</p>
             
             <div class="space-y-4">
-                <div>
-                    <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">Nama Lengkap</label>
-                    <input type="text" id="f-nama" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Anda">
-                </div>
-                <div>
-                    <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">WhatsApp</label>
-                    <input type="number" id="f-wa" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="0812xxxx">
-                </div>
-                <div>
-                    <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">Alamat Lengkap</label>
-                    <textarea id="f-alamat" rows="2" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Jl. Mawar No. 5..."></textarea>
-                </div>
+                <input type="text" id="f-nama" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
+                <input type="number" id="f-wa" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (0812...)">
+                <textarea id="f-alamat" rows="2" class="w-full p-4 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
                 
                 <div class="bg-green-50 border-2 border-green-100 p-4 rounded-2xl flex justify-between items-center">
-                    <div>
-                        <p class="text-[10px] font-extrabold text-green-600 uppercase tracking-widest">Ongkos Kirim</p>
-                        <p class="text-xs text-gray-400 font-bold">Flat Area Ndeso</p>
-                    </div>
+                    <p class="text-xs font-extrabold text-green-600 uppercase">Ongkos Kirim</p>
                     <p class="font-black text-green-600 text-lg">Rp 5.000</p>
                 </div>
             </div>
@@ -74,12 +58,12 @@
     </div>
 
     <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50">
-        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10">
+        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-green-900">🛒</div>
                 <div>
-                    <p id="total-harga" class="font-extrabold text-lg leading-none">Rp 0</p>
-                    <p id="info-ongkir" class="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-widest">+ Ongkir Rp 5.000</p>
+                    <p id="total-harga" class="font-extrabold text-lg leading-none text-white">Rp 0</p>
+                    <p class="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-widest">+ Ongkir 5rb</p>
                 </div>
             </div>
             <button onclick="bukaModal()" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs active:scale-95 transition-all uppercase tracking-tighter">Bayar</button>
@@ -108,7 +92,7 @@
                                 <p class="text-green-600 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
                             <button onclick="masukKeranjang('${item.nama_makanan}', ${item.harga})" 
-                                class="w-full mt-4 bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black hover:bg-green-600 hover:text-white transition-all uppercase">
+                                class="w-full mt-4 bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black hover:bg-green-600 hover:text-white transition-all uppercase tracking-widest">
                                 + Tambah
                             </button>
                         </div>`;
@@ -131,35 +115,52 @@
             const nama = document.getElementById('f-nama').value;
             const wa = document.getElementById('f-wa').value;
             const alamat = document.getElementById('f-alamat').value;
+            if (!nama || !wa || !alamat) return alert("Lengkapi data dulu Bos!");
 
-            if (!nama || !wa || !alamat) return alert("Lengkapi data dulu ya Bos!");
+            const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
+            const detailMakan = keranjang.map(i => i.nama).join(", ");
 
             const { data } = await sb.from('pesanan_ojek').insert([{ 
-                nama_pembeli: nama, 
-                alamat_kirim: alamat, 
-                status: 'pending' 
+                nama_pembeli: nama, alamat_kirim: alamat, status: 'pending' 
             }]).select();
 
             if (data) {
                 tutupModal();
-                keranjang = [];
-                tampilkanHalamanTracking(data[0].id, 'pending');
+                tampilkanHalamanTracking(data[0].id, 'pending', totalMakan);
+                keranjang = []; 
             }
         }
 
-        function tampilkanHalamanTracking(id, statusAwal) {
+        function tampilkanHalamanTracking(id, statusAwal, totalMakan) {
+            const totalBayar = totalMakan + ONGKIR;
             document.getElementById('konten-utama').innerHTML = `
-                <div class="mt-8 bg-white p-10 rounded-[3.5rem] shadow-2xl text-center border border-gray-50">
-                    <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8 text-5xl">🥡</div>
-                    <h3 id="txt-status" class="text-3xl font-black text-gray-800 italic uppercase tracking-tighter">${statusAwal}</h3>
-                    <p id="txt-desc" class="text-xs text-gray-400 mt-3 font-bold px-4 leading-relaxed">Pesanan dikonfirmasi. Driver sedang menuju lokasi.</p>
-                    
-                    <div class="relative h-2 bg-gray-100 rounded-full mb-16 mt-16 mx-6">
-                        <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
-                        <div id="motor" class="absolute -top-12 text-5xl transition-all duration-700" style="left:0%">🛵</div>
+                <div class="mt-4 bg-white p-8 rounded-[3rem] shadow-2xl border border-gray-50">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">🥡</div>
+                        <h3 id="txt-status" class="text-2xl font-black text-gray-800 italic uppercase tracking-tighter">${statusAwal}</h3>
+                        
+                        <div class="relative h-1.5 bg-gray-100 rounded-full mb-10 mt-12">
+                            <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
+                            <div id="motor" class="absolute -top-10 text-4xl transition-all duration-700" style="left:0%">🛵</div>
+                        </div>
                     </div>
 
-                    <button onclick="window.location.reload()" class="bg-gray-100 text-gray-800 w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest">Kembali Berbelanja</button>
+                    <div class="bg-gray-50 rounded-3xl p-5 mb-8 border border-dashed border-gray-200">
+                        <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-widest">
+                            <span>Makan</span>
+                            <span class="text-gray-800">Rp ${totalMakan.toLocaleString('id-ID')}</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-4 uppercase tracking-widest border-b border-gray-200 pb-2">
+                            <span>Ongkir Flat</span>
+                            <span class="text-gray-800 text-green-600">Rp 5.000</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-xs font-black text-gray-800 uppercase">Total Bayar</span>
+                            <span class="text-xl font-black text-green-600 tracking-tighter">Rp ${totalBayar.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+
+                    <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">Kembali Belanja</button>
                 </div>
             `;
             document.getElementById('cart-bar').classList.add('hidden');
@@ -175,14 +176,12 @@
             const m = document.getElementById('motor');
             const b = document.getElementById('bar-progress');
             const t = document.getElementById('txt-status');
-            const d = document.getElementById('txt-desc');
             if (!m) return;
-
             t.innerText = stat.toUpperCase();
-            if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; d.innerText = "Orderan masuk. Mencari driver terdekat..."; }
-            if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; d.innerText = "Restoran sedang menyiapkan hidanganmu."; }
-            if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; d.innerText = "Driver sedang meluncur ke lokasi!"; }
-            if(stat === 'selesai') { m.style.left = '92%'; b.style.width = '100%'; m.innerHTML = "🏠"; d.innerText = "Pesanan sampai! Selamat makan lur."; }
+            if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; }
+            if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; }
+            if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
+            if(stat === 'selesai') { m.style.left = '92%'; b.style.width = '100%'; m.innerHTML = "🏠"; }
         }
 
         function tanyaStatus() {
@@ -190,8 +189,8 @@
             if (n) {
                 sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
                 .then(({data}) => {
-                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status);
-                    else alert("Gak ada pesanan atas nama itu!");
+                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, 0); // Note: 0 for history
+                    else alert("Gak ketemu!");
                 });
             }
         }
