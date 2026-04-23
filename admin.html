@@ -31,7 +31,10 @@
             
             if (data && data.length > 0) {
                 container.innerHTML = '';
-                data.forEach(o => {
+                data.forEach(o => {// Di bawah tulisan alamat, tambahkan:
+<p class="text-[10px] font-black ${o.metode_bayar === 'QRIS' ? 'text-blue-600' : 'text-orange-600'} uppercase mt-2">
+    💳 METODE: ${o.metode_bayar || 'COD'}
+</p>
                     container.innerHTML += `
                         <div class="bg-white p-6 rounded-[2.5rem] shadow-xl border border-white">
                             <div class="flex justify-between items-start mb-4">
