@@ -209,15 +209,41 @@
         }
 
         function geserMotor(stat) {
-            const m = document.getElementById('motor');
-            const b = document.getElementById('bar-progress');
-            const t = document.getElementById('txt-status');
-            if (!m) return;
-            t.innerText = stat.toUpperCase();
-            if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; m.innerHTML = "🛵"; }
-            if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; m.innerHTML = "👨‍🍳"; }
-            if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
-            if(stat === 'selesai') { m.style.left = '92%'; b.style.width = '100%'; m.innerHTML = "🏠"; }
+    const m = document.getElementById('motor');
+    const b = document.getElementById('bar-progress');
+    const t = document.getElementById('txt-status');
+    if (!m) return;
+
+    t.innerText = stat.toUpperCase();
+    
+    // Setel ulang posisi biar gak kepotong (Top dikurangi biar turun sedikit)
+    m.style.transition = "all 1s cubic-bezier(0.4, 0, 0.2, 1)";
+    
+    if(stat === 'pending') { 
+        m.style.left = '0%'; 
+        b.style.width = '10%'; 
+        m.innerHTML = "🛵"; 
+        m.className = "absolute -top-8 text-4xl"; // Ukuran pas & turun dikit
+    }
+    if(stat === 'proses') { 
+        m.style.left = '40%'; 
+        b.style.width = '45%'; 
+        m.innerHTML = "👨‍🍳"; 
+        m.className = "absolute -top-8 text-4xl animate-bounce"; // Lagi masak goyang-goyang
+    }
+    if(stat === 'dikirim') { 
+        m.style.left = '80%'; 
+        b.style.width = '85%'; 
+        m.innerHTML = "🏍️💨"; 
+        m.className = "absolute -top-8 text-4xl"; // Motor ngebut
+    }
+    if(stat === 'selesai') { 
+        m.style.left = '90%'; 
+        b.style.width = '100%'; 
+        m.innerHTML = "🏠"; 
+        m.className = "absolute -top-8 text-4xl"; // Sampai rumah
+    }
+} }
         }
 
         function tanyaStatus() {
