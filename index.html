@@ -41,20 +41,28 @@
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 animasi-up">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
             <h3 class="text-2xl font-extrabold text-gray-800 mb-2 text-center">Detail Pengiriman</h3>
-            <p class="text-xs text-gray-400 text-center mb-8 font-semibold">Lengkapi data untuk memulai pengantaran</p>
+            <p class="text-xs text-gray-400 text-center mb-8 font-semibold">Selesaikan pembayaran untuk kirim pesanan</p>
             
             <div class="space-y-4">
                 <div>
                     <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">Nama Lengkap</label>
-                    <input type="text" id="f-nama" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Contoh: Bos Geng">
+                    <input type="text" id="f-nama" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Anda">
                 </div>
                 <div>
-                    <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">WhatsApp (Aktif)</label>
-                    <input type="number" id="f-wa" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="0812xxxxxx">
+                    <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">WhatsApp</label>
+                    <input type="number" id="f-wa" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="0812xxxx">
                 </div>
                 <div>
-                    <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">Alamat Lengkap (RT/RW/No)</label>
-                    <textarea id="f-alamat" rows="3" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Contoh: Jl. Mawar No. 5 RT 01/02"></textarea>
+                    <label class="text-[10px] font-extrabold text-gray-400 uppercase ml-2">Alamat Lengkap</label>
+                    <textarea id="f-alamat" rows="2" class="w-full p-4 mt-1 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Jl. Mawar No. 5..."></textarea>
+                </div>
+                
+                <div class="bg-green-50 border-2 border-green-100 p-4 rounded-2xl flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] font-extrabold text-green-600 uppercase tracking-widest">Ongkos Kirim</p>
+                        <p class="text-xs text-gray-400 font-bold">Flat Area Ndeso</p>
+                    </div>
+                    <p class="font-black text-green-600 text-lg">Rp 5.000</p>
                 </div>
             </div>
 
@@ -71,7 +79,7 @@
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg shadow-green-900">🛒</div>
                 <div>
                     <p id="total-harga" class="font-extrabold text-lg leading-none">Rp 0</p>
-                    <p id="total-item" class="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-widest">0 Item dipilih</p>
+                    <p id="info-ongkir" class="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-widest">+ Ongkir Rp 5.000</p>
                 </div>
             </div>
             <button onclick="bukaModal()" class="bg-white text-black px-8 py-4 rounded-2xl font-black text-xs active:scale-95 transition-all uppercase tracking-tighter">Bayar</button>
@@ -84,6 +92,7 @@
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let keranjang = [];
+        const ONGKIR = 5000;
 
         async function loadMenu() {
             const container = document.getElementById('daftar-menu');
@@ -110,9 +119,9 @@
         function masukKeranjang(nama, harga) {
             keranjang.push({ nama, harga });
             document.getElementById('cart-bar').classList.remove('hidden');
-            const total = keranjang.reduce((s, i) => s + i.harga, 0);
-            document.getElementById('total-harga').innerText = `Rp ${total.toLocaleString('id-ID')}`;
-            document.getElementById('total-item').innerText = `${keranjang.length} Item dipilih`;
+            const totalProduk = keranjang.reduce((s, i) => s + i.harga, 0);
+            const totalAkhir = totalProduk + ONGKIR;
+            document.getElementById('total-harga').innerText = `Rp ${totalAkhir.toLocaleString('id-ID')}`;
         }
 
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
@@ -125,7 +134,7 @@
 
             if (!nama || !wa || !alamat) return alert("Lengkapi data dulu ya Bos!");
 
-            const { data, error } = await sb.from('pesanan_ojek').insert([{ 
+            const { data } = await sb.from('pesanan_ojek').insert([{ 
                 nama_pembeli: nama, 
                 alamat_kirim: alamat, 
                 status: 'pending' 
