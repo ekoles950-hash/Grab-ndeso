@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab Ndeso - Exclusive Edition</title>
+    <title>Grab Ndeso - GoFood Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; text-align: left; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
         .input-mewah { border: 2px solid #F3F4F6; transition: 0.3s; }
         .input-mewah:focus { border-color: #10B981; outline: none; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
         .metode-card { border: 2px solid #F3F4F6; cursor: pointer; transition: 0.3s; text-align: center; }
@@ -17,7 +17,7 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-[#F9FAFB] pb-32">
+<body class="bg-[#F9FAFB] pb-32 text-left">
 
     <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-2">
@@ -28,41 +28,38 @@
     </nav>
 
     <div id="konten-utama" class="max-w-md mx-auto p-5">
-        <div id="daftar-menu" class="grid grid-cols-2 gap-4">
-            <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
-            <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
-        </div>
+        <div id="daftar-menu" class="grid grid-cols-2 gap-4"></div>
     </div>
 
     <div id="modal-checkout" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-end justify-center">
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 text-left overflow-y-auto max-h-[95vh] animasi-up">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
-            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter">Data Antar</h3>
+            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter">Detail Pesanan</h3>
             
             <div class="space-y-4">
                 <input type="text" id="f-nama" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
-                <input type="number" id="f-wa" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (081xxx)">
+                <input type="number" id="f-wa" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp">
                 <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
                 
-                <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider">Metode Pembayaran</p>
+                <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider text-left">Metode Bayar</p>
                 <div class="grid grid-cols-2 gap-3 pb-2">
-                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-5 rounded-2xl text-center shadow-sm">
+                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-5 rounded-2xl shadow-sm text-center">
                         <span class="text-2xl">💵</span>
                         <p class="text-[10px] font-black mt-2 uppercase">COD (CASH)</p>
                     </div>
-                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-5 rounded-2xl text-center shadow-sm">
+                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-5 rounded-2xl shadow-sm text-center">
                         <span class="text-2xl">📱</span>
-                        <p class="text-[10px] font-black mt-2 uppercase tracking-widest">QRIS/TRANSFER</p>
+                        <p class="text-[10px] font-black mt-2 uppercase">QRIS/TRANSFER</p>
                     </div>
                 </div>
 
                 <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem]">
                     <div class="flex justify-between items-center pb-2">
-                        <span class="text-xs font-extrabold text-green-600 uppercase tracking-widest">Ongkir</span>
+                        <span class="text-xs font-extrabold text-green-600 uppercase">Ongkir</span>
                         <span class="text-green-600 font-bold text-sm">Rp 5.000</span>
                     </div>
-                    <div class="flex justify-between items-center border-t border-green-100 pt-3 text-left">
-                        <p class="text-xs font-black text-gray-800 uppercase tracking-wider">Total Bayar</p>
+                    <div class="flex justify-between items-center border-t border-green-100 pt-3">
+                        <p class="text-xs font-black text-gray-800 uppercase">Total Bayar</p>
                         <p id="txt-total-akhir" class="font-black text-green-600 text-2xl tracking-tighter">Rp 0</p>
                     </div>
                 </div>
@@ -70,7 +67,7 @@
 
             <div class="mt-10 flex gap-4">
                 <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm">Batal</button>
-                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 transition">KONFIRMASI</button>
+                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl transition">KONFIRMASI</button>
             </div>
         </div>
     </div>
@@ -79,19 +76,17 @@
         <div class="bg-white p-4 rounded-3xl max-w-sm w-full shadow-2xl relative" onclick="event.stopPropagation()">
             <img src="QRIS.jpg" class="w-full rounded-2xl shadow-inner border border-gray-100 mb-4" alt="QRIS">
             <p id="txt-qris-total" class="text-center font-black text-2xl text-green-600 tracking-tighter mb-4">Rp 0</p>
-            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Tutup QRIS</button>
+            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase">Tutup</button>
         </div>
     </div>
 
     <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50 animasi-up">
-        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative overflow-hidden">
-            <div class="flex items-center gap-4 relative z-10">
+        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative">
+            <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div>
-                <div>
-                    <p id="total-harga-bar" class="font-extrabold text-2xl leading-none text-white">Rp 0</p>
-                </div>
+                <p id="total-harga-bar" class="font-extrabold text-2xl leading-none">Rp 0</p>
             </div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs uppercase active:scale-95 transition tracking-tighter">Checkout</button>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs uppercase tracking-tighter">Checkout</button>
         </div>
     </div>
 
@@ -100,7 +95,7 @@
         const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let keranjang = [];
+        let keranjang = {}; 
         let metodeBayar = 'COD';
         const ONGKIR = 5000;
 
@@ -113,29 +108,48 @@
                     container.innerHTML += `
                         <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left">
                             <img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
-                            <div class="flex-grow px-2">
+                            <div class="flex-grow px-2 text-left">
                                 <h3 class="font-bold text-[11px] text-gray-800 leading-tight">${item.nama_makanan}</h3>
                                 <p class="text-green-600 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
-                            <button onclick="masukKeranjang('${item.nama_makanan}', ${item.harga})" class="w-full mt-4 bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest active:bg-green-100 transition">
-                                + Tambah / Batal
-                            </button>
+                            
+                            <div id="kontrol-${item.id}" class="mt-4 flex items-center justify-between bg-gray-50 rounded-2xl p-1">
+                                <button onclick="kurangItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-white text-gray-400 rounded-xl font-bold shadow-sm">-</button>
+                                <span id="qty-${item.id}" class="font-black text-xs text-gray-800">0</span>
+                                <button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-xl font-bold shadow-md shadow-green-100">+</button>
+                            </div>
                         </div>`;
                 });
             }
         }
 
-        function masukKeranjang(nama, harga) {
-            const indeks = keranjang.findIndex(item => item.nama === nama);
-            if (indeks !== -1) {
-                keranjang.splice(indeks, 1);
+        function tambahItem(id, nama, harga) {
+            if (!keranjang[id]) {
+                keranjang[id] = { nama, harga, qty: 1 };
             } else {
-                keranjang.push({ nama, harga });
+                keranjang[id].qty += 1;
+            }
+            updateTampilan(id);
+        }
+
+        function kurangItem(id, nama, harga) {
+            if (keranjang[id]) {
+                keranjang[id].qty -= 1;
+                if (keranjang[id].qty <= 0) delete keranjang[id];
+            }
+            updateTampilan(id);
+        }
+
+        function updateTampilan(id) {
+            const qtyLabel = document.getElementById(`qty-${id}`);
+            if (qtyLabel) qtyLabel.innerText = keranjang[id] ? keranjang[id].qty : 0;
+
+            let totalMakan = 0;
+            for (let k in keranjang) {
+                totalMakan += keranjang[k].harga * keranjang[k].qty;
             }
 
-            const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
             const cartBar = document.getElementById('cart-bar');
-            
             if (totalMakan > 0) {
                 cartBar.classList.remove('hidden');
                 document.getElementById('total-harga-bar').innerText = `Rp ${totalMakan.toLocaleString('id-ID')}`;
@@ -151,9 +165,9 @@
         }
 
         function cekAlamat() {
-            const alamat = document.getElementById('f-alamat').value;
-            const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
-            if (alamat.length > 2) {
+            let totalMakan = 0;
+            for (let k in keranjang) totalMakan += keranjang[k].harga * keranjang[k].qty;
+            if (document.getElementById('f-alamat').value.length > 2) {
                 document.getElementById('box-total').classList.remove('hidden');
                 document.getElementById('txt-total-akhir').innerText = `Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}`;
             }
@@ -161,9 +175,11 @@
 
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
-        function bukaQRIS(totalMakan) {
+        function bukaQRIS() { 
+            let totalMakan = 0;
+            for (let k in keranjang) totalMakan += keranjang[k].harga * keranjang[k].qty;
             document.getElementById('txt-qris-total').innerText = `Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}`;
-            document.getElementById('modal-qris').classList.remove('hidden');
+            document.getElementById('modal-qris').classList.remove('hidden'); 
         }
         function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
 
@@ -171,18 +187,24 @@
             const nama = document.getElementById('f-nama').value;
             const wa = document.getElementById('f-wa').value;
             const alamat = document.getElementById('f-alamat').value;
-            if (!nama || !alamat) return alert("Lengkapi data antarmu Juragan!");
+            if (!nama || !alamat) return alert("Lengkapi data antarmu!");
 
-            const totalMakan = keranjang.reduce((s, i) => s + i.harga, 0);
+            let totalMakan = 0;
+            let listMenu = [];
+            for (let k in keranjang) {
+                totalMakan += keranjang[k].harga * keranjang[k].qty;
+                listMenu.push(`${keranjang[k].nama} (x${keranjang[k].qty})`);
+            }
+
             const { data } = await sb.from('pesanan_ojek').insert([{ 
-                nama_pembeli: nama, alamat_kirim: alamat, no_wa: wa, 
+                nama_pembeli: nama, alamat_kirim: alamat + " [" + listMenu.join(", ") + "]", no_wa: wa, 
                 status: 'pending', total_harga: totalMakan, metode_bayar: metodeBayar 
             }]).select();
 
             if (data) {
                 tutupModal();
                 tampilkanHalamanTracking(data[0].id, 'pending', totalMakan, metodeBayar);
-                keranjang = []; 
+                keranjang = {}; 
             }
         }
 
@@ -191,54 +213,4 @@
             document.getElementById('konten-utama').innerHTML = `
                 <div class="mt-4 bg-white p-8 rounded-[3.5rem] shadow-2xl border border-gray-50 text-center animasi-up">
                     <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter text-center">${statusAwal}</h3>
-                    
-                    <div class="relative h-2 bg-gray-100 rounded-full mb-14 mt-14 mx-4">
-                        <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
-                        <div id="motor" class="absolute -top-8 text-4xl transition-all duration-700 flex items-center justify-center" style="left:0%; transform: translateX(-50%);">🛵</div>
-                    </div>
-                    
-                    <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200 text-left">
-                        <div class="flex justify-between items-center text-left">
-                            <span class="text-xs font-black text-gray-400 uppercase tracking-widest text-left">Total Tagihan</span>
-                            <span class="text-2xl font-black text-green-600 tracking-tighter text-left">Rp ${totalBayar.toLocaleString('id-ID')}</span>
-                        </div>
-                        <p class="text-[9px] font-bold text-gray-400 mt-1 uppercase text-left">💳 Metode: ${metode}</p>
-                    </div>
-
-                    ${metode === 'QRIS' ? `<button onclick="bukaQRIS(${totalMakan})" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-[10px] mb-4 shadow-xl uppercase tracking-widest">📱 TAMPILKAN QRIS BAYAR</button>` : ''}
-                    <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4.5 rounded-2xl font-black text-[10px] uppercase shadow-xl tracking-widest">Menu Utama</button>
-                </div>
-            `;
-            document.getElementById('cart-bar').classList.add('hidden');
-            geserMotor(statusAwal);
-            sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
-        }
-
-        function geserMotor(stat) {
-            const m = document.getElementById('motor');
-            const b = document.getElementById('bar-progress');
-            const t = document.getElementById('txt-status');
-            if (!m) return;
-            t.innerText = stat.toUpperCase();
-            m.style.transition = "all 1s cubic-bezier(0.4, 0, 0.2, 1)";
-            
-            if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; m.innerHTML = "🛵"; }
-            if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; m.innerHTML = "👨‍🍳"; }
-            if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
-            if(stat === 'selesai') { m.style.left = '92%'; b.style.width = '100%'; m.innerHTML = "🏠"; }
-        }
-
-        function tanyaStatus() {
-            const n = prompt("Cek Pesanan (Nama):");
-            if (n) {
-                sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
-                .then(({data}) => {
-                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, data[0].total_harga || 0, data[0].metode_bayar || 'COD');
-                    else alert("Gak ada pesanan atas nama itu!");
-                });
-            }
-        }
-        loadMenu();
-    </script>
-</body>
-</html>
+                    <div class="relative h-2 bg
