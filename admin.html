@@ -68,4 +68,62 @@
                                 <p class="text-sm font-bold text-gray-700 leading-relaxed mb-4">📍 ${o.alamat_kirim}</p>
                                 
                                 <div class="mb-4 pt-3 border-t border-gray-200">
-                                    <p class="text-[10px] font-black ${o.metode_bayar ===
+                                    <p class="text-[10px] font-black ${o.metode_bayar === 'QRIS' ? 'text-blue-600' : 'text-orange-600'} uppercase">
+                                        💳 METODE: ${o.metode_bayar || 'COD'}
+                                    </p>
+                                    <p class="text-[11px] font-black text-gray-800 mt-1">TOTAL TAGIHAN: Rp ${(o.total_harga + 5000).toLocaleString('id-ID')}</p>
+                                </div>
+
+                                <div class="flex items-center gap-2 bg-white p-3 rounded-2xl border border-gray-100">
+                                    <span class="text-xs">📞</span>
+                                    <input type="text" readonly value="${o.no_wa || ''}" id="input-wa-${o.id}" class="bg-transparent text-[11px] font-black text-green-600 w-full outline-none">
+                                    <button onclick="salinNomor('${o.id}')" class="bg-green-600 text-white px-4 py-2 rounded-xl text-[9px] font-black uppercase shadow-md shadow-green-100 tombol-aksi">Salin</button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-3">
+                                <button onclick="updateStatus('${o.id}', 'proses')" class="bg-yellow-400 hover:bg-yellow-500 text-white py-4 rounded-2xl font-black text-[9px] uppercase shadow-lg shadow-yellow-100 tombol-aksi">Masak</button>
+                                <button onclick="updateStatus('${o.id}', 'dikirim')" class="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-black text-[9px] uppercase shadow-lg shadow-blue-100 tombol-aksi">Kirim</button>
+                                <button onclick="updateStatus('${o.id}', 'selesai')" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-black text-[9px] uppercase shadow-lg shadow-green-100 tombol-aksi">Sampai</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        // FUNGSI UPDATE STATUS KE DATABASE
+        async function updateStatus(id, stat) {
+            const { error } = await sb.from('pesanan_ojek').update({ status: stat }).eq('id', id);
+            if(!error) {
+                console.log("Status diupdate!");
+                muatPesanan();
+            }
+        }
+
+        // FUNGSI SALIN NOMOR WA
+        function salinNomor(id) {
+            const copyText = document.getElementById("input-wa-" + id);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(copyText.value);
+            
+            // Notifikasi Kecil
+            const btn = event.target;
+            const textLama = btn.innerText;
+            btn.innerText = "OK!";
+            setTimeout(() => { btn.innerText = textLama; }, 1000);
+        }
+
+        // FITUR REALTIME (Otomatis Refresh saat ada Orderan Baru)
+        sb.channel('markas-driver')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'pesanan_ojek' }, (payload) => {
+              muatPesanan();
+          })
+          .subscribe();
+
+        // Jalankan saat pertama buka halaman
+        muatPesanan();
+    </script>
+</body>
+</html>
