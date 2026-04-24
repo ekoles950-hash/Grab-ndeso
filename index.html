@@ -28,6 +28,19 @@
     </nav>
 
     <div id="konten-utama" class="max-w-md mx-auto p-5 text-left">
+        
+        <div class="mb-8 mt-2 px-1 text-left">
+            <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">
+                Halo, Selamat <span id="waktu-hari">Pagi</span>!
+            </p>
+            <h2 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mt-1.5 text-left uppercase italic">
+                Mau Makan <span class="text-green-600">Apa</span> Hari Ini?
+            </h2>
+            <p class="text-xs text-gray-500 font-semibold mt-3 leading-relaxed text-left">
+                Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.
+            </p>
+        </div>
+
         <div id="daftar-menu" class="grid grid-cols-2 gap-4 text-left">
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
@@ -47,17 +60,17 @@
                 <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider text-left">Metode Pembayaran</p>
                 <div class="grid grid-cols-2 gap-3 pb-2 text-left">
                     <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-5 rounded-2xl text-center shadow-sm">
-                        <span class="text-2xl">💵</span>
-                        <p class="text-[10px] font-black mt-2 uppercase">COD (CASH)</p>
+                        <span class="text-2xl text-center">💵</span>
+                        <p class="text-[10px] font-black mt-2 uppercase text-center">COD (CASH)</p>
                     </div>
                     <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-5 rounded-2xl text-center shadow-sm">
-                        <span class="text-2xl">📱</span>
-                        <p class="text-[10px] font-black mt-2 uppercase tracking-widest">QRIS/TRANSFER</p>
+                        <span class="text-2xl text-center">📱</span>
+                        <p class="text-[10px] font-black mt-2 uppercase text-center tracking-widest">QRIS/TRANSFER</p>
                     </div>
                 </div>
 
                 <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem] text-left">
-                    <div class="flex justify-between items-center pb-2">
+                    <div class="flex justify-between items-center pb-2 text-left">
                         <span class="text-xs font-extrabold text-green-600 uppercase tracking-widest text-left">Ongkir</span>
                         <span class="text-green-600 font-bold text-sm text-left">Rp 5.000</span>
                     </div>
@@ -83,7 +96,7 @@
     </div>
 
     <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50 animasi-up text-left">
-        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative overflow-hidden">
+        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative overflow-hidden text-left">
             <div class="flex items-center gap-4 text-left">
                 <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div>
                 <div class="text-left">
@@ -103,6 +116,17 @@
         let metodeBayar = 'COD';
         const ONGKIR = 5000;
 
+        // FUNGSI UPDATE WAKTU OTOMATIS
+        function setSapaan() {
+            const waktuLabel = document.getElementById('waktu-hari');
+            const jam = new Date().getHours();
+            let sapaan = "Pagi";
+            if (jam >= 11 && jam < 15) sapaan = "Siang";
+            else if (jam >= 15 && jam < 18) sapaan = "Sore";
+            else if (jam >= 18 || jam < 4) sapaan = "Malam";
+            if(waktuLabel) waktuLabel.innerText = sapaan;
+        }
+
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
@@ -111,14 +135,14 @@
                 data.forEach(item => {
                     container.innerHTML += `
                         <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left">
-                            <img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
+                            <img src="${item.foto_url}" onerror="this.remove()" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
                             <div class="flex-grow px-2 text-left">
                                 <h3 class="font-bold text-[11px] text-gray-800 leading-tight text-left">${item.nama_makanan}</h3>
                                 <p class="text-green-600 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
                             
                             <div class="mt-4 flex flex-col gap-1">
-                                <button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest active:bg-green-600 active:text-white transition text-center">Beli</button>
+                                <button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest active:bg-green-600 active:text-white transition text-center text-center">Beli</button>
                                 
                                 <div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-gray-50 rounded-2xl p-1 text-left">
                                     <button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-white text-gray-400 rounded-xl font-bold shadow-sm active:scale-90 text-center">-</button>
@@ -161,12 +185,8 @@
         function updateTampilan(id) {
             const qtyLabel = document.getElementById(`qty-${id}`);
             if (qtyLabel) qtyLabel.innerText = keranjang[id] ? keranjang[id].qty : 0;
-
             let totalMakan = 0;
-            for (let k in keranjang) {
-                totalMakan += keranjang[k].harga * keranjang[k].qty;
-            }
-
+            for (let k in keranjang) totalMakan += keranjang[k].harga * keranjang[k].qty;
             const cartBar = document.getElementById('cart-bar');
             if (totalMakan > 0) {
                 cartBar.classList.remove('hidden');
@@ -225,19 +245,19 @@
             const totalBayar = totalMakan + ONGKIR;
             document.getElementById('konten-utama').innerHTML = `
                 <div class="mt-4 bg-white p-8 rounded-[3.5rem] shadow-2xl border border-gray-50 text-center animasi-up">
-                    <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter text-center">${statusAwal}</h3>
+                    <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter text-center text-center">${statusAwal}</h3>
                     
-                    <div class="relative h-2 bg-gray-100 rounded-full mb-14 mt-14 mx-4">
+                    <div class="relative h-2 bg-gray-100 rounded-full mb-14 mt-14 mx-4 text-left">
                         <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
                         <div id="motor" class="absolute -top-8 text-4xl transition-all duration-700 flex items-center justify-center text-left" style="left:0%; transform: translateX(-50%);">🛵</div>
                     </div>
                     
-                    <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200 text-left text-left">
+                    <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200 text-left">
                         <div class="flex justify-between items-center text-left">
-                            <span class="text-xs font-black text-gray-800 uppercase tracking-widest text-left">Total Tagihan</span>
+                            <span class="text-xs font-black text-gray-800 uppercase tracking-widest text-left text-left">Total Tagihan</span>
                             <span class="text-2xl font-black text-green-600 tracking-tighter text-left text-left">Rp ${totalBayar.toLocaleString('id-ID')}</span>
                         </div>
-                        <p class="text-[9px] font-bold text-gray-400 mt-1 uppercase text-left text-left">💳 Metode: ${metode}</p>
+                        <p class="text-[9px] font-bold text-gray-400 mt-1.5 uppercase text-left text-left">Metode: ${metode}</p>
                     </div>
 
                     ${metode === 'QRIS' ? `<button onclick="bukaQRIS()" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-[10px] mb-4 shadow-xl uppercase tracking-widest text-center">📱 TAMPILKAN QRIS BAYAR</button>` : ''}
@@ -273,6 +293,7 @@
                 });
             }
         }
+        setSapaan(); // PANGGIL SAPAAN
         loadMenu();
     </script>
 </body>
