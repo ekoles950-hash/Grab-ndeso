@@ -28,6 +28,19 @@
     </nav>
 
     <div id="konten-utama" class="max-w-md mx-auto p-5 text-left">
+        
+        <div class="mb-8 mt-2 px-1 text-left">
+            <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">
+                Halo, Selamat <span id="waktu-hari">...</span>!
+            </p>
+            <h2 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mt-1.5 text-left uppercase italic">
+                Mau Makan <span class="text-green-600">Apa</span> Hari Ini?
+            </h2>
+            <p class="text-xs text-gray-500 font-semibold mt-3 leading-relaxed text-left">
+                Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.
+            </p>
+        </div>
+
         <div id="daftar-menu" class="grid grid-cols-2 gap-4 text-left">
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
             <div class="bg-white h-52 rounded-[2rem] animate-pulse"></div>
@@ -107,6 +120,17 @@
         let metodeBayar = 'COD';
         const ONGKIR = 5000;
 
+        // FUNGSI UPDATE WAKTU OTOMATIS
+        function setSapaan() {
+            const waktuLabel = document.getElementById('waktu-hari');
+            const jam = new Date().getHours();
+            let sapaan = "Pagi";
+            if (jam >= 11 && jam < 15) sapaan = "Siang";
+            else if (jam >= 15 && jam < 18) sapaan = "Sore";
+            else if (jam >= 18 || jam < 4) sapaan = "Malam";
+            if(waktuLabel) waktuLabel.innerText = sapaan;
+        }
+
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
@@ -115,7 +139,7 @@
                 data.forEach(item => {
                     container.innerHTML += `
                         <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left">
-                            <img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
+                            <img src="${item.foto_url}" onerror="this.remove()" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
                             <div class="flex-grow px-2 text-left">
                                 <h3 class="font-bold text-[11px] text-gray-800 leading-tight text-left">${item.nama_makanan}</h3>
                                 <p class="text-green-600 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p>
@@ -291,6 +315,7 @@
                 });
             }
         }
+        setSapaan(); // PANGGIL SAPAAN
         loadMenu();
     </script>
 </body>
