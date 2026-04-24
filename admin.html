@@ -22,22 +22,16 @@
     <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <div class="bg-green-600 p-2.5 rounded-2xl text-white shadow-lg shadow-green-100 text-xl">🛵</div>
-            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic">Grab<span class="text-green-600">Ndeso</span></h1>
+            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic text-left">Grab<span class="text-green-600">Ndeso</span></h1>
         </div>
-        <button onclick="tanyaStatus()" class="text-[10px] font-extrabold text-green-600 border-2 border-green-600 px-5 py-2.5 rounded-full uppercase tracking-widest active:scale-95 transition">Lacak</button>
+        <button onclick="tanyaStatus()" class="text-[10px] font-extrabold text-green-600 border-2 border-green-600 px-5 py-2.5 rounded-full uppercase tracking-widest">Lacak</button>
     </nav>
 
     <div id="konten-utama" class="max-w-md mx-auto p-5 text-left animasi-up">
         <div class="mb-8 mt-2 px-1 text-left">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">
-                Halo, Selamat <span id="waktu-hari">...</span>!
-            </p>
-            <h2 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mt-1.5 text-left uppercase italic">
-                Mau Makan <span class="text-green-600">Apa</span> Hari Ini?
-            </h2>
-            <p class="text-xs text-gray-500 font-semibold mt-3 leading-relaxed text-left">
-                Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.
-            </p>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Halo, Selamat <span id="waktu-hari">...</span>!</p>
+            <h2 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mt-1.5 uppercase italic">Mau Makan <span class="text-green-600">Apa</span> Hari Ini?</h2>
+            <p class="text-xs text-gray-500 font-semibold mt-3 leading-relaxed">Pilih menu favoritmu di bawah. Mager? Tenang, ojek kami siap anter sat-set!</p>
         </div>
         <div id="daftar-menu" class="grid grid-cols-2 gap-4 text-left"></div>
     </div>
@@ -45,36 +39,26 @@
     <div id="modal-checkout" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-end justify-center">
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 text-left overflow-y-auto max-h-[95vh] animasi-up">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
-            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter text-left">Data Antar</h3>
+            <h3 class="text-2xl font-black text-gray-800 mb-8 tracking-tighter">Data Antar</h3>
             <div class="space-y-4">
                 <input type="text" id="f-nama" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
                 <input type="number" id="f-wa" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (081xxx)">
                 <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
                 <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem]">
-                    <div class="flex justify-between items-center pb-2 text-left">
-                        <span class="text-xs font-extrabold text-green-600 uppercase tracking-widest">Ongkir</span>
-                        <span class="text-green-600 font-bold text-sm">Rp 5.000</span>
-                    </div>
-                    <div class="flex justify-between items-center border-t border-green-100 pt-3 text-left">
-                        <p class="text-xs font-black text-gray-800 uppercase tracking-wider">Total Bayar</p>
-                        <p id="txt-total-akhir" class="font-black text-green-600 text-2xl tracking-tighter">Rp 0</p>
-                    </div>
+                    <div class="flex justify-between items-center border-t border-green-100 pt-3"><p class="text-xs font-black text-gray-800 uppercase tracking-wider">Total Bayar</p><p id="txt-total-akhir" class="font-black text-green-600 text-2xl tracking-tighter">Rp 0</p></div>
                 </div>
             </div>
             <div class="mt-10 flex gap-4">
-                <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm active:scale-95">Batal</button>
-                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition">KONFIRMASI</button>
+                <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm">Batal</button>
+                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl active:scale-95 transition">KONFIRMASI</button>
             </div>
         </div>
     </div>
 
-    <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50 animasi-up text-left">
+    <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50 animasi-up">
         <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative overflow-hidden">
-            <div class="flex items-center gap-4 relative z-10">
-                <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div>
-                <p id="total-harga-bar" class="font-extrabold text-2xl leading-none text-white text-left">Rp 0</p>
-            </div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 transition uppercase tracking-tighter relative z-10">Checkout</button>
+            <div class="flex items-center gap-4 relative z-10"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div><p id="total-harga-bar" class="font-extrabold text-2xl">Rp 0</p></div>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 uppercase tracking-tighter z-10">Checkout</button>
         </div>
     </div>
 
@@ -83,7 +67,6 @@
         const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- DATA TELEGRAM BOS (SUDAH AKTIF) ---
         const TELE_TOKEN = '8669740968:AAE7WcWDDqKcj7V836fFYUaZmdcpwyuecVE';
         const TELE_CHATID = '7933777456';
         const ONGKIR = 5000;
@@ -103,22 +86,7 @@
                 container.innerHTML = '';
                 data.forEach(item => {
                     const fotoHtml = (item.foto_url && item.foto_url.trim().length > 5) ? `<img src="${item.foto_url}" onerror="this.remove()" class="w-full h-36 object-cover rounded-[2rem] mb-3">` : '';
-                    container.innerHTML += `
-                        <div class="bg-white rounded-[2.5rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left animasi-up">
-                            ${fotoHtml}
-                            <div class="flex-grow px-2 text-left">
-                                <h3 class="font-bold text-[11px] text-gray-800 leading-tight text-left">${item.nama_makanan}</h3>
-                                <p class="text-green-600 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p>
-                            </div>
-                            <div class="mt-4 flex flex-col gap-1 text-left">
-                                <button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase text-center">Beli</button>
-                                <div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-gray-50 rounded-2xl p-1">
-                                    <button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-white text-gray-400 rounded-xl font-bold shadow-sm text-center">-</button>
-                                    <span id="qty-${item.id}" class="font-black text-xs text-gray-800 text-center">0</span>
-                                    <button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-xl font-bold shadow-md text-center">+</button>
-                                </div>
-                            </div>
-                        </div>`;
+                    container.innerHTML += `<div class="bg-white rounded-[2.5rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left animasi-up">${fotoHtml}<div class="flex-grow px-2"><h3 class="font-bold text-[11px] text-gray-800 leading-tight">${item.nama_makanan}</h3><p class="text-green-600 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p></div><div class="mt-4 flex flex-col gap-1"><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase text-center">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-gray-50 rounded-2xl p-1"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-white text-gray-400 rounded-xl font-bold shadow-sm">-</button><span id="qty-${item.id}" class="font-black text-xs text-gray-800 text-center">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-xl font-bold shadow-md">+</button></div></div></div>`;
                 });
             }
         }
@@ -137,11 +105,7 @@
         function kurangItem(id) {
             if (keranjang[id]) {
                 keranjang[id].qty -= 1;
-                if (keranjang[id].qty <= 0) {
-                    delete keranjang[id];
-                    document.getElementById(`qty-control-${id}`).classList.add('hidden');
-                    document.getElementById(`btn-beli-${id}`).classList.remove('hidden');
-                }
+                if (keranjang[id].qty <= 0) { delete keranjang[id]; document.getElementById(`qty-control-${id}`).classList.add('hidden'); document.getElementById(`btn-beli-${id}`).classList.remove('hidden'); }
             }
             updateTampilan(id);
         }
@@ -151,10 +115,7 @@
             if (qtyLabel) qtyLabel.innerText = keranjang[id] ? keranjang[id].qty : 0;
             let total = 0; for (let k in keranjang) total += keranjang[k].harga * keranjang[k].qty;
             const cb = document.getElementById('cart-bar');
-            if (total > 0) { 
-                cb.classList.remove('hidden'); 
-                document.getElementById('total-harga-bar').innerText = `Rp ${total.toLocaleString('id-ID')}`; 
-            } else cb.classList.add('hidden');
+            if (total > 0) { cb.classList.remove('hidden'); document.getElementById('total-harga-bar').innerText = `Rp ${total.toLocaleString('id-ID')}`; } else cb.classList.add('hidden');
         }
 
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
@@ -162,38 +123,48 @@
         
         function cekAlamat() {
             let t = 0; for (let k in keranjang) t += keranjang[k].harga * keranjang[k].qty;
-            if (document.getElementById('f-alamat').value.length > 2) {
-                document.getElementById('box-total').classList.remove('hidden');
-                document.getElementById('txt-total-akhir').innerText = `Rp ${(t + ONGKIR).toLocaleString('id-ID')}`;
-            }
+            if (document.getElementById('f-alamat').value.length > 2) { document.getElementById('box-total').classList.remove('hidden'); document.getElementById('txt-total-akhir').innerText = `Rp ${(t + ONGKIR).toLocaleString('id-ID')}`; }
         }
 
-        async function kirimTelegram(nama, alamat, wa, menu, total) {
-            const pesan = `🚨 *ORDERAN MASUK BOS!* 🚨\n\n👤 *Nama:* ${nama}\n📍 *Alamat:* ${alamat}\n📞 *WA:* ${wa}\n🍱 *Pesanan:* ${menu}\n💰 *TOTAL TAGIHAN:* Rp ${total.toLocaleString('id-ID')}\n\nCek Dashboard Driver segera! 🛵💨`;
-            await fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
+        // --- FUNGSI TELEGRAM YANG DIPERKUAT ---
+        async function kirimTelegram(pesan) {
+            const url = `https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`;
+            try {
+                await fetch(url, { method: 'POST' });
+            } catch (e) {
+                console.log("Error Tele:", e);
+            }
         }
 
         async function kirimOrderan() {
             const n = document.getElementById('f-nama').value; 
             const a = document.getElementById('f-alamat').value;
             const w = document.getElementById('f-wa').value;
-            if (!n || !a) return alert("Lengkapi data antar Bos!");
+            if (!n || !a) return alert("Isi data dulu Bos!");
+            
             let t = 0; let m = []; 
             for (let k in keranjang) { 
                 t += keranjang[k].harga * keranjang[k].qty; 
                 m.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); 
             }
-            const { data } = await sb.from('pesanan_ojek').insert([{ 
+            
+            const totalFinal = t + ONGKIR;
+
+            const { data, error } = await sb.from('pesanan_ojek').insert([{ 
                 nama_pembeli: n, 
                 alamat_kirim: a + " [" + m.join(", ") + "]", 
-                no_wa: w,
                 status: 'pending', 
-                total_harga: t 
+                total_harga: t, 
+                no_wa: w 
             }]).select();
+
             if (data) { 
-                await kirimTelegram(n, a, w, m.join(", "), t + ONGKIR);
-                alert("Pesanan Meluncur Bos! Cek Telegram."); 
+                const pesanTele = `🚨 *ORDERAN BARU!* 🚨\n\n👤 *Nama:* ${n}\n📍 *Alamat:* ${a}\n📞 *WA:* ${w}\n🍱 *Pesanan:* ${m.join(", ")}\n💰 *TOTAL:* Rp ${totalFinal.toLocaleString('id-ID')}\n\nCek Dashboard Driver Bos! 🛵💨`;
+                await kirimTelegram(pesanTele);
+                alert("Pesanan Terkirim! Cek Telegram Bos."); 
                 location.reload(); 
+            } else if (error) {
+                alert("Gagal kirim ke database: " + error.message);
             }
         }
 
