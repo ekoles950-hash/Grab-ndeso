@@ -3,127 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markas Driver - Grab Ndeso</title>
+    <title>Grab Ndeso - Exclusive Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .tombol-aksi { transition: all 0.2s; }
-        .tombol-aksi:active { transform: scale(0.9); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; text-align: left; }
+        .input-mewah { border: 2px solid #F3F4F6; transition: 0.3s; }
+        .input-mewah:focus { border-color: #10B981; outline: none; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
+        .metode-card { border: 2px solid #F3F4F6; cursor: pointer; transition: 0.3s; text-align: center; }
+        .metode-card.active { border-color: #10B981; background: #ECFDF5; }
+        .animasi-up { animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
-<body class="bg-[#F3F4F6] p-4">
-    <div class="max-w-md mx-auto">
-        
-        <div class="flex justify-between items-center mb-8 mt-4">
-            <div>
-                <h1 class="text-2xl font-black text-gray-800 tracking-tighter uppercase italic">Orderan <span class="text-green-600">Masuk</span></h1>
-                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Dashboard Driver v2.0</p>
-            </div>
-            <div class="flex flex-col items-end">
-                <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[9px] font-black animate-pulse">● ONLINE</span>
-                <button onclick="location.reload()" class="mt-2 text-[9px] font-bold text-gray-400 border-b border-gray-300">REFRESH</button>
-            </div>
+<body class="bg-[#F9FAFB] pb-32 text-left">
+
+    <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="bg-green-600 p-2.5 rounded-2xl text-white shadow-lg shadow-green-100 text-xl">🛵</div>
+            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic">Grab<span class="text-green-600">Ndeso</span></h1>
         </div>
-        
-        <div id="list-orderan" class="space-y-6">
-            <div class="bg-white p-10 rounded-[2.5rem] text-center shadow-sm">
-                <p class="text-gray-300 font-black text-[10px] uppercase tracking-widest">Menunggu Pesanan Baru...</p>
+        <button onclick="tanyaStatus()" class="text-[10px] font-extrabold text-green-600 border-2 border-green-600 px-5 py-2.5 rounded-full uppercase tracking-widest active:scale-95 transition">Lacak</button>
+    </nav>
+
+    <div id="konten-utama" class="max-w-md mx-auto p-5 text-left animasi-up">
+        <div class="mb-8 mt-2 px-1 text-left">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">
+                Halo, Selamat <span id="waktu-hari">...</span>!
+            </p>
+            <h2 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mt-1.5 text-left uppercase italic">
+                Mau Makan <span class="text-green-600">Apa</span> Hari Ini?
+            </h2>
+            <p class="text-xs text-gray-500 font-semibold mt-3 leading-relaxed text-left">
+                Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.
+            </p>
+        </div>
+        <div id="daftar-menu" class="grid grid-cols-2 gap-4 text-left"></div>
+    </div>
+
+    <div id="modal-checkout" class="fixed inset-0 bg-black/60 z-[60] hidden flex items-end justify-center">
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 text-left overflow-y-auto max-h-[95vh] animasi-up">
+            <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
+            <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter text-left">Data Antar</h3>
+            <div class="space-y-4">
+                <input type="text" id="f-nama" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
+                <input type="number" id="f-wa" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (081xxx)">
+                <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
+                <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem]">
+                    <div class="flex justify-between items-center pb-2 text-left">
+                        <span class="text-xs font-extrabold text-green-600 uppercase tracking-widest">Ongkir</span>
+                        <span class="text-green-600 font-bold text-sm">Rp 5.000</span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-green-100 pt-3 text-left">
+                        <p class="text-xs font-black text-gray-800 uppercase tracking-wider">Total Bayar</p>
+                        <p id="txt-total-akhir" class="font-black text-green-600 text-2xl tracking-tighter">Rp 0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-10 flex gap-4">
+                <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm active:scale-95">Batal</button>
+                <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition">KONFIRMASI</button>
             </div>
         </div>
     </div>
 
+    <div id="cart-bar" class="fixed bottom-8 left-4 right-4 hidden z-50 animasi-up text-left">
+        <div class="bg-[#1A1A1A] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/10 relative overflow-hidden">
+            <div class="flex items-center gap-4 relative z-10">
+                <div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div>
+                <p id="total-harga-bar" class="font-extrabold text-2xl leading-none text-white text-left">Rp 0</p>
+            </div>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-xs active:scale-95 transition uppercase tracking-tighter relative z-10">Checkout</button>
+        </div>
+    </div>
+
     <script>
-        // KONFIGURASI SUPABASE
         const SUPABASE_URL = 'https://butydxuauhtvwojvpixt.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X'; 
+        const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // FUNGSI MUAT DATA DARI DATABASE
-        async function muatPesanan() {
-            const { data, error } = await sb.from('pesanan_ojek').select('*').order('created_at', { ascending: false }).limit(20);
-            const container = document.getElementById('list-orderan');
-            
-            if (data && data.length > 0) {
+        // --- DATA TELEGRAM BOS (SUDAH AKTIF) ---
+        const TELE_TOKEN = '8669740968:AAE7WcWDDqKcj7V836fFYUaZmdcpwyuecVE';
+        const TELE_CHATID = '7933777456';
+        const ONGKIR = 5000;
+        let keranjang = {};
+
+        function setSapaan() {
+            const waktuLabel = document.getElementById('waktu-hari');
+            const jam = new Date().getHours();
+            let s = "Pagi"; if (jam >= 11 && jam < 15) s = "Siang"; else if (jam >= 15 && jam < 18) s = "Sore"; else if (jam >= 18 || jam < 4) s = "Malam";
+            if(waktuLabel) waktuLabel.innerText = s;
+        }
+
+        async function loadMenu() {
+            const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
+            const container = document.getElementById('daftar-menu');
+            if (data) {
                 container.innerHTML = '';
-                data.forEach(o => {
-                    // Logika Warna Status
-                    let warnaStatus = "bg-orange-100 text-orange-600";
-                    if(o.status === 'selesai') warnaStatus = "bg-green-100 text-green-600";
-                    if(o.status === 'dikirim') warnaStatus = "bg-blue-100 text-blue-600";
-
+                data.forEach(item => {
+                    const fotoHtml = (item.foto_url && item.foto_url.trim().length > 5) ? `<img src="${item.foto_url}" onerror="this.remove()" class="w-full h-36 object-cover rounded-[2rem] mb-3">` : '';
                     container.innerHTML += `
-                        <div class="bg-white p-6 rounded-[2.5rem] shadow-xl shadow-gray-200/50 border border-white relative overflow-hidden">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="font-black text-xl text-gray-800 tracking-tight">${o.nama_pembeli}</h3>
-                                    <p class="text-[10px] text-gray-400 font-extrabold uppercase tracking-widest">${new Date(o.created_at).toLocaleTimeString()}</p>
-                                </div>
-                                <span class="${warnaStatus} px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-tighter shadow-sm">${o.status}</span>
+                        <div class="bg-white rounded-[2.5rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left animasi-up">
+                            ${fotoHtml}
+                            <div class="flex-grow px-2 text-left">
+                                <h3 class="font-bold text-[11px] text-gray-800 leading-tight text-left">${item.nama_makanan}</h3>
+                                <p class="text-green-600 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
-                            
-                            <div class="bg-gray-50 p-5 rounded-[2rem] mb-6 border border-gray-100">
-                                <p class="text-[9px] text-gray-400 font-black uppercase mb-2 tracking-widest">Lokasi Pengantaran</p>
-                                <p class="text-sm font-bold text-gray-700 leading-relaxed mb-4">📍 ${o.alamat_kirim}</p>
-                                
-                                <div class="mb-4 pt-3 border-t border-gray-200">
-                                    <p class="text-[10px] font-black ${o.metode_bayar === 'QRIS' ? 'text-blue-600' : 'text-orange-600'} uppercase">
-                                        💳 METODE: ${o.metode_bayar || 'COD'}
-                                    </p>
-                                    <p class="text-[11px] font-black text-gray-800 mt-1">TOTAL TAGIHAN: Rp ${(o.total_harga + 5000).toLocaleString('id-ID')}</p>
-                                </div>
-
-                                <div class="flex items-center gap-2 bg-white p-3 rounded-2xl border border-gray-100">
-                                    <span class="text-xs">📞</span>
-                                    <input type="text" readonly value="${o.no_wa || ''}" id="input-wa-${o.id}" class="bg-transparent text-[11px] font-black text-green-600 w-full outline-none">
-                                    <button onclick="salinNomor('${o.id}')" class="bg-green-600 text-white px-4 py-2 rounded-xl text-[9px] font-black uppercase shadow-md shadow-green-100 tombol-aksi">Salin</button>
+                            <div class="mt-4 flex flex-col gap-1 text-left">
+                                <button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase text-center">Beli</button>
+                                <div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-gray-50 rounded-2xl p-1">
+                                    <button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-white text-gray-400 rounded-xl font-bold shadow-sm text-center">-</button>
+                                    <span id="qty-${item.id}" class="font-black text-xs text-gray-800 text-center">0</span>
+                                    <button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-xl font-bold shadow-md text-center">+</button>
                                 </div>
                             </div>
-                            
-                            <div class="grid grid-cols-3 gap-3">
-                                <button onclick="updateStatus('${o.id}', 'proses')" class="bg-yellow-400 hover:bg-yellow-500 text-white py-4 rounded-2xl font-black text-[9px] uppercase shadow-lg shadow-yellow-100 tombol-aksi">Masak</button>
-                                <button onclick="updateStatus('${o.id}', 'dikirim')" class="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-black text-[9px] uppercase shadow-lg shadow-blue-100 tombol-aksi">Kirim</button>
-                                <button onclick="updateStatus('${o.id}', 'selesai')" class="bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-black text-[9px] uppercase shadow-lg shadow-green-100 tombol-aksi">Sampai</button>
-                            </div>
-                        </div>
-                    `;
+                        </div>`;
                 });
             }
         }
 
-        // FUNGSI UPDATE STATUS KE DATABASE
-        async function updateStatus(id, stat) {
-            const { error } = await sb.from('pesanan_ojek').update({ status: stat }).eq('id', id);
-            if(!error) {
-                console.log("Status diupdate!");
-                muatPesanan();
+        function showQtyControl(id, nama, harga) {
+            document.getElementById(`btn-beli-${id}`).classList.add('hidden');
+            document.getElementById(`qty-control-${id}`).classList.remove('hidden');
+            tambahItem(id, nama, harga);
+        }
+
+        function tambahItem(id, nama, harga) {
+            if (!keranjang[id]) keranjang[id] = { nama, harga, qty: 1 }; else keranjang[id].qty += 1;
+            updateTampilan(id);
+        }
+
+        function kurangItem(id) {
+            if (keranjang[id]) {
+                keranjang[id].qty -= 1;
+                if (keranjang[id].qty <= 0) {
+                    delete keranjang[id];
+                    document.getElementById(`qty-control-${id}`).classList.add('hidden');
+                    document.getElementById(`btn-beli-${id}`).classList.remove('hidden');
+                }
+            }
+            updateTampilan(id);
+        }
+
+        function updateTampilan(id) {
+            const qtyLabel = document.getElementById(`qty-${id}`);
+            if (qtyLabel) qtyLabel.innerText = keranjang[id] ? keranjang[id].qty : 0;
+            let total = 0; for (let k in keranjang) total += keranjang[k].harga * keranjang[k].qty;
+            const cb = document.getElementById('cart-bar');
+            if (total > 0) { 
+                cb.classList.remove('hidden'); 
+                document.getElementById('total-harga-bar').innerText = `Rp ${total.toLocaleString('id-ID')}`; 
+            } else cb.classList.add('hidden');
+        }
+
+        function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
+        function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
+        
+        function cekAlamat() {
+            let t = 0; for (let k in keranjang) t += keranjang[k].harga * keranjang[k].qty;
+            if (document.getElementById('f-alamat').value.length > 2) {
+                document.getElementById('box-total').classList.remove('hidden');
+                document.getElementById('txt-total-akhir').innerText = `Rp ${(t + ONGKIR).toLocaleString('id-ID')}`;
             }
         }
 
-        // FUNGSI SALIN NOMOR WA
-        function salinNomor(id) {
-            const copyText = document.getElementById("input-wa-" + id);
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); 
-            navigator.clipboard.writeText(copyText.value);
-            
-            // Notifikasi Kecil
-            const btn = event.target;
-            const textLama = btn.innerText;
-            btn.innerText = "OK!";
-            setTimeout(() => { btn.innerText = textLama; }, 1000);
+        async function kirimTelegram(nama, alamat, wa, menu, total) {
+            const pesan = `🚨 *ORDERAN MASUK BOS!* 🚨\n\n👤 *Nama:* ${nama}\n📍 *Alamat:* ${alamat}\n📞 *WA:* ${wa}\n🍱 *Pesanan:* ${menu}\n💰 *TOTAL TAGIHAN:* Rp ${total.toLocaleString('id-ID')}\n\nCek Dashboard Driver segera! 🛵💨`;
+            await fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`);
         }
 
-        // FITUR REALTIME (Otomatis Refresh saat ada Orderan Baru)
-        sb.channel('markas-driver')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'pesanan_ojek' }, (payload) => {
-              muatPesanan();
-          })
-          .subscribe();
+        async function kirimOrderan() {
+            const n = document.getElementById('f-nama').value; 
+            const a = document.getElementById('f-alamat').value;
+            const w = document.getElementById('f-wa').value;
+            if (!n || !a) return alert("Lengkapi data antar Bos!");
+            let t = 0; let m = []; 
+            for (let k in keranjang) { 
+                t += keranjang[k].harga * keranjang[k].qty; 
+                m.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); 
+            }
+            const { data } = await sb.from('pesanan_ojek').insert([{ 
+                nama_pembeli: n, 
+                alamat_kirim: a + " [" + m.join(", ") + "]", 
+                no_wa: w,
+                status: 'pending', 
+                total_harga: t 
+            }]).select();
+            if (data) { 
+                await kirimTelegram(n, a, w, m.join(", "), t + ONGKIR);
+                alert("Pesanan Meluncur Bos! Cek Telegram."); 
+                location.reload(); 
+            }
+        }
 
-        // Jalankan saat pertama buka halaman
-        muatPesanan();
+        setSapaan(); loadMenu();
     </script>
 </body>
 </html>
