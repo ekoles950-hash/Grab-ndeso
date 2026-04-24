@@ -3,118 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Grab Ndeso</title>
+    <title>Driver Grab Ndeso</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F9FAFB; }
-        .card-order { animation: slideIn 0.5s ease-out; }
-        @keyframes slideIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .btn-status { transition: 0.3s; text-transform: uppercase; font-weight: 800; font-size: 10px; letter-spacing: 1px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F9FAFB; text-align: left; }
+        .card-order { border-radius: 2.5rem; transition: 0.3s; }
+        .tab-active { color: #10B981; position: relative; }
+        .tab-active::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 4px; background: #10B981; border-radius: 10px; }
+        .btn-tahap { transition: 0.2s active:scale-95; }
     </style>
 </head>
-<body class="p-5 pb-20">
+<body class="pb-10 text-left">
 
-    <audio id="suara-notif" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
-
-    <div class="max-w-md mx-auto">
-        <div class="flex justify-between items-center mb-10">
-            <div>
-                <h1 class="text-2xl font-black text-gray-800 tracking-tighter uppercase">Orderan<span class="text-green-600">Masuk</span></h1>
-                <p class="text-[9px] font-bold text-gray-400 tracking-widest uppercase">Dashboard Driver V2.0</p>
-            </div>
-            <div class="text-right">
-                <span id="label-online" class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">• Online</span>
-                <button onclick="location.reload()" class="block mt-2 text-[10px] font-black text-gray-400 uppercase">Refresh</button>
-            </div>
-        </div>
-
-        <div id="container-orderan" class="space-y-6">
-            <p class="text-center text-gray-400 py-10 font-bold text-xs uppercase tracking-widest">Menunggu Orderan Baru...</p>
+    <div id="login-screen" class="fixed inset-0 bg-white z-[100] flex items-center justify-center p-8 hidden">
+        <div class="w-full max-w-md">
+            <div class="bg-green-100 w-20 h-20 rounded-[2rem] mx-auto mb-6 flex items-center justify-center text-4xl shadow-inner">🏁</div>
+            <h2 class="text-3xl font-black text-gray-800 tracking-tighter text-center italic uppercase">Driver<span class="text-green-600">Ndeso</span></h2>
+            <p class="text-xs text-gray-400 text-center font-bold mb-10 tracking-widest uppercase">Otoritas Pengemudi</p>
+            <input type="password" id="pass-admin" class="w-full p-5 rounded-3xl bg-gray-50 border-2 border-gray-100 focus:border-green-500 outline-none mb-4 text-center font-bold" placeholder="Password Rahasia">
+            <button onclick="cekLogin()" class="w-full bg-green-600 text-white py-5 rounded-3xl font-black shadow-xl active:scale-95 transition">MASUK SEKARANG</button>
         </div>
     </div>
+
+    <nav class="bg-white p-6 sticky top-0 z-40 border-b border-gray-50 flex items-center justify-between">
+        <div>
+            <h1 class="text-xl font-black text-gray-800 italic uppercase leading-none">Grab<span class="text-green-600">Ndeso</span></h1>
+            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Status: <span class="text-green-500">Online</span></p>
+        </div>
+        <button onclick="logout()" class="text-[9px] font-black text-red-500 border border-red-100 px-4 py-2 rounded-full uppercase tracking-tighter">Keluar</button>
+    </nav>
+
+    <div class="flex bg-white shadow-sm mb-6 text-left">
+        <button id="tab-p" onclick="switchTab('pending')" class="flex-1 py-5 text-[10px] font-black uppercase tracking-widest tab-active">Baru</button>
+        <button id="tab-r" onclick="switchTab('proses')" class="flex-1 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Diproses</button>
+        <button id="tab-d" onclick="switchTab('dikirim')" class="flex-1 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Dikirim</button>
+    </div>
+
+    <div id="list-orderan" class="p-5 space-y-6">
+        </div>
 
     <script>
         const SUPABASE_URL = 'https://butydxuauhtvwojvpixt.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const sound = document.getElementById('suara-notif');
+        let currentTab = 'pending';
+        const PASS_RAHASIA = "driverndesogacor"; 
 
-        // Fungsi Ambil Data
-        async function loadOrderan() {
-            const { data } = await sb.from('pesanan_ojek').select('*').order('created_at', { ascending: false });
-            if (data) renderOrderan(data);
+        window.onload = () => {
+            if (localStorage.getItem('isLoggedGrabNdeso') === 'true') {
+                document.getElementById('login-screen').classList.add('hidden');
+                loadOrders();
+                subscribeChanges();
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+            }
+        };
+
+        function cekLogin() {
+            if(document.getElementById('pass-admin').value === PASS_RAHASIA) {
+                localStorage.setItem('isLoggedGrabNdeso', 'true');
+                location.reload();
+            } else { alert("Salah Bos!"); }
         }
 
-        function renderOrderan(list) {
-            const container = document.getElementById('container-orderan');
-            container.innerHTML = '';
-            list.forEach(order => {
-                const statusColor = order.status === 'pending' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600';
-                container.innerHTML += `
-                    <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-50 card-order">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="font-black text-xl text-gray-800">${order.nama_pembeli}</h3>
-                                <p class="text-[10px] font-bold text-gray-400 italic">${new Date(order.created_at).toLocaleTimeString()}</p>
+        function logout() { localStorage.removeItem('isLoggedGrabNdeso'); location.reload(); }
+
+        async function loadOrders() {
+            const container = document.getElementById('list-orderan');
+            const { data } = await sb.from('pesanan_ojek').select('*').eq('status', currentTab).order('created_at', { ascending: false });
+
+            if (data && data.length > 0) {
+                container.innerHTML = '';
+                data.forEach(item => {
+                    let cleanWA = item.no_wa ? item.no_wa.toString().replace(/[^0-9]/g, '') : '';
+                    if (cleanWA.startsWith('0')) cleanWA = '62' + cleanWA.slice(1);
+
+                    // LOGIKA TOMBOL BERTAHAP
+                    let tombolAksi = '';
+                    if(item.status === 'pending') {
+                        tombolAksi = `<button onclick="updateStatus('${item.id}', 'proses')" class="w-full bg-yellow-500 text-white py-5 rounded-[1.8rem] font-black text-xs uppercase shadow-lg shadow-yellow-100 mt-4">👨‍🍳 Mulai Masak (Proses)</button>`;
+                    } else if(item.status === 'proses') {
+                        tombolAksi = `<button onclick="updateStatus('${item.id}', 'dikirim')" class="w-full bg-blue-500 text-white py-5 rounded-[1.8rem] font-black text-xs uppercase shadow-lg shadow-blue-100 mt-4">🏍️ Gas Antar (Dikirim)</button>`;
+                    } else if(item.status === 'dikirim') {
+                        tombolAksi = `<button onclick="updateStatus('${item.id}', 'selesai')" class="w-full bg-green-600 text-white py-5 rounded-[1.8rem] font-black text-xs uppercase shadow-lg shadow-green-100 mt-4">✅ Sudah Sampai (Selesai)</button>`;
+                    }
+
+                    container.innerHTML += `
+                        <div class="bg-white p-7 rounded-[2.5rem] shadow-sm border border-gray-100 text-left animasi-up">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Pelanggan</p>
+                                    <h4 class="text-2xl font-black text-gray-800 leading-none">${item.nama_pembeli}</h4>
+                                </div>
+                                <span class="bg-green-50 text-green-600 text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-tighter">${item.status}</span>
                             </div>
-                            <span class="${statusColor} px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">${order.status}</span>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-5 rounded-3xl mb-4 border border-gray-100">
-                            <p class="text-[10px] font-black text-gray-400 uppercase mb-2">Lokasi Pengantaran</p>
-                            <p class="font-bold text-gray-700 text-sm">📍 ${order.alamat_kirim}</p>
-                            <div class="mt-4 pt-4 border-t border-gray-200">
-                                <p class="text-[9px] font-bold text-blue-600 uppercase">💳 Metode: ${order.metode_bayar || 'COD'}</p>
-                                <p class="font-black text-gray-800 mt-1">TOTAL: Rp ${order.total_harga.toLocaleString('id-ID')}</p>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 p-5 rounded-3xl border border-dashed border-gray-200">
+                                    <p class="text-[9px] font-black text-gray-400 uppercase mb-2">Alamat & Menu</p>
+                                    <p class="text-sm font-bold text-gray-700 leading-relaxed">${item.alamat_kirim}</p>
+                                </div>
+                                
+                                <div class="flex items-center justify-between px-2">
+                                    <div class="text-left">
+                                        <p class="text-[9px] font-black text-gray-400 uppercase">Tagihan</p>
+                                        <p class="text-lg font-black text-green-600 tracking-tighter">Rp ${item.total_harga?.toLocaleString('id-ID')}</p>
+                                    </div>
+                                    <a href="https://wa.me/${cleanWA}" class="bg-green-100 text-green-600 p-4 rounded-2xl flex items-center gap-2 font-black text-[10px] uppercase">📲 Chat</a>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="flex gap-2 mb-6">
-                             <div class="flex-1 bg-gray-50 p-3 rounded-2xl flex items-center justify-between border border-gray-100">
-                                <span class="text-xs font-bold text-gray-600">📞 ${order.no_wa || '-'}</span>
-                                <button onclick="salinWA('${order.no_wa}')" class="bg-green-600 text-white px-4 py-2 rounded-xl text-[9px] font-black uppercase">Salin</button>
-                             </div>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="updateStatus('${order.id}', 'proses')" class="btn-status py-4 rounded-2xl bg-yellow-400 text-white shadow-lg shadow-yellow-100 active:scale-95">Masak</button>
-                            <button onclick="updateStatus('${order.id}', 'dikirim')" class="btn-status py-4 rounded-2xl bg-blue-500 text-white shadow-lg shadow-blue-100 active:scale-95">Kirim</button>
-                            <button onclick="updateStatus('${order.id}', 'selesai')" class="btn-status py-4 rounded-2xl bg-green-600 text-white shadow-lg shadow-green-100 active:scale-95">Sampai</button>
-                        </div>
-                    </div>
-                `;
-            });
+                            ${tombolAksi}
+                        </div>`;
+                });
+            } else {
+                container.innerHTML = `<div class="text-center py-20"><p class="text-4xl mb-4">💤</p><p class="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">Tab Ini Kosong</p></div>`;
+            }
         }
 
-        async function updateStatus(id, stat) {
-            await sb.from('pesanan_ojek').update({ status: stat }).eq('id', id);
-            loadOrderan();
+        async function updateStatus(id, statusBaru) {
+            await sb.from('pesanan_ojek').update({ status: statusBaru }).eq('id', id);
+            // Kalau mau pindah tab otomatis setelah klik:
+            if(statusBaru === 'proses') switchTab('proses');
+            else if(statusBaru === 'dikirim') switchTab('dikirim');
+            else if(statusBaru === 'selesai') switchTab('pending'); 
+            else loadOrders();
         }
 
-        function salinWA(no) {
-            navigator.clipboard.writeText(no);
-            alert("Nomor WA disalin!");
+        function switchTab(t) {
+            currentTab = t;
+            document.querySelectorAll('nav + div button').forEach(btn => btn.classList.remove('tab-active', 'text-gray-400'));
+            document.querySelectorAll('nav + div button').forEach(btn => btn.classList.add('text-gray-400'));
+            
+            if(t === 'pending') document.getElementById('tab-p').className = "flex-1 py-5 text-[10px] font-black uppercase tracking-widest tab-active";
+            if(t === 'proses') document.getElementById('tab-r').className = "flex-1 py-5 text-[10px] font-black uppercase tracking-widest tab-active";
+            if(t === 'dikirim') document.getElementById('tab-d').className = "flex-1 py-5 text-[10px] font-black uppercase tracking-widest tab-active";
+            
+            loadOrders();
         }
 
-        // --- SISTEM NOTIFIKASI BUNYI REALTIME ---
-        sb.channel('custom-all-channel')
-          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'pesanan_ojek' }, (payload) => {
-              console.log('Ada orderan baru!', payload);
-              sound.play().catch(e => console.log("Klik layar dulu biar suara aktif!"));
-              loadOrderan();
-          })
-          .subscribe();
-
-        // Penting: Browser biasanya melarang suara otomatis.
-        // User (Bos) harus klik apa saja di layar sekali setelah buka admin biar suaranya "diizinkan".
-        document.body.addEventListener('click', () => {
-            console.log("Audio diaktifkan oleh User");
-        }, { once: true });
-
-        loadOrderan();
+        function subscribeChanges() {
+            sb.channel('driver-pro').on('postgres_changes', { event: '*', schema: 'public', table: 'pesanan_ojek' }, () => {
+                loadOrders();
+            }).subscribe();
+        }
     </script>
 </body>
 </html>
