@@ -7,36 +7,65 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Grab%20Ndeso%22,%22short_name%22:%22GrabNdeso%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22#ffffff%22,%22theme_color%22:%22#10B981%22,%22icons%22:[{%22src%22:%22https://i.ibb.co.com/k2y4DhJk/images-3.jpg%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]} ">
-
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; text-align: left; }
-        .input-mewah { border: 2px solid #F3F4F6; transition: 0.3s; }
-        .input-mewah:focus { border-color: #10B981; outline: none; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
         .animasi-up { animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .nav-bawah { box-shadow: 0 -10px 25px rgba(0,0,0,0.05); }
+        
+        /* Style Chat Gelembung */
+        .bubble-driver { background: #1F2937; color: white; border-radius: 20px 20px 20px 4px; }
+        .bubble-user { background: #10B981; color: white; border-radius: 20px 20px 4px 20px; align-self: flex-end; }
+        
+        /* Animasi Muncul Chat */
+        #live-chat-modal { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(100%); opacity: 0; pointer-events: none; }
+        #live-chat-modal.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
     </style>
 </head>
-<body class="bg-[#F9FAFB] pb-40 text-left">
-
-    <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
+<body class="bg-[#0F172A] pb-40 text-left"> <nav class="bg-white/95 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-2">
-            <div class="bg-green-600 p-2.5 rounded-2xl text-white shadow-lg shadow-green-100 text-xl">🛵</div>
+            <div class="bg-green-600 p-2 rounded-xl text-white text-xl">🛵</div>
             <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic">Grab<span class="text-green-600">Ndeso</span></h1>
         </div>
     </nav>
 
-    <div id="konten-utama" class="max-w-md mx-auto p-5 text-left animasi-up">
-        <div class="mb-8 mt-2 px-1">
-            <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">Halo, Selamat Makan!</p>
-            <h2 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mt-1.5 uppercase italic text-left">Mau Makan <span class="text-green-600">Apa</span> Hari Ini?</h2>
+    <div id="konten-utama" class="max-w-md mx-auto p-5 animasi-up">
+        <div class="mb-8 mt-2 px-1 text-left">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Halo, Selamat Makan!</p>
+            <h2 class="text-3xl font-black text-white tracking-tighter uppercase italic">Mau Makan <span class="text-green-600">Apa?</span></h2>
         </div>
-        <div id="daftar-menu" class="grid grid-cols-2 gap-4"></div>
+        <div id="daftar-menu" class="grid grid-cols-2 gap-4">
+             </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2rem]">
+    <div id="live-chat-modal" class="fixed inset-x-0 bottom-0 z-[150] flex justify-center p-4">
+        <div class="bg-[#1E293B] w-full max-w-md rounded-[2.5rem] shadow-2xl border border-gray-700 overflow-hidden flex flex-col h-[70vh]">
+            <div class="bg-[#10B981] p-5 flex items-center justify-between shadow-lg">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl">💬</div>
+                    <div>
+                        <h4 class="text-white font-black text-sm leading-none">Live Chat GrabNdeso</h4>
+                        <p class="text-green-100 text-[10px] mt-1 font-bold">🟢 Online</p>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="text-white bg-black/20 w-8 h-8 rounded-full font-bold">✕</button>
+            </div>
+
+            <div id="box-chat" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-[#0F172A]">
+                <div class="bubble-driver p-4 text-xs font-bold shadow-md max-w-[85%]">
+                    Halo Lur! Ada yang bisa kami bantu? Ketik pesane sampeyan dibawah ya..
+                </div>
+            </div>
+
+            <div class="p-5 bg-[#1E293B] border-t border-gray-700 flex gap-3">
+                <input type="text" id="input-pesan" class="flex-1 p-4 bg-[#0F172A] text-white rounded-2xl outline-none text-sm font-bold border border-gray-700 focus:border-green-500" placeholder="Ketik pesane sampeyan...">
+                <button onclick="kirimChat()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-green-900/20">
+                    <span class="text-xl">✈️</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 flex justify-around items-center z-[100] max-w-md mx-auto rounded-t-[2.5rem] shadow-[0_-10px_25px_rgba(0,0,0,0.1)]">
         <button onclick="tanyaStatus()" class="flex flex-col items-center gap-1 group">
             <span class="text-xl">🔍</span>
             <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Lacak</span>
@@ -47,10 +76,11 @@
             </div>
             <span class="text-[10px] font-black text-green-600 uppercase tracking-tighter">Beranda</span>
         </button>
-        <a href="https://t.me/GrabNdesoBot" target="_blank" class="flex flex-col items-center gap-1 group text-center">
-            <span class="text-xl">✈️</span>
-            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Chat Tele</span>
-        </a>
+        <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative">
+            <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+            <span class="text-xl">💬</span>
+            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Chat</span>
+        </button>
     </div>
 
     <script>
@@ -58,73 +88,32 @@
         const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // BOT TOKEN BARU BOS
-        const TELE_TOKEN = '8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM';
-        const TELE_CHATID = '7933777456';
-        const ONGKIR = 5000;
-        let keranjang = {}; 
+        // Buka/Tutup Chat
+        function toggleChat() {
+            document.getElementById('live-chat-modal').classList.toggle('active');
+        }
 
-        // Fungsi Lacak Tanpa Fitur Chat Ribet (Hanya Info Motor & Balasan Driver)
-        function tampilkanHalamanTracking(id, statusAwal, totalMakan) {
-            const totalBayar = totalMakan + ONGKIR;
-            document.getElementById('konten-utama').innerHTML = `
-                <div class="mt-4 bg-white p-8 rounded-[3.5rem] shadow-2xl border border-gray-50 text-center animasi-up">
-                    <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter text-center">${statusAwal}</h3>
-                    
-                    <div class="relative h-2 bg-gray-100 rounded-full mb-14 mt-14 mx-4">
-                        <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
-                        <div id="motor" class="absolute -top-8 text-4xl transition-all duration-700 flex items-center justify-center" style="left:0%; transform: translateX(-50%);">🛵</div>
-                    </div>
-                    
-                    <div id="box-pesan" class="hidden bg-blue-50 border-2 border-blue-100 p-5 rounded-3xl mb-6 animasi-up">
-                        <p class="text-[9px] font-black text-blue-400 uppercase mb-1 tracking-widest text-left">Pesan Driver:</p>
-                        <p id="txt-pesan" class="text-xs font-bold text-blue-700 italic text-left">...</p>
-                    </div>
+        async function kirimChat() {
+            const input = document.getElementById('input-pesan');
+            const pesan = input.value;
+            if(!pesan) return;
 
-                    <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200">
-                        <p class="text-xs font-black text-gray-800 uppercase tracking-widest text-left">Total Bayar: <span class="text-green-600 font-bold">Rp ${totalBayar.toLocaleString('id-ID')}</span></p>
-                    </div>
-                    
-                    <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4.5 rounded-2xl font-black text-[10px] uppercase shadow-xl tracking-widest text-center">Menu Utama</button>
-                </div>
-            `;
+            // Tambahkan Bubble User ke Layar
+            const box = document.getElementById('box-chat');
+            box.innerHTML += `<div class="bubble-user p-4 text-xs font-bold shadow-md max-w-[85%]">${pesan}</div>`;
             
-            geserMotor(statusAwal);
-            
-            // Dengarkan perubahan status & pesan balasan dari Admin
-            sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => {
-                geserMotor(p.new.status);
-                // Jika ada balasan teks dari Bos
-                if(p.new.catatan_driver) {
-                    document.getElementById('box-pesan').classList.remove('hidden');
-                    document.getElementById('txt-pesan').innerText = `"${p.new.catatan_driver}"`;
-                }
-            }).subscribe();
+            // Scroll ke paling bawah
+            box.scrollTop = box.scrollHeight;
+            input.value = '';
+
+            // Kirim ke Telegram (Biar Bos dapet notif)
+            const TELE_TOKEN = '8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM';
+            const TELE_CHATID = '7933777456';
+            const teks = `💬 *PESAN BARU DARI TAMU:* \n\n"${pesan}"`;
+            await fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(teks)}&parse_mode=Markdown`);
         }
 
-        function geserMotor(stat) {
-            const m = document.getElementById('motor');
-            const b = document.getElementById('bar-progress');
-            const t = document.getElementById('txt-status');
-            if (!m) return;
-            t.innerText = stat.toUpperCase();
-            if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; m.innerHTML = "🛵"; }
-            if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; m.innerHTML = "👨‍🍳"; }
-            if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
-            if(stat === 'selesai') { m.style.left = '92%'; b.style.width = '100%'; m.innerHTML = "🏠"; }
-        }
-
-        function tanyaStatus() {
-            const n = prompt("Nama Pembeli:");
-            if (n) {
-                sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
-                .then(({data}) => { 
-                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, data[0].total_harga || 0); 
-                    else alert("Gak ada Bos!");
-                });
-            }
-        }
-
+        // --- Load Menu (Tetap Sesuai Fitur Bos) ---
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
@@ -132,13 +121,13 @@
                 container.innerHTML = '';
                 data.forEach(item => {
                     container.innerHTML += `
-                        <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-50 flex flex-col text-left">
+                        <div class="bg-[#1E293B] rounded-[2rem] p-3 border border-gray-700 flex flex-col text-left">
                             <img src="${item.foto_url}" onerror="this.remove()" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
-                            <div class="flex-grow px-2 text-left">
-                                <h3 class="font-bold text-[11px] text-gray-800 leading-tight">${item.nama_makanan}</h3>
-                                <p class="text-green-600 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
+                            <div class="flex-grow px-2">
+                                <h3 class="font-bold text-[11px] text-white leading-tight">${item.nama_makanan}</h3>
+                                <p class="text-green-500 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
-                            <button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 py-3 rounded-2xl text-[9px] font-black uppercase mt-4">Beli</button>
+                            <button class="w-full bg-white/5 text-white py-3 rounded-2xl text-[9px] font-black uppercase mt-4">Beli</button>
                         </div>`;
                 });
             }
