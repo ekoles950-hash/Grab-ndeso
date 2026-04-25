@@ -15,7 +15,7 @@
         .metode-card { background: #1E293B; border: 2px solid #334155; cursor: pointer; transition: 0.3s; text-align: center; color: #94A3B8; }
         .metode-card.active { border-color: #10B981; background: #064E3B; color: white; }
         .animasi-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         /* SLIDER STYLE */
         #slider { display: flex; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -29,6 +29,8 @@
         .bubble-user { background: #10B981; color: white; padding: 12px 16px; border-radius: 20px 20px 5px 20px; font-size: 11px; align-self: flex-end; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
         
         .nav-bawah { background: #1E293B; border-top: 1px solid #334155; box-shadow: 0 -10px 25px rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body class="pb-32">
@@ -44,30 +46,30 @@
     <div id="konten-utama" class="max-w-md mx-auto p-5 animasi-up">
         <div class="mb-6 px-1">
             <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Halo, Selamat <span id="waktu-hari">...</span>!</p>
-            <h2 class="text-3xl font-black text-white tracking-tighter leading-tight mt-1 uppercase italic">Mau Makan <span class="text-green-600">Apa?</span></h2>
+            <h2 class="text-3xl font-black text-white tracking-tighter leading-tight mt-1 uppercase italic text-left">Mau Makan <span class="text-green-600">Apa?</span></h2>
         </div>
 
         <div class="relative overflow-hidden rounded-[2.5rem] mb-8 shadow-2xl border border-white/5 mx-1 bg-slate-800">
             <div id="slider">
                 <div class="min-w-full relative">
-                    <img src="https://raw.githubusercontent.com/username/repo/main/banner1.jpg" onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800'" class="w-full h-44 object-cover opacity-70">
+                    <img src="https://raw.githubusercontent.com/ekoles950-hash/Grab-ndeso/main/promo1.jpg" class="w-full h-44 object-cover opacity-70">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0F172A] to-transparent"></div>
                     <div class="absolute bottom-5 left-6 text-left">
-                        <span class="bg-green-600 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Diskon Gede</span>
-                        <h3 class="text-xl font-black mt-1 italic uppercase">Laper? Satsetin Aja!</h3>
+                        <span class="bg-green-600 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Promo Gacor</span>
+                        <h3 class="text-xl font-black mt-1 italic uppercase text-white">Makan Enak <br> Satsetin Aja!</h3>
                     </div>
                 </div>
                 <div class="min-w-full relative">
-                    <img src="https://raw.githubusercontent.com/username/repo/main/banner2.jpg" onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800'" class="w-full h-44 object-cover opacity-70">
+                    <img src="https://raw.githubusercontent.com/ekoles950-hash/Grab-ndeso/main/promo2.jpg" class="w-full h-44 object-cover opacity-70">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0F172A] to-transparent"></div>
                     <div class="absolute bottom-5 left-6 text-left">
-                        <span class="bg-blue-600 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Menu Baru</span>
-                        <h3 class="text-xl font-black mt-1 italic uppercase">Rasa Mantap Sekali!</h3>
+                        <span class="bg-blue-600 text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Spesial Menu</span>
+                        <h3 class="text-xl font-black mt-1 italic uppercase text-white">Rasa Mantap <br> Bikin Nagih!</h3>
                     </div>
                 </div>
             </div>
             <div class="absolute bottom-4 right-8 flex gap-2">
-                <div id="dot0" class="indicator-dot w-2 h-2 rounded-full bg-green-500 shadow-lg"></div>
+                <div id="dot0" class="indicator-dot w-5 h-2 rounded-full bg-green-500 shadow-lg"></div>
                 <div id="dot1" class="indicator-dot w-2 h-2 rounded-full bg-white/20"></div>
             </div>
         </div>
@@ -82,18 +84,25 @@
                 <button onclick="tutupModal()" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl active:scale-90 transition">✕</button>
             </div>
             <div class="p-6 space-y-5 overflow-y-auto flex-1 text-left">
-                <input type="text" id="f-nama" class="w-full p-4 rounded-2xl input-dark text-sm font-bold" placeholder="Nama Penerima">
-                <input type="number" id="f-wa" class="w-full p-4 rounded-2xl input-dark text-sm font-bold" placeholder="WhatsApp (081xxx)">
-                <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4 rounded-2xl input-dark text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-4 rounded-2xl shadow-sm"><span class="text-xl">💵</span><p class="text-[9px] font-black mt-1 uppercase">COD (CASH)</p></div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 block">Nama Penerima</label>
+                    <input type="text" id="f-nama" class="w-full p-4 rounded-2xl input-dark text-sm font-bold mt-1" placeholder="Masukkan nama...">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 block">WhatsApp</label>
+                    <input type="number" id="f-wa" class="w-full p-4 rounded-2xl input-dark text-sm font-bold mt-1" placeholder="0812xxxx">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 block">Alamat Lengkap</label>
+                    <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4 rounded-2xl input-dark text-sm font-bold mt-1" placeholder="Alamat pengiriman..."></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-2">
+                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-4 rounded-2xl shadow-sm"><span class="text-xl">💵</span><p class="text-[9px] font-black mt-1 uppercase">COD (TUNAI)</p></div>
                     <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-4 rounded-2xl shadow-sm"><span class="text-xl">📱</span><p class="text-[9px] font-black mt-1 uppercase">QRIS/TRANSFER</p></div>
                 </div>
-
-                <div id="box-total" class="hidden bg-[#064E3B]/30 border-2 border-green-900/50 p-5 rounded-[2rem]">
-                    <div class="flex justify-between items-center"><p class="text-[10px] font-bold text-slate-400 uppercase">Ongkir Flat</p><p class="text-[10px] font-bold text-slate-400">Rp 5.000</p></div>
-                    <div class="flex justify-between items-center border-t border-green-900/50 mt-2 pt-2"><p class="text-xs font-black text-white uppercase tracking-widest">Total Bayar</p><p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter">Rp 0</p></div>
+                <div id="box-total" class="hidden bg-[#064E3B]/30 border-2 border-green-900/50 p-5 rounded-[2rem] mt-2">
+                    <div class="flex justify-between items-center text-left"><p class="text-[10px] font-bold text-slate-400 uppercase">Ongkir Flat</p><p class="text-[10px] font-bold text-slate-400">Rp 5.000</p></div>
+                    <div class="flex justify-between items-center border-t border-green-900/50 mt-2 pt-2 text-left"><p class="text-xs font-black text-white uppercase tracking-widest">Total Bayar</p><p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter">Rp 0</p></div>
                 </div>
             </div>
             <div class="p-6 bg-[#1E293B] border-t border-white/5">
@@ -102,20 +111,20 @@
         </div>
     </div>
 
-    <div id="modal-qris" class="fixed inset-0 bg-black/90 z-[120] hidden flex items-center justify-center p-6" onclick="tutupQRIS()">
-        <div class="bg-white p-4 rounded-3xl max-w-sm w-full relative text-center" onclick="event.stopPropagation()">
+    <div id="modal-qris" class="fixed inset-0 bg-black/90 z-[120] hidden flex items-center justify-center p-6 text-center" onclick="tutupQRIS()">
+        <div class="bg-white p-4 rounded-3xl max-w-sm w-full relative" onclick="event.stopPropagation()">
             <img src="QRIS.jpg" class="w-full rounded-2xl border border-gray-100 mb-4" alt="QRIS">
-            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase text-center">Sudah Bayar / Tutup</button>
+            <button onclick="tutupQRIS()" class="w-full bg-gray-100 text-gray-600 py-4 rounded-2xl font-black text-xs uppercase">Tutup</button>
         </div>
     </div>
 
     <div id="chatWidget" class="animasi-up">
         <div class="chat-header text-white">
-            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl"></i><div class="text-left"><p class="font-black text-xs leading-none">Live Chat Driver</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 uppercase italic tracking-widest">Ref: -</p></div></div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl"></i><div class="text-left"><p class="font-black text-xs leading-none">Live Chat Driver</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 uppercase italic tracking-widest text-left">Ref: -</p></div></div>
             <button onclick="toggleChat()" class="text-white opacity-70 hover:opacity-100 font-bold text-xl">✕</button>
         </div>
         <div id="chatMessages" class="chat-body text-left"></div>
-        <div class="p-4 bg-[#1E293B] border-t border-white/5 flex gap-2 text-left">
+        <div class="p-4 bg-[#1E293B] border-t border-white/5 flex gap-2">
             <input type="text" id="chatInput" onkeypress="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-white/10 focus:border-green-600" placeholder="Ketik pesan...">
             <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
@@ -130,7 +139,7 @@
     <div id="cart-bar" class="fixed bottom-24 left-4 right-4 hidden z-50 animasi-up">
         <div class="bg-[#1E293B] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/5">
             <div class="flex items-center gap-4 text-left"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div><p id="total-harga-bar" class="font-black text-2xl">Rp 0</p></div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-[10px] uppercase">Checkout</button>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-[10px] uppercase">Beli</button>
         </div>
     </div>
 
@@ -148,7 +157,6 @@
 
         function setSapaan() { const h = new Date().getHours(); let s = "Pagi"; if(h>=11 && h<15) s="Siang"; else if(h>=15 && h<18) s="Sore"; else if(h>=18 || h<4) s="Malam"; document.getElementById('waktu-hari').innerText = s; }
 
-        // SLIDER LOGIC
         function moveSlide() {
             currentSlide = (currentSlide + 1) % 2;
             document.getElementById('slider').style.transform = `translateX(-${currentSlide * 100}%)`;
@@ -163,7 +171,7 @@
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
-            if (data) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4"><div class="flex-grow px-3"><h3 class="font-bold text-[10px] text-white leading-tight uppercase">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 active:bg-green-600 transition">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5 text-center"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold">-</button><span id="qty-${item.id}" class="font-black text-sm text-white">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold">+</button></div></div>`; }); }
+            if (data) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4"><div class="flex-grow px-3"><h3 class="font-bold text-[10px] text-white leading-tight uppercase">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 transition active:bg-green-600">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5 text-center"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold">-</button><span id="qty-${item.id}" class="font-black text-sm text-white">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold">+</button></div></div>`; }); }
         }
 
         function showQtyControl(id, n, h) { document.getElementById(`btn-beli-${id}`).classList.add('hidden'); document.getElementById(`qty-control-${id}`).classList.remove('hidden'); tambahItem(id, n, h); }
@@ -175,8 +183,8 @@
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
         function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
-        async function kirimOrderan() { const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; if (!n || !a) return alert("Wajib isi Nama & Alamat!"); let tm = 0, lm = []; for (let k in keranjang) { tm += keranjang[k].harga * keranjang[k].qty; lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); } const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: tm, metode_bayar: metodeBayar }]).select(); if (data) { const pt = `🚨 *ORDER BARU* \n👤 *Nama:* ${n}\n📍 *Alamat:* ${a}\n📞 *WA:* ${w}\n🍱 *Menu:* ${lm.join(", ")}\n💰 *Total:* Rp ${(tm + ONGKIR).toLocaleString('id-ID')}\n🆔 *Ref:* ${mySessionId}`; fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); location.reload(); } }
-        function tanyaStatus() { const n = prompt("Ketik Nama:"); if (n) { sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1).then(({data}) => { if (data && data.length > 0) alert("Pesanan Ditemukan! Status: " + data[0].status); else alert("Gak ada pesanan!"); }); } }
+        async function kirimOrderan() { const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; if (!n || !a) return alert("Isi Nama & Alamat dulu!"); let tm = 0, lm = []; for (let k in keranjang) { tm += keranjang[k].harga * keranjang[k].qty; lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); } const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: tm, metode_bayar: metodeBayar }]).select(); if (data) { const pt = `🚨 *ORDER BARU* \n👤 *Nama:* ${n}\n📍 *Alamat:* ${a}\n🍱 *Menu:* ${lm.join(", ")}\n💰 *Total:* Rp ${(tm + ONGKIR).toLocaleString('id-ID')}\n🆔 *Ref:* ${mySessionId}`; fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); location.reload(); } }
+        function tanyaStatus() { const n = prompt("Ketik Nama:"); if (n) { sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1).then(({data}) => { if (data && data.length > 0) alert("Ditemukan! Status: " + data[0].status); else alert("Gak ada pesanan!"); }); } }
         function toggleChat() { const w = document.getElementById('chatWidget'); document.getElementById('txt-ref-id').innerText = "Ref: " + mySessionId; w.style.display = (w.style.display === 'block') ? 'none' : 'block'; }
         async function pollTelegram() { try { const res = await fetch(`https://api.telegram.org/bot${TELE_TOKEN}/getUpdates?offset=${lastMsgId + 1}`); const d = await res.json(); if (d.ok && d.result.length > 0) { d.result.forEach(u => { const msg = u.message; lastMsgId = u.update_id; if (msg && msg.from.id.toString() === TELE_CHATID && msg.reply_to_message && msg.reply_to_message.text.includes(mySessionId)) { addBubble(msg.text, 'admin'); } }); } } catch (e) {} setTimeout(pollTelegram, 3000); }
         async function sendChatMessage() { const i = document.getElementById('chatInput'); if(!i.value.trim()) return; addBubble(i.value, 'user'); const tt = `💬 *CHAT TAMU:*\n"${i.value}"\n\n_Ref: ${mySessionId}_`; fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(tt)}&parse_mode=Markdown`); i.value = ''; }
@@ -184,4 +192,4 @@
         setSapaan(); loadMenu(); pollTelegram();
     </script>
 </body>
-</html> 
+</html>
