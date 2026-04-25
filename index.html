@@ -3,139 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab Ndeso - Chat System</title>
+    <title>Grab Ndeso - Chat Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #F9FAFB; }
-        /* MODAL CHAT PERSIS BASECAMP */
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0F172A; }
+        .animasi-up { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        /* MODAL CHAT MODEL BASECAMP */
         #chatWidget { 
-            display: none; position: fixed; bottom: 90px; left: 15px; right: 15px; 
-            max-width: 360px; background: #1E293B; border-radius: 2rem; 
-            overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.4); 
+            display: none; position: fixed; bottom: 100px; left: 15px; right: 15px; 
+            max-width: 360px; background: #1E293B; border-radius: 2.5rem; 
+            overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5); 
             z-index: 1000; border: 1px solid #334155; 
         }
-        .chat-header { background: #10B981; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-body { height: 320px; overflow-y: auto; padding: 20px; background: #0F172A; display: flex; flex-direction: column; gap: 10px; }
-        .bubble-admin { background: #334155; color: white; padding: 10px 15px; border-radius: 15px 15px 15px 5px; font-size: 12px; max-width: 80%; align-self: flex-start; }
-        .bubble-user { background: #10B981; color: white; padding: 10px 15px; border-radius: 15px 15px 5px 15px; font-size: 12px; max-width: 80%; align-self: flex-end; }
-        .nav-bawah { position: fixed; bottom: 0; left: 0; right: 0; bg-white; border-t: 1px solid #eee; display: flex; justify-content: space-around; padding: 10px; background: white; border-radius: 2rem 2rem 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        .chat-header { background: #10B981; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-body { height: 350px; overflow-y: auto; padding: 20px; background: #0F172A; display: flex; flex-direction: column; gap: 12px; }
+        
+        /* BUBBLE CHAT */
+        .bubble-admin { background: #334155; color: white; padding: 12px 16px; border-radius: 20px 20px 20px 5px; font-size: 12px; max-width: 85%; align-self: flex-start; border: 1px solid #475569; }
+        .bubble-user { background: #10B981; color: white; padding: 12px 16px; border-radius: 20px 20px 5px 20px; font-size: 12px; max-width: 85%; align-self: flex-end; }
+        
+        .nav-bawah { box-shadow: 0 -10px 25px rgba(0,0,0,0.2); }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-32">
 
-    <nav class="p-4 flex justify-center bg-white border-b border-gray-100">
-        <h1 class="text-xl font-black italic">GRAB<span class="text-green-600">NDESO</span></h1>
+    <nav class="bg-white/10 backdrop-blur p-4 sticky top-0 z-40 border-b border-white/5 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="bg-green-600 p-2 rounded-xl text-white text-xl">🛵</div>
+            <h1 class="text-xl font-extrabold text-white tracking-tighter uppercase italic text-left">Grab<span class="text-green-600">Ndeso</span></h1>
+        </div>
     </nav>
 
-    <div id="chatWidget">
+    <div class="max-w-md mx-auto p-5 text-left">
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Halo Bos!</p>
+        <h2 class="text-3xl font-black text-white tracking-tighter uppercase italic leading-none">Mau Makan <br><span class="text-green-600">Apa Hari Ini?</span></h2>
+    </div>
+
+    <div id="chatWidget" class="animasi-up">
         <div class="chat-header text-white">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-circle-user text-2xl"></i>
-                <div>
-                    <p class="font-bold text-xs">Live Chat GrabNdeso</p>
-                    <p id="ref-teks" class="text-[9px] opacity-80">Ref: -</p>
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-comments text-xl"></i>
+                <div class="text-left">
+                    <p class="font-black text-xs leading-none">Live Chat GrabNdeso</p>
+                    <p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 uppercase">Ref: -</p>
                 </div>
             </div>
-            <button onclick="toggleChat()" class="font-bold">✕</button>
+            <button onclick="toggleChat()" class="text-white opacity-70 hover:opacity-100 font-bold">✕</button>
         </div>
-        <div id="boxChat" class="chat-body">
-            <div class="bubble-admin">Halo! Ada yang bisa kami bantu Bos?</div>
+
+        <div id="chatMessages" class="chat-body">
+            <div class="bubble-admin">
+                Halo Bos! Ada yang bisa kami bantu? <br>
+                Ketik pesane sampeyan dibawah ya..
+            </div>
         </div>
-        <div class="p-3 bg-[#1E293B] flex gap-2">
-            <input type="text" id="chatInp" class="flex-1 bg-[#0F172A] text-white text-xs p-3 rounded-xl border border-gray-700 outline-none" placeholder="Ketik pesene sampeyan...">
-            <button onclick="kirimChat()" class="bg-green-500 text-white w-10 h-10 rounded-xl flex items-center justify-center">
-                <i class="fa-solid fa-paper-plane"></i>
+
+        <div class="p-4 bg-[#1E293B] border-t border-gray-700 flex gap-2">
+            <input type="text" id="chatInput" 
+                onkeypress="if(event.key === 'Enter') sendChatMessage()"
+                class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-gray-700 focus:border-green-500" 
+                placeholder="Ketik pesene sampeyan...">
+            <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition">
+                <i class="fa-solid fa-paper-plane text-lg"></i>
             </button>
         </div>
     </div>
 
-    <div class="nav-bawah max-w-md mx-auto">
-        <button class="flex flex-col items-center gap-1 opacity-40"><i class="fa-solid fa-search"></i><span class="text-[9px] font-bold">LACAK</span></button>
-        <button onclick="location.reload()" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-green-600"></i><span class="text-[9px] font-bold text-green-600">BERANDA</span></button>
-        <button onclick="toggleChat()" class="flex flex-col items-center gap-1"><i class="fa-solid fa-message"></i><span class="text-[9px] font-bold">CHAT</span></button>
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
+        <button class="flex flex-col items-center gap-1 opacity-30"><span class="text-xl">🔍</span><span class="text-[9px] font-black uppercase">Lacak</span></button>
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1">
+            <div class="bg-green-600 p-3 rounded-2xl shadow-lg -mt-8 border-4 border-[#0F172A]">
+                <span class="text-xl">🏠</span>
+            </div>
+            <span class="text-[10px] font-black text-green-600 uppercase tracking-tighter">Beranda</span>
+        </button>
+        <button onclick="toggleChat()" class="flex flex-col items-center gap-1">
+            <span class="text-xl">💬</span>
+            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Chat</span>
+        </button>
     </div>
 
     <script>
-        // PAKAI KONFIGURASI SUPABASE BOS
-        const SB_URL = 'https://butydxuauhtvwojvpixt.supabase.co';
-        const SB_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
-        const sb = supabase.createClient(SB_URL, SB_KEY);
+        // --- PENGATURAN CHAT (TOKEN BOS) ---
+        const CHAT_BOT_TOKEN = "8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM";
+        const ADMIN_CHAT_ID = "7933777456";
+        let lastMsgId = 0;
+        let isStoreOpen = true; 
 
-        const TOKEN = "8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM";
-        const CID = "7933777456";
-
-        // Ambil ID Unik (Ref ID)
-        let myID = localStorage.getItem('chatSessionId');
-        if (!myID) {
-            myID = "GN-" + Math.random().toString(36).substr(2, 5).toUpperCase();
-            localStorage.setItem('chatSessionId', myID);
+        // Generate Ref ID
+        let mySessionId = localStorage.getItem('chatSessionId');
+        if (!mySessionId) {
+            mySessionId = "GN-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+            localStorage.setItem('chatSessionId', mySessionId);
         }
 
         function toggleChat() {
-            let w = document.getElementById('chatWidget');
-            document.getElementById('ref-teks').innerText = "Ref: " + myID;
-            if(w.style.display === 'block') {
-                w.style.display = 'none';
-            } else {
-                w.style.display = 'block';
-                loadChat();
-                hubungkanRealtime();
-            }
+            const widget = document.getElementById('chatWidget');
+            document.getElementById('txt-ref-id').innerText = "Ref: " + mySessionId;
+            widget.style.display = (widget.style.display === 'block') ? 'none' : 'block';
         }
 
-        async function kirimChat() {
-            let inp = document.getElementById('chatInp');
-            let teks = inp.value.trim();
-            if(!teks) return;
-
-            // 1. Simpan ke Supabase (Sesuaikan nama kolom)
-            // Di Basecamp Bos pakai kolom 'pesanan_id' atau 'pesanan_id_string'?
-            // Saya pakai 'pesanan_id_string' sesuai diskusi sebelumnya.
-            const { error } = await sb.from('chat_pesanan').insert([{ 
-                pesanan_id_string: myID, 
-                pengirim: 'pembeli', 
-                pesan: teks 
-            }]);
-
-            if(!error) {
-                tampilkanBubble(teks, 'pembeli');
-                inp.value = "";
+        // FUNGSI POLLING: CEK BALASAN DARI TELEGRAM BOS
+        async function pollTelegram() {
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${CHAT_BOT_TOKEN}/getUpdates?offset=${lastMsgId + 1}`);
+                const data = await res.json();
                 
-                // 2. Kirim Notif Telegram
-                let t = `💬 *PESAN BARU:*\n"${teks}"\n\n_Ref: ${myID}_`;
-                fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CID}&text=${encodeURIComponent(t)}&parse_mode=Markdown`);
-            } else {
-                console.log(error);
-                alert("Gagal Kirim! Pastikan tabel 'chat_pesanan' sudah ada kolom 'pesanan_id_string'");
-            }
+                if (data.ok && data.result.length > 0) {
+                    data.result.forEach(update => {
+                        const msg = update.message;
+                        lastMsgId = update.update_id;
+
+                        // Jika Bos membalas (Reply) dan teks asli mengandung Ref ID user ini
+                        if (msg && msg.from && msg.from.id.toString() === ADMIN_CHAT_ID) {
+                            if (msg.reply_to_message && msg.reply_to_message.text.includes(mySessionId)) {
+                                addBubble(msg.text, 'admin');
+                            }
+                        }
+                    });
+                }
+            } catch (e) { console.log("Gagal polling"); }
+            setTimeout(pollTelegram, 3000); // Cek tiap 3 detik
         }
 
-        function hubungkanRealtime() {
-            sb.channel('live-grab').on('postgres_changes', { 
-                event: 'INSERT', 
-                schema: 'public', 
-                table: 'chat_pesanan', 
-                filter: `pesanan_id_string=eq.${myID}` 
-            }, (p) => {
-                if(p.new.pengirim === 'driver') tampilkanBubble(p.new.pesan, 'driver');
-            }).subscribe();
+        // FUNGSI KIRIM PESAN KE TELEGRAM BOS
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            // Munculkan di layar user
+            addBubble(text, 'user');
+            input.value = '';
+
+            // Kirim ke Telegram Bos (Lengkap dengan Ref ID)
+            const textToTelegram = `💬 *CHAT TAMU:*\n"${text}"\n\n_Ref: ${mySessionId}_`;
+            fetch(`https://api.telegram.org/bot${CHAT_BOT_TOKEN}/sendMessage?chat_id=${ADMIN_CHAT_ID}&text=${encodeURIComponent(textToTelegram)}&parse_mode=Markdown`);
         }
 
-        async function loadChat() {
-            const { data } = await sb.from('chat_pesanan').select('*').eq('pesanan_id_string', myID).order('created_at', {ascending: true});
-            const box = document.getElementById('boxChat');
-            box.innerHTML = '';
-            if(data) data.forEach(m => tampilkanBubble(m.pesan, m.pengirim));
+        function addBubble(text, sender) {
+            const chatMsgs = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = (sender === 'user') ? 'bubble-user animasi-up' : 'bubble-admin animasi-up';
+            div.innerHTML = text;
+            chatMsgs.appendChild(div);
+            chatMsgs.scrollTop = chatMsgs.scrollHeight;
         }
 
-        function tampilkanBubble(teks, pengirim) {
-            const box = document.getElementById('boxChat');
-            const style = (pengirim === 'pembeli') ? 'bubble-user' : 'bubble-admin';
-            box.innerHTML += `<div class="${style}">${teks}</div>`;
-            box.scrollTop = box.scrollHeight;
-        }
+        // Jalankan polling saat web dibuka
+        pollTelegram();
     </script>
 </body>
 </html>
