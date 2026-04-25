@@ -7,9 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Grab%20Ndeso%22,%22short_name%22:%22GrabNdeso%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22#ffffff%22,%22theme_color%22:%22#10B981%22,%22icons%22:[{%22src%22:%22https://i.ibb.co.com/k2y4DhJk/images-3.jpg%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]} ">
-
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; text-align: left; }
         .input-mewah { border: 2px solid #F3F4F6; transition: 0.3s; }
@@ -30,18 +27,8 @@
         <button onclick="tanyaStatus()" class="text-[10px] font-extrabold text-green-600 border-2 border-green-600 px-5 py-2.5 rounded-full uppercase tracking-widest active:scale-95 transition">Lacak</button>
     </nav>
 
-    <div id="install-banner" class="hidden mx-5 mt-4 p-4 bg-green-600 rounded-3xl flex items-center justify-between shadow-lg shadow-green-100 animasi-up">
-        <div class="flex items-center gap-3">
-            <span class="text-2xl">📲</span>
-            <div>
-                <p class="text-[10px] font-black text-white uppercase tracking-tighter">Pasang Aplikasi</p>
-                <p class="text-[9px] text-green-100 font-bold">Biar pesennya lebih sat-set!</p>
-            </div>
-        </div>
-        <button id="btn-install" class="bg-white text-green-600 px-5 py-2 rounded-xl font-black text-[10px] uppercase">Install</button>
-    </div>
-
     <div id="konten-utama" class="max-w-md mx-auto p-5 text-left">
+        
         <div class="mb-8 mt-2 px-1 text-left">
             <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-left">
                 Halo, Selamat <span id="waktu-hari">...</span>!
@@ -64,10 +51,13 @@
         <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 text-left overflow-y-auto max-h-[95vh] animasi-up">
             <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-8"></div>
             <h3 class="text-2xl font-black text-gray-800 mb-8 text-center tracking-tighter text-left">Data Antar</h3>
+            
             <div class="space-y-4 text-left">
                 <input type="text" id="f-nama" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Nama Lengkap">
                 <input type="number" id="f-wa" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="WhatsApp (081xxx)">
                 <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4.5 rounded-2xl bg-gray-50 input-mewah text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
+                
+                <p class="text-[11px] font-black text-gray-400 uppercase ml-2 tracking-wider text-left">Metode Pembayaran</p>
                 <div class="grid grid-cols-2 gap-3 pb-2 text-left">
                     <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-5 rounded-2xl text-center shadow-sm">
                         <span class="text-2xl text-center">💵</span>
@@ -78,6 +68,7 @@
                         <p class="text-[10px] font-black mt-2 uppercase text-center tracking-widest">QRIS/TRANSFER</p>
                     </div>
                 </div>
+
                 <div id="box-total" class="hidden bg-green-50 border-2 border-green-100 p-6 rounded-[2rem] text-left">
                     <div class="flex justify-between items-center pb-2 text-left">
                         <span class="text-xs font-extrabold text-green-600 uppercase tracking-widest text-left">Ongkir</span>
@@ -89,6 +80,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="mt-10 flex gap-4 text-left">
                 <button onclick="tutupModal()" class="flex-1 py-4.5 text-gray-400 font-bold text-sm active:scale-95 text-center">Batal</button>
                 <button onclick="kirimOrderan()" class="flex-[2.5] bg-green-600 text-white py-4.5 rounded-2xl font-black text-sm shadow-xl shadow-green-100 active:scale-95 transition text-center">KONFIRMASI</button>
@@ -120,6 +112,7 @@
         const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // DATA TELEGRAM BOS JURAGAN
         const TELE_TOKEN = '8669740968:AAE7WcWDDqKcj7V836fFYUaZmdcpwyuecVE';
         const TELE_CHATID = '7933777456';
 
@@ -127,25 +120,7 @@
         let metodeBayar = 'COD';
         const ONGKIR = 5000;
 
-        // FUNGSI INSTALL OTOMATIS
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('install-banner').classList.remove('hidden');
-        });
-
-        document.getElementById('btn-install').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    document.getElementById('install-banner').classList.add('hidden');
-                }
-                deferredPrompt = null;
-            }
-        });
-
+        // FUNGSI UPDATE WAKTU OTOMATIS
         function setSapaan() {
             const waktuLabel = document.getElementById('waktu-hari');
             const jam = new Date().getHours();
@@ -169,11 +144,13 @@
                                 <h3 class="font-bold text-[11px] text-gray-800 leading-tight text-left">${item.nama_makanan}</h3>
                                 <p class="text-green-600 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p>
                             </div>
+                            
                             <div class="mt-4 flex flex-col gap-1">
-                                <button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase text-center">Beli</button>
+                                <button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-gray-50 text-gray-800 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest active:bg-green-600 active:text-white transition text-center">Beli</button>
+                                
                                 <div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-gray-50 rounded-2xl p-1 text-left">
                                     <button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-white text-gray-400 rounded-xl font-bold shadow-sm active:scale-90 text-center">-</button>
-                                    <span id="qty-${item.id}" class="font-black text-xs text-gray-800 text-center">0</span>
+                                    <span id="qty-${item.id}" class="font-black text-xs text-gray-800 text-center text-center">0</span>
                                     <button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-xl font-bold shadow-md active:scale-90 text-center">+</button>
                                 </div>
                             </div>
@@ -189,7 +166,11 @@
         }
 
         function tambahItem(id, nama, harga) {
-            if (!keranjang[id]) { keranjang[id] = { nama, harga, qty: 1 }; } else { keranjang[id].qty += 1; }
+            if (!keranjang[id]) {
+                keranjang[id] = { nama, harga, qty: 1 };
+            } else {
+                keranjang[id].qty += 1;
+            }
             updateTampilan(id);
         }
 
@@ -208,13 +189,19 @@
         function updateTampilan(id) {
             const qtyLabel = document.getElementById(`qty-${id}`);
             if (qtyLabel) qtyLabel.innerText = keranjang[id] ? keranjang[id].qty : 0;
+
             let totalMakan = 0;
-            for (let k in keranjang) totalMakan += keranjang[k].harga * keranjang[k].qty;
+            for (let k in keranjang) {
+                totalMakan += keranjang[k].harga * keranjang[k].qty;
+            }
+
             const cartBar = document.getElementById('cart-bar');
             if (totalMakan > 0) {
                 cartBar.classList.remove('hidden');
                 document.getElementById('total-harga-bar').innerText = `Rp ${totalMakan.toLocaleString('id-ID')}`;
-            } else { cartBar.classList.add('hidden'); }
+            } else {
+                cartBar.classList.add('hidden');
+            }
         }
 
         function pilihMetode(m) {
@@ -224,10 +211,11 @@
         }
 
         function cekAlamat() {
-            let t = 0; for (let k in keranjang) t += keranjang[k].harga * keranjang[k].qty;
+            let totalMakan = 0;
+            for (let k in keranjang) totalMakan += keranjang[k].harga * keranjang[k].qty;
             if (document.getElementById('f-alamat').value.length > 2) {
                 document.getElementById('box-total').classList.remove('hidden');
-                document.getElementById('txt-total-akhir').innerText = `Rp ${(t + ONGKIR).toLocaleString('id-ID')}`;
+                document.getElementById('txt-total-akhir').innerText = `Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}`;
             }
         }
 
@@ -236,18 +224,24 @@
         function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
         function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
 
+        // FUNGSI KIRIM KE TELEGRAM BOS JURAGAN
         async function kirimTelegram(pesan) {
             const url = `https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pesan)}&parse_mode=Markdown`;
-            try { await fetch(url, { method: 'POST' }); } catch (e) { console.log(e); }
+            try {
+                await fetch(url, { method: 'POST' });
+            } catch (e) {
+                console.log("Error Telegram:", e);
+            }
         }
 
         async function kirimOrderan() {
             const nama = document.getElementById('f-nama').value;
             const wa = document.getElementById('f-wa').value;
             const alamat = document.getElementById('f-alamat').value;
-            if (!nama || !alamat) return alert("Lengkapi data!");
+            if (!nama || !alamat) return alert("Lengkapi data antarmu Juragan!");
 
-            let totalMakan = 0; let listMenu = [];
+            let totalMakan = 0;
+            let listMenu = [];
             for (let k in keranjang) {
                 totalMakan += keranjang[k].harga * keranjang[k].qty;
                 listMenu.push(`${keranjang[k].nama} (x${keranjang[k].qty})`);
@@ -259,8 +253,10 @@
             }]).select();
 
             if (data) {
-                const pesanTele = `🚨 *ORDERAN BARU!* 🚨\n\n👤 *Nama:* ${nama}\n📍 *Alamat:* ${alamat}\n🍱 *Pesanan:* ${listMenu.join(", ")}\n💰 *TOTAL:* Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}`;
+                // KIRIM NOTIFIKASI KE TELEGRAM
+                const pesanTele = `🚨 *ORDERAN BARU!* 🚨\n\n👤 *Nama:* ${nama}\n📍 *Alamat:* ${alamat}\n📞 *WA:* ${wa}\n🍱 *Pesanan:* ${listMenu.join(", ")}\n💰 *TOTAL:* Rp ${(totalMakan + ONGKIR).toLocaleString('id-ID')}\n\nCek Dashboard Driver Bos! 🛵💨`;
                 await kirimTelegram(pesanTele);
+
                 tutupModal();
                 tampilkanHalamanTracking(data[0].id, 'pending', totalMakan, metodeBayar);
                 keranjang = {}; 
@@ -272,16 +268,21 @@
             document.getElementById('konten-utama').innerHTML = `
                 <div class="mt-4 bg-white p-8 rounded-[3.5rem] shadow-2xl border border-gray-50 text-center animasi-up">
                     <h3 id="txt-status" class="text-3xl font-black text-gray-800 uppercase italic tracking-tighter text-center">${statusAwal}</h3>
+                    
                     <div class="relative h-2 bg-gray-100 rounded-full mb-14 mt-14 mx-4">
-                        <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all" style="width:10%"></div>
-                        <div id="motor" class="absolute -top-8 text-4xl transition-all" style="left:0%; transform: translateX(-50%);">🛵</div>
+                        <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
+                        <div id="motor" class="absolute -top-8 text-4xl transition-all duration-700 flex items-center justify-center text-left" style="left:0%; transform: translateX(-50%);">🛵</div>
                     </div>
-                    <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200">
+                    
+                    <div class="bg-gray-50 rounded-3xl p-6 mb-6 border border-dashed border-gray-200 text-left text-left">
                         <div class="flex justify-between items-center text-left">
                             <span class="text-xs font-black text-gray-800 uppercase tracking-widest text-left">Total Tagihan</span>
-                            <span class="text-2xl font-black text-green-600 tracking-tighter">Rp ${totalBayar.toLocaleString('id-ID')}</span>
+                            <span class="text-2xl font-black text-green-600 tracking-tighter text-left text-left">Rp ${totalBayar.toLocaleString('id-ID')}</span>
                         </div>
+                        <p class="text-[9px] font-bold text-gray-400 mt-1 uppercase text-left text-left">💳 Metode: ${metode}</p>
                     </div>
+
+                    ${metode === 'QRIS' ? `<button onclick="bukaQRIS()" class="w-full bg-blue-600 text-white py-4.5 rounded-2xl font-black text-[10px] mb-4 shadow-xl uppercase tracking-widest text-center">📱 TAMPILKAN QRIS BAYAR</button>` : ''}
                     <button onclick="window.location.reload()" class="bg-[#1A1A1A] text-white w-full py-4.5 rounded-2xl font-black text-[10px] uppercase shadow-xl tracking-widest text-center">Menu Utama</button>
                 </div>
             `;
@@ -297,6 +298,7 @@
             if (!m) return;
             t.innerText = stat.toUpperCase();
             m.style.transition = "all 1s cubic-bezier(0.4, 0, 0.2, 1)";
+            
             if(stat === 'pending') { m.style.left = '0%'; b.style.width = '10%'; m.innerHTML = "🛵"; }
             if(stat === 'proses') { m.style.left = '40%'; b.style.width = '45%'; m.innerHTML = "👨‍🍳"; }
             if(stat === 'dikirim') { m.style.left = '80%'; b.style.width = '85%'; m.innerHTML = "🏍️💨"; }
@@ -304,13 +306,17 @@
         }
 
         function tanyaStatus() {
-            const n = prompt("Nama:");
+            const n = prompt("Cek Pesanan (Nama):");
             if (n) {
                 sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1)
-                .then(({data}) => { if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, data[0].total_harga || 0, 'COD'); });
+                .then(({data}) => {
+                    if (data && data.length > 0) tampilkanHalamanTracking(data[0].id, data[0].status, data[0].total_harga || 0, data[0].metode_bayar || 'COD');
+                    else alert("Gak ada pesanan atas nama itu!");
+                });
             }
         }
-        setSapaan(); loadMenu();
+        setSapaan(); // PANGGIL SAPAAN
+        loadMenu();
     </script>
 </body>
 </html>
