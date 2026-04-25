@@ -6,78 +6,85 @@
     <title>Grab Ndeso - Exclusive Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; text-align: left; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F9FAFB; text-align: left; }
         .animasi-up { animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        /* Style Chat Gelembung */
-        .bubble-driver { background: #1F2937; color: white; border-radius: 20px 20px 20px 4px; }
-        .bubble-user { background: #10B981; color: white; border-radius: 20px 20px 4px 20px; align-self: flex-end; }
+        /* STYLE CHAT PREMIUM */
+        #chatWidget { display: none; position: fixed; bottom: 100px; left: 20px; right: 20px; max-width: 350px; background: #1E293B; border-radius: 2.5rem; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); z-index: 1000; border: 1px solid #334155; }
+        .chat-header { background: #10B981; padding: 15px; display: flex; justify-content: space-between; items-center; }
+        .chat-body { height: 320px; overflow-y: auto; padding: 20px; background: #0F172A; display: flex; flex-direction: column; gap: 10px; }
+        .bubble-admin { background: #334155; color: white; padding: 10px 15px; border-radius: 18px 18px 18px 5px; font-size: 12px; max-width: 85%; align-self: flex-start; }
+        .bubble-user { background: #10B981; color: white; padding: 10px 15px; border-radius: 18px 18px 5px 18px; font-size: 12px; max-width: 85%; align-self: flex-end; }
         
-        /* Animasi Muncul Chat */
-        #live-chat-modal { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(100%); opacity: 0; pointer-events: none; }
-        #live-chat-modal.active { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        /* NAV BAWAH */
+        .nav-bawah { box-shadow: 0 -10px 25px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="bg-[#0F172A] pb-40 text-left"> <nav class="bg-white/95 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
+<body class="pb-40">
+
+    <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <div class="bg-green-600 p-2 rounded-xl text-white text-xl">🛵</div>
             <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic">Grab<span class="text-green-600">Ndeso</span></h1>
         </div>
     </nav>
 
-    <div id="konten-utama" class="max-w-md mx-auto p-5 animasi-up">
-        <div class="mb-8 mt-2 px-1 text-left">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Halo, Selamat Makan!</p>
-            <h2 class="text-3xl font-black text-white tracking-tighter uppercase italic">Mau Makan <span class="text-green-600">Apa?</span></h2>
+    <div id="halaman-menu" class="max-w-md mx-auto p-5 animasi-up">
+        <div class="mb-6">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Halo Bos!</p>
+            <h2 class="text-3xl font-black text-gray-800 tracking-tighter uppercase italic">Menu <span class="text-green-600">Gacor</span></h2>
         </div>
         <div id="daftar-menu" class="grid grid-cols-2 gap-4">
-             </div>
+            </div>
     </div>
 
-    <div id="live-chat-modal" class="fixed inset-x-0 bottom-0 z-[150] flex justify-center p-4">
-        <div class="bg-[#1E293B] w-full max-w-md rounded-[2.5rem] shadow-2xl border border-gray-700 overflow-hidden flex flex-col h-[70vh]">
-            <div class="bg-[#10B981] p-5 flex items-center justify-between shadow-lg">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl">💬</div>
-                    <div>
-                        <h4 class="text-white font-black text-sm leading-none">Live Chat GrabNdeso</h4>
-                        <p class="text-green-100 text-[10px] mt-1 font-bold">🟢 Online</p>
-                    </div>
-                </div>
-                <button onclick="toggleChat()" class="text-white bg-black/20 w-8 h-8 rounded-full font-bold">✕</button>
+    <div id="halaman-lacak" class="hidden max-w-md mx-auto p-5 animasi-up">
+        <div class="bg-white p-8 rounded-[3rem] shadow-xl text-center">
+            <h3 id="txt-status" class="text-2xl font-black text-gray-800 uppercase italic">PENDING</h3>
+            <div class="relative h-2 bg-gray-100 rounded-full my-12 mx-4">
+                <div id="bar-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700" style="width:10%"></div>
+                <div id="motor" class="absolute -top-8 text-4xl transition-all duration-700" style="left:0%; transform: translateX(-50%);">🛵</div>
             </div>
-
-            <div id="box-chat" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4 bg-[#0F172A]">
-                <div class="bubble-driver p-4 text-xs font-bold shadow-md max-w-[85%]">
-                    Halo Lur! Ada yang bisa kami bantu? Ketik pesane sampeyan dibawah ya..
-                </div>
-            </div>
-
-            <div class="p-5 bg-[#1E293B] border-t border-gray-700 flex gap-3">
-                <input type="text" id="input-pesan" class="flex-1 p-4 bg-[#0F172A] text-white rounded-2xl outline-none text-sm font-bold border border-gray-700 focus:border-green-500" placeholder="Ketik pesane sampeyan...">
-                <button onclick="kirimChat()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-green-900/20">
-                    <span class="text-xl">✈️</span>
-                </button>
-            </div>
+            <button onclick="bukaHalamanMenu()" class="w-full bg-gray-100 text-gray-400 py-4 rounded-2xl font-black text-xs uppercase">Kembali</button>
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 flex justify-around items-center z-[100] max-w-md mx-auto rounded-t-[2.5rem] shadow-[0_-10px_25px_rgba(0,0,0,0.1)]">
-        <button onclick="tanyaStatus()" class="flex flex-col items-center gap-1 group">
+    <div id="chatWidget">
+        <div class="chat-header text-white">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-comments"></i>
+                <div class="text-left">
+                    <p class="font-black text-xs leading-none">Chat GrabNdeso</p>
+                    <p id="chat-ref" class="text-[9px] font-bold opacity-80 mt-1 uppercase">Ref: -</p>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="text-xl">✕</button>
+        </div>
+        <div id="boxPesan" class="chat-body">
+            <div class="bubble-admin">Halo Bos! Ada yang bisa dibantu? Pesanan sedang diproses ya..</div>
+        </div>
+        <div class="p-4 bg-[#1E293B] border-t border-gray-700 flex gap-2">
+            <input type="text" id="inputChat" class="flex-1 bg-[#0F172A] text-white text-xs p-3 rounded-xl outline-none border border-gray-700" placeholder="Tanya admin...">
+            <button onclick="kirimChat()" class="bg-green-600 text-white w-10 h-10 rounded-xl flex items-center justify-center">✈️</button>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
+        <button onclick="tanyaStatus()" class="flex flex-col items-center gap-1">
             <span class="text-xl">🔍</span>
             <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Lacak</span>
         </button>
-        <button onclick="location.reload()" class="flex flex-col items-center gap-1 group">
+        <button onclick="bukaHalamanMenu()" class="flex flex-col items-center gap-1">
             <div class="bg-green-600 p-3 rounded-2xl shadow-lg -mt-8 border-4 border-[#F9FAFB]">
                 <span class="text-xl">🏠</span>
             </div>
             <span class="text-[10px] font-black text-green-600 uppercase tracking-tighter">Beranda</span>
         </button>
-        <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative">
-            <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+        <button onclick="toggleChat()" class="flex flex-col items-center gap-1">
             <span class="text-xl">💬</span>
             <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Chat</span>
         </button>
@@ -88,32 +95,16 @@
         const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Buka/Tutup Chat
+        const BOT_TOKEN = "8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM";
+        const CHAT_ID = "7933777456";
+        let currentRef = localStorage.getItem('last_ref') || "ID-GUEST";
+
         function toggleChat() {
-            document.getElementById('live-chat-modal').classList.toggle('active');
+            let w = document.getElementById('chatWidget');
+            document.getElementById('chat-ref').innerText = "Ref: " + currentRef;
+            w.style.display = (w.style.display === 'block') ? 'none' : 'block';
         }
 
-        async function kirimChat() {
-            const input = document.getElementById('input-pesan');
-            const pesan = input.value;
-            if(!pesan) return;
-
-            // Tambahkan Bubble User ke Layar
-            const box = document.getElementById('box-chat');
-            box.innerHTML += `<div class="bubble-user p-4 text-xs font-bold shadow-md max-w-[85%]">${pesan}</div>`;
-            
-            // Scroll ke paling bawah
-            box.scrollTop = box.scrollHeight;
-            input.value = '';
-
-            // Kirim ke Telegram (Biar Bos dapet notif)
-            const TELE_TOKEN = '8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM';
-            const TELE_CHATID = '7933777456';
-            const teks = `💬 *PESAN BARU DARI TAMU:* \n\n"${pesan}"`;
-            await fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(teks)}&parse_mode=Markdown`);
-        }
-
-        // --- Load Menu (Tetap Sesuai Fitur Bos) ---
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
@@ -121,17 +112,52 @@
                 container.innerHTML = '';
                 data.forEach(item => {
                     container.innerHTML += `
-                        <div class="bg-[#1E293B] rounded-[2rem] p-3 border border-gray-700 flex flex-col text-left">
-                            <img src="${item.foto_url}" onerror="this.remove()" class="w-full h-36 object-cover rounded-[1.5rem] mb-3">
-                            <div class="flex-grow px-2">
-                                <h3 class="font-bold text-[11px] text-white leading-tight">${item.nama_makanan}</h3>
-                                <p class="text-green-500 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p>
-                            </div>
-                            <button class="w-full bg-white/5 text-white py-3 rounded-2xl text-[9px] font-black uppercase mt-4">Beli</button>
+                        <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-100 text-left">
+                            <img src="${item.foto_url}" class="w-full h-32 object-cover rounded-2xl mb-3">
+                            <h3 class="font-bold text-[10px] text-gray-800 leading-tight">${item.nama_makanan}</h3>
+                            <p class="text-green-600 font-black text-xs mt-1">Rp ${item.harga.toLocaleString()}</p>
+                            <button onclick="orderLangsung('${item.nama_makanan}')" class="w-full bg-gray-50 py-2 rounded-xl text-[9px] font-black uppercase mt-3">Order</button>
                         </div>`;
                 });
             }
         }
+
+        function orderLangsung(nama) {
+            let user = prompt("Nama Pembeli:");
+            if(user) {
+                currentRef = "GN-" + Math.random().toString(36).substr(2, 4).toUpperCase();
+                localStorage.setItem('last_ref', currentRef);
+                kirimTelegram(`🚨 *ORDER BARU!* \n👤 Nama: ${user}\n🍱 Menu: ${nama}\n🆔 Ref: ${currentRef}`);
+                alert("Orderan dikirim! Silahkan cek di menu Lacak.");
+            }
+        }
+
+        async function kirimChat() {
+            let inp = document.getElementById('inputChat');
+            let box = document.getElementById('boxPesan');
+            if(!inp.value) return;
+            
+            box.innerHTML += `<div class="bubble-user">${inp.value}</div>`;
+            kirimTelegram(`💬 *CHAT TAMU:*\n"${inp.value}"\n\n_Ref: ${currentRef}_`);
+            inp.value = "";
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function kirimTelegram(teks) {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(teks)}&parse_mode=Markdown`);
+        }
+
+        function bukaHalamanMenu() {
+            document.getElementById('halaman-menu').classList.remove('hidden');
+            document.getElementById('halaman-lacak').classList.add('hidden');
+        }
+
+        function tanyaStatus() {
+            document.getElementById('halaman-menu').classList.add('hidden');
+            document.getElementById('halaman-lacak').classList.remove('hidden');
+            // Logika geser motor Bos yang sudah ada bisa ditaruh sini
+        }
+
         loadMenu();
     </script>
 </body>
