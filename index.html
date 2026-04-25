@@ -3,199 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab Ndeso - Exclusive Edition</title>
+    <title>Grab Ndeso - Chat System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #F9FAFB; text-align: left; }
-        .animasi-up { animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        /* STYLE CHAT PREMIUM MELAYANG */
+        body { font-family: sans-serif; background: #F9FAFB; }
+        /* MODAL CHAT PERSIS BASECAMP */
         #chatWidget { 
-            display: none; position: fixed; bottom: 100px; left: 15px; right: 15px; 
-            max-width: 360px; background: #1E293B; border-radius: 2.5rem; 
-            overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+            display: none; position: fixed; bottom: 90px; left: 15px; right: 15px; 
+            max-width: 360px; background: #1E293B; border-radius: 2rem; 
+            overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.4); 
             z-index: 1000; border: 1px solid #334155; 
         }
-        .chat-header { background: #10B981; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-body { height: 380px; overflow-y: auto; padding: 20px; background: #0F172A; display: flex; flex-direction: column; gap: 12px; }
-        
-        /* Gelembung Chat */
-        .bubble-admin { background: #334155; color: white; padding: 12px 16px; border-radius: 20px 20px 20px 5px; font-size: 12px; max-width: 85%; align-self: flex-start; border: 1px solid #475569; }
-        .bubble-user { background: #10B981; color: white; padding: 12px 16px; border-radius: 20px 20px 5px 20px; font-size: 12px; max-width: 85%; align-self: flex-end; }
-        
-        .nav-bawah { box-shadow: 0 -10px 25px rgba(0,0,0,0.05); }
+        .chat-header { background: #10B981; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-body { height: 320px; overflow-y: auto; padding: 20px; background: #0F172A; display: flex; flex-direction: column; gap: 10px; }
+        .bubble-admin { background: #334155; color: white; padding: 10px 15px; border-radius: 15px 15px 15px 5px; font-size: 12px; max-width: 80%; align-self: flex-start; }
+        .bubble-user { background: #10B981; color: white; padding: 10px 15px; border-radius: 15px 15px 5px 15px; font-size: 12px; max-width: 80%; align-self: flex-end; }
+        .nav-bawah { position: fixed; bottom: 0; left: 0; right: 0; bg-white; border-t: 1px solid #eee; display: flex; justify-content: space-around; padding: 10px; background: white; border-radius: 2rem 2rem 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="pb-32">
+<body class="pb-24">
 
-    <nav class="bg-white/90 backdrop-blur p-4 sticky top-0 z-40 border-b border-gray-100 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-            <div class="bg-green-600 p-2 rounded-xl text-white text-xl">🛵</div>
-            <h1 class="text-xl font-extrabold text-gray-800 tracking-tighter uppercase italic">Grab<span class="text-green-600">Ndeso</span></h1>
-        </div>
+    <nav class="p-4 flex justify-center bg-white border-b border-gray-100">
+        <h1 class="text-xl font-black italic">GRAB<span class="text-green-600">NDESO</span></h1>
     </nav>
-
-    <div id="halaman-menu" class="max-w-md mx-auto p-5 animasi-up">
-        <div id="daftar-menu" class="grid grid-cols-2 gap-4">
-            </div>
-    </div>
 
     <div id="chatWidget">
         <div class="chat-header text-white">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-comments text-xl"></i>
-                <div class="text-left">
-                    <p class="font-black text-xs leading-none">Live Chat GrabNdeso</p>
-                    <p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 uppercase">Ref: ID-GUEST</p>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-user text-2xl"></i>
+                <div>
+                    <p class="font-bold text-xs">Live Chat GrabNdeso</p>
+                    <p id="ref-teks" class="text-[9px] opacity-80">Ref: -</p>
                 </div>
             </div>
-            <button onclick="toggleChat()" class="text-white opacity-70 hover:opacity-100 text-xl font-bold">✕</button>
+            <button onclick="toggleChat()" class="font-bold">✕</button>
         </div>
-
-        <div id="boxPesan" class="chat-body">
-            <div class="bubble-admin">
-                Halo Bos! Ada yang bisa kami bantu? <br>
-                Pesanan sampeyan sedang kami pantau..
-            </div>
+        <div id="boxChat" class="chat-body">
+            <div class="bubble-admin">Halo! Ada yang bisa kami bantu Bos?</div>
         </div>
-
-        <div class="p-4 bg-[#1E293B] border-t border-gray-700 flex gap-2">
-            <input type="text" id="inputChat" 
-                onkeypress="if(event.key === 'Enter') kirimChat()"
-                class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-gray-700 focus:border-green-500" 
-                placeholder="Ketik pesene sampeyan...">
-            <button onclick="kirimChat()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition">
-                <i class="fa-solid fa-paper-plane text-lg"></i>
+        <div class="p-3 bg-[#1E293B] flex gap-2">
+            <input type="text" id="chatInp" class="flex-1 bg-[#0F172A] text-white text-xs p-3 rounded-xl border border-gray-700 outline-none" placeholder="Ketik pesene sampeyan...">
+            <button onclick="kirimChat()" class="bg-green-500 text-white w-10 h-10 rounded-xl flex items-center justify-center">
+                <i class="fa-solid fa-paper-plane"></i>
             </button>
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
-        <button onclick="alert('Lacak Pesanan Segera Hadir!')" class="flex flex-col items-center gap-1 group">
-            <span class="text-xl">🔍</span>
-            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Lacak</span>
-        </button>
-        <button onclick="location.reload()" class="flex flex-col items-center gap-1">
-            <div class="bg-green-600 p-3 rounded-2xl shadow-lg -mt-8 border-4 border-[#F9FAFB]">
-                <span class="text-xl">🏠</span>
-            </div>
-            <span class="text-[10px] font-black text-green-600 uppercase tracking-tighter">Beranda</span>
-        </button>
-        <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group">
-            <span class="text-xl">💬</span>
-            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Chat</span>
-        </button>
+    <div class="nav-bawah max-w-md mx-auto">
+        <button class="flex flex-col items-center gap-1 opacity-40"><i class="fa-solid fa-search"></i><span class="text-[9px] font-bold">LACAK</span></button>
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1"><i class="fa-solid fa-house text-green-600"></i><span class="text-[9px] font-bold text-green-600">BERANDA</span></button>
+        <button onclick="toggleChat()" class="flex flex-col items-center gap-1"><i class="fa-solid fa-message"></i><span class="text-[9px] font-bold">CHAT</span></button>
     </div>
 
     <script>
-        // --- KONFIGURASI ---
-        const SUPABASE_URL = 'https://butydxuauhtvwojvpixt.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // PAKAI KONFIGURASI SUPABASE BOS
+        const SB_URL = 'https://butydxuauhtvwojvpixt.supabase.co';
+        const SB_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
+        const sb = supabase.createClient(SB_URL, SB_KEY);
 
-        const TELE_TOKEN = '8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM';
-        const TELE_CHAT_ID = '7933777456';
+        const TOKEN = "8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM";
+        const CID = "7933777456";
 
-        // Buat ID unik untuk pembeli
-        let myRefID = localStorage.getItem('my_chat_id');
-        if(!myRefID) {
-            myRefID = "GN-" + Math.random().toString(36).substr(2, 5).toUpperCase();
-            localStorage.setItem('my_chat_id', myRefID);
+        // Ambil ID Unik (Ref ID)
+        let myID = localStorage.getItem('chatSessionId');
+        if (!myID) {
+            myID = "GN-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+            localStorage.setItem('chatSessionId', myID);
         }
 
-        // --- FUNGSI TOGGLE CHAT ---
         function toggleChat() {
-            const widget = document.getElementById('chatWidget');
-            document.getElementById('txt-ref-id').innerText = "Ref: " + myRefID;
-            
-            if (widget.style.display === 'block') {
-                widget.style.display = 'none';
+            let w = document.getElementById('chatWidget');
+            document.getElementById('ref-teks').innerText = "Ref: " + myID;
+            if(w.style.display === 'block') {
+                w.style.display = 'none';
             } else {
-                widget.style.display = 'block';
-                loadChatHistory();
+                w.style.display = 'block';
+                loadChat();
                 hubungkanRealtime();
             }
         }
 
-        // --- FUNGSI KIRIM CHAT ---
         async function kirimChat() {
-            const inp = document.getElementById('inputChat');
-            const teks = inp.value.trim();
+            let inp = document.getElementById('chatInp');
+            let teks = inp.value.trim();
             if(!teks) return;
 
-            // 1. Simpan ke Supabase
-            const { error } = await sb.from('chat_pesanan').insert([
-                { pesanan_id_string: myRefID, pengirim: 'pembeli', pesan: teks }
-            ]);
+            // 1. Simpan ke Supabase (Sesuaikan nama kolom)
+            // Di Basecamp Bos pakai kolom 'pesanan_id' atau 'pesanan_id_string'?
+            // Saya pakai 'pesanan_id_string' sesuai diskusi sebelumnya.
+            const { error } = await sb.from('chat_pesanan').insert([{ 
+                pesanan_id_string: myID, 
+                pengirim: 'pembeli', 
+                pesan: teks 
+            }]);
 
             if(!error) {
-                // Tampilkan di layar sendiri (Cepat)
                 tampilkanBubble(teks, 'pembeli');
-                
-                // 2. Notif ke Telegram Bos
-                const msgTele = `💬 *CHAT TAMU:*\n"${teks}"\n\n_Ref: ${myRefID}_`;
-                fetch(`https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHAT_ID}&text=${encodeURIComponent(msgTele)}&parse_mode=Markdown`);
-                
                 inp.value = "";
+                
+                // 2. Kirim Notif Telegram
+                let t = `💬 *PESAN BARU:*\n"${teks}"\n\n_Ref: ${myID}_`;
+                fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CID}&text=${encodeURIComponent(t)}&parse_mode=Markdown`);
             } else {
-                alert("Gagal kirim pesan. Cek koneksi!");
+                console.log(error);
+                alert("Gagal Kirim! Pastikan tabel 'chat_pesanan' sudah ada kolom 'pesanan_id_string'");
             }
         }
 
-        // --- FUNGSI REALTIME (TERIMA BALASAN) ---
         function hubungkanRealtime() {
-            sb.channel('live-chat-grab')
-            .on('postgres_changes', { 
+            sb.channel('live-grab').on('postgres_changes', { 
                 event: 'INSERT', 
                 schema: 'public', 
                 table: 'chat_pesanan', 
-                filter: `pesanan_id_string=eq.${myRefID}` 
-            }, (payload) => {
-                // Hanya tampilkan jika pengirimnya adalah driver/admin
-                if(payload.new.pengirim === 'driver') {
-                    tampilkanBubble(payload.new.pesan, 'driver');
-                }
+                filter: `pesanan_id_string=eq.${myID}` 
+            }, (p) => {
+                if(p.new.pengirim === 'driver') tampilkanBubble(p.new.pesan, 'driver');
             }).subscribe();
         }
 
-        async function loadChatHistory() {
-            const { data } = await sb.from('chat_pesanan').select('*').eq('pesanan_id_string', myRefID).order('created_at', {ascending: true});
-            const box = document.getElementById('boxPesan');
-            box.innerHTML = '<div class="bubble-admin text-center text-[10px] opacity-50">Riwayat chat dimuat</div>'; 
+        async function loadChat() {
+            const { data } = await sb.from('chat_pesanan').select('*').eq('pesanan_id_string', myID).order('created_at', {ascending: true});
+            const box = document.getElementById('boxChat');
+            box.innerHTML = '';
             if(data) data.forEach(m => tampilkanBubble(m.pesan, m.pengirim));
         }
 
         function tampilkanBubble(teks, pengirim) {
-            const box = document.getElementById('boxPesan');
+            const box = document.getElementById('boxChat');
             const style = (pengirim === 'pembeli') ? 'bubble-user' : 'bubble-admin';
-            box.innerHTML += `<div class="${style} animasi-up" style="margin-bottom: 5px;">${teks}</div>`;
+            box.innerHTML += `<div class="${style}">${teks}</div>`;
             box.scrollTop = box.scrollHeight;
         }
-
-        // Load Menu dari Supabase
-        async function loadMenu() {
-            const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
-            const container = document.getElementById('daftar-menu');
-            if (data) {
-                container.innerHTML = '';
-                data.forEach(item => {
-                    container.innerHTML += `
-                        <div class="bg-white rounded-[2rem] p-3 shadow-sm border border-gray-100 flex flex-col text-left">
-                            <img src="${item.foto_url}" class="w-full h-32 object-cover rounded-2xl mb-3">
-                            <div class="px-2">
-                                <h3 class="font-bold text-[10px] text-gray-800 leading-tight">${item.nama_makanan}</h3>
-                                <p class="text-green-600 font-black text-xs mt-1">Rp ${item.harga.toLocaleString()}</p>
-                            </div>
-                            <button onclick="alert('Order: ${item.nama_makanan}')" class="bg-gray-50 py-2 rounded-xl text-[9px] font-black uppercase mt-3">Beli</button>
-                        </div>`;
-                });
-            }
-        }
-        loadMenu();
     </script>
 </body>
 </html>
