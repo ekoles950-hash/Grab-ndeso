@@ -38,7 +38,6 @@
     </header>
 
     <div id="konten-utama" class="max-w-md mx-auto p-5 animasi-up">
-        
         <div id="slider-container" class="mb-8">
             <div id="slider">
                 <img src="https://raw.githubusercontent.com/ekoles950-hash/Grab-ndeso/main/promo1.jpg" class="slide-img">
@@ -52,7 +51,7 @@
 
         <div id="sapaan-kontainer" class="mb-8 px-1">
             <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Halo, Selamat <span id="waktu-hari">...</span>!</p>
-            <h2 class="text-4xl font-black text-white tracking-tighter leading-tight mt-1 uppercase italic">Mau Makan <span class="text-green-600">Apa Hari Ini?</span></h2>
+            <h2 class="text-4xl font-black text-white tracking-tighter leading-tight mt-1 uppercase italic text-left">Mau Makan <span class="text-green-600">Apa Hari Ini?</span></h2>
             <p class="text-xs text-gray-400 mt-2">Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.</p>
         </div>
 
@@ -70,7 +69,7 @@
         <div id="daftar-menu" class="grid grid-cols-2 gap-4"></div>
     </div>
 
-    <div id="modal-lacak" class="fixed inset-0 bg-black/90 z-[150] hidden flex items-center justify-center p-6">
+    <div id="modal-lacak" class="fixed inset-0 bg-black/90 z-[150] hidden flex items-center justify-center p-6 text-left">
         <div class="bg-[#1E293B] w-full max-w-sm rounded-[3rem] p-8 border border-white/10 shadow-2xl animasi-up">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-black text-white tracking-tighter uppercase italic">Lacak Pesanan</h3>
@@ -82,7 +81,7 @@
     </div>
 
     <div id="modal-checkout" class="fixed inset-0 bg-black/80 z-[110] hidden flex items-end justify-center">
-        <div class="bg-[#1E293B] w-full max-w-md rounded-t-[3rem] border-t border-white/10 animasi-up flex flex-col" style="max-height: 92vh;">
+        <div class="bg-[#1E293B] w-full max-w-md rounded-t-[3rem] border-t border-white/10 animasi-up flex flex-col text-left" style="max-height: 92vh;">
             <div class="p-6 pb-2 flex justify-between items-center">
                 <h3 class="text-2xl font-black text-white tracking-tighter uppercase italic text-left">Data Antar</h3>
                 <button onclick="tutupModal()" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl">✕</button>
@@ -103,9 +102,13 @@
                     <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">📱</span><p class="text-[9px] font-black mt-1">QRIS</p></div>
                 </div>
                 <div id="box-total" class="hidden bg-[#064E3B]/30 border-2 border-green-900/50 p-5 rounded-[2rem]">
-                    <div class="flex justify-between items-center border-t border-green-900/50 pt-2 text-left">
+                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 mb-2">
+                        <span>Ongkir</span>
+                        <span id="txt-ongkir-display">Rp 5.000</span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-green-900/50 pt-2">
                         <p class="text-xs font-black text-white uppercase tracking-widest">Total Bayar</p>
-                        <p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter text-left">Rp 0</p>
+                        <p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter">Rp 0</p>
                     </div>
                 </div>
             </div>
@@ -117,25 +120,25 @@
 
     <div id="chatWidget" class="animasi-up">
         <div class="chat-header text-white">
-            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl"></i><div class="text-left"><p class="font-black text-xs leading-none">Live Chat</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 italic tracking-widest">Ref: -</p></div></div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl"></i><div class="text-left text-left"><p class="font-black text-xs leading-none">Live Chat</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 italic tracking-widest">Ref: -</p></div></div>
             <button onclick="toggleChat()" class="text-white opacity-70 font-bold text-xl">✕</button>
         </div>
         <div id="chatMessages" class="chat-body text-left"></div>
         <div class="p-4 bg-[#1E293B] border-t border-white/5 flex gap-2">
-            <input type="text" id="chatInput" onkeypress="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-white/10 focus:border-green-600" placeholder="Ketik pesan...">
-            <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition"><i class="fa-solid fa-paper-plane text-xl"></i></button>
+            <input type="text" id="chatInput" onkeypress="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-white/10" placeholder="Ketik pesan...">
+            <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
     <div class="fixed bottom-0 left-0 right-0 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
-        <button onclick="bukaLacakModern()" class="flex flex-col items-center gap-1 group"><span class="text-xl group-active:scale-75 transition">🔍</span><span class="text-[9px] font-black text-slate-500 uppercase">Lacak</span></button>
-        <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase uppercase">Beranda</span></button>
-        <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative"><div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1E293B] animate-pulse"></div><span class="text-xl group-active:scale-75 transition">💬</span><span class="text-[9px] font-black text-slate-500 uppercase">Chat</span></button>
+        <button onclick="bukaLacakModern()" class="flex flex-col items-center gap-1 group text-left"><span class="text-xl group-active:scale-75 transition">🔍</span><span class="text-[9px] font-black text-slate-500 uppercase">Lacak</span></button>
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1 group text-left"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase">Beranda</span></button>
+        <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative text-left"><div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1E293B] animate-pulse"></div><span class="text-xl group-active:scale-75 transition">💬</span><span class="text-[9px] font-black text-slate-500 uppercase">Chat</span></button>
     </div>
 
-    <div id="cart-bar" class="fixed bottom-24 left-4 right-4 hidden z-50 animasi-up">
+    <div id="cart-bar" class="fixed bottom-24 left-4 right-4 hidden z-50 animasi-up text-left">
         <div class="bg-[#1E293B] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/5">
-            <div class="flex items-center gap-4 text-left"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div><p id="total-harga-bar" class="font-black text-2xl">Rp 0</p></div>
+            <div class="flex items-center gap-4"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div><p id="total-harga-bar" class="font-black text-2xl">Rp 0</p></div>
             <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-[10px] uppercase">Checkout</button>
         </div>
     </div>
@@ -145,17 +148,18 @@
         const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // --- DUAL TOKEN JURAGAN ---
         const TOKEN_ORDER = '8514459117:AAH3kJ4MLDwnhykBMTSCLKatglFudZfm_dM';
         const TOKEN_CHAT = '8669740968:AAE7WcWDDqKcj7V836fFYUaZmdcpwyuecVE';
         const TELE_CHATID = '7933777456';
         
         let keranjang = {}, metodeBayar = 'COD', lastMsgId = 0, currentSlide = 0;
-        let potongVoucher = 0, kodeTerpakai = "";
-        const ONGKIR = 5000;
+        let ongkirSekarang = 5000;
+        let kodeTerpakai = "";
 
-        // SISTEM VOUCHER (Atur di Sini Bos)
+        // SISTEM VOUCHER ONGKIR
         const LIST_VOUCHER = {
-            "GRABNDESOPROMO": { potong: 5000, kuota: 9 }
+            "GRABNDESOPROMO": { diskonOngkir: 2000, kuota: 9 }
         };
 
         let mySessionId = localStorage.getItem('chatSessionId');
@@ -170,13 +174,13 @@
             const inp = document.getElementById('f-voucher').value.toUpperCase();
             const msg = document.getElementById('v-msg');
             if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
-                potongVoucher = LIST_VOUCHER[inp].potong;
+                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir;
                 kodeTerpakai = inp;
-                msg.innerText = "✅ Voucher Berhasil Dipakai!";
+                msg.innerText = "✅ Ongkir Berhasil Dipotong!";
                 msg.style.color = "#10B981";
-                cekAlamat(); // Update total
+                cekAlamat();
             } else {
-                potongVoucher = 0;
+                ongkirSekarang = 5000;
                 msg.innerText = "❌ Kode Salah atau Habis!";
                 msg.style.color = "#EF4444";
                 cekAlamat();
@@ -186,7 +190,7 @@
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
-            if (data && container) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4"><div class="flex-grow px-3 text-left"><h3 class="font-bold text-[10px] text-white leading-tight uppercase text-left">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 active:bg-green-600 transition text-center">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5 text-center"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold text-center">-</button><span id="qty-${item.id}" class="font-black text-sm text-white text-center">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold text-center">+</button></div></div>`; }); }
+            if (data && container) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4 text-left"><div class="flex-grow px-3 text-left"><h3 class="font-bold text-[10px] text-white leading-tight uppercase text-left">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 active:bg-green-600 transition text-center">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5 text-center"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold text-center">-</button><span id="qty-${item.id}" class="font-black text-sm text-white text-center">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold text-center">+</button></div></div>`; }); }
         }
 
         function showQtyControl(id, n, h) { document.getElementById(`btn-beli-${id}`).classList.add('hidden'); document.getElementById(`qty-control-${id}`).classList.remove('hidden'); tambahItem(id, n, h); }
@@ -194,7 +198,16 @@
         function kurangItem(id) { if (keranjang[id]) { keranjang[id].qty -= 1; if (keranjang[id].qty <= 0) { delete keranjang[id]; document.getElementById(`qty-control-${id}`).classList.add('hidden'); document.getElementById(`btn-beli-${id}`).classList.remove('hidden'); } } updateTampilan(id); }
         function updateTampilan(id) { const q = document.getElementById(`qty-${id}`); if (q) q.innerText = keranjang[id] ? keranjang[id].qty : 0; let t = 0; for (let k in keranjang) t += keranjang[k].harga * keranjang[k].qty; const cb = document.getElementById('cart-bar'); if (t > 0) { cb.classList.remove('hidden'); document.getElementById('total-harga-bar').innerText = `Rp ${t.toLocaleString('id-ID')}`; } else cb.classList.add('hidden'); }
         function pilihMetode(m) { metodeBayar = m; document.getElementById('btn-cod').classList.toggle('active', m === 'COD'); document.getElementById('btn-qris').classList.toggle('active', m === 'QRIS'); }
-        function cekAlamat() { let t = 0; for (let k in keranjang) t += keranjang[k].harga * keranjang[k].qty; if (document.getElementById('f-alamat').value.length > 1) { document.getElementById('box-total').classList.remove('hidden'); let totalAkhir = (t + ONGKIR) - potongVoucher; if(totalAkhir < 0) totalAkhir = 0; document.getElementById('txt-total-akhir').innerText = `Rp ${totalAkhir.toLocaleString('id-ID')}`; } }
+        
+        function cekAlamat() { 
+            let totalMakan = 0; for (let k in keranjang) totalMakan += keranjang[k].harga * keranjang[k].qty; 
+            if (document.getElementById('f-alamat').value.length > 1) { 
+                document.getElementById('box-total').classList.remove('hidden'); 
+                document.getElementById('txt-ongkir-display').innerText = `Rp ${ongkirSekarang.toLocaleString('id-ID')}`;
+                document.getElementById('txt-total-akhir').innerText = `Rp ${(totalMakan + ongkirSekarang).toLocaleString('id-ID')}`; 
+            } 
+        }
+
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
         function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); }
@@ -202,9 +215,9 @@
 
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
-            if (!n || !a) return alert("Wajib isi Nama & Alamat!"); 
+            if (!n || !a) return alert("Isi Nama & Alamat!"); 
             let tm = 0, lm = []; for (let k in keranjang) { tm += keranjang[k].harga * keranjang[k].qty; lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); } 
-            let totalFix = (tm + ONGKIR) - potongVoucher;
+            let totalFix = tm + ongkirSekarang;
             const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: totalFix, metode_bayar: metodeBayar }]).select(); 
             if (data) { 
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n🎫 Voucher: ${kodeTerpakai || "-"}\n🆔 Ref: ${mySessionId}`; 
