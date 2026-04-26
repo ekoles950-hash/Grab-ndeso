@@ -22,8 +22,8 @@
         #slider { display: flex; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-img { width: 100%; flex-shrink: 0; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.7; }
 
-        /* SHOPEE PATH STYLE */
-        .shopee-path-container { position: relative; width: 100%; height: 160px; background: rgba(255,255,255,0.02); border-radius: 30px; margin: 30px 0; overflow: visible; padding: 0 20px; }
+        /* SHOPEE PATH SYSTEM */
+        .shopee-path-container { position: relative; width: 100%; height: 160px; background: rgba(255,255,255,0.02); border-radius: 30px; margin: 30px 0; overflow: visible; }
         .svg-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .route-line { fill: none; stroke: #334155; stroke-width: 3; stroke-dasharray: 8; stroke-linecap: round; }
 
@@ -39,7 +39,7 @@
             transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
             transform: translate(-50%, -50%);
         }
-        /* Motor Hadap Kanan */
+        /* Motor Hadap Kanan (Maju) */
         #motor-emoji { display: inline-block; transform: scaleX(-1); }
 
         .ngebut-miring { animation: shopeeLean 0.6s infinite alternate ease-in-out; }
@@ -48,7 +48,6 @@
             100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); }
         }
 
-        /* MODAL CHAT */
         #chatWidget { display: none; position: fixed; bottom: 100px; left: 15px; right: 15px; max-width: 360px; background: #1E293B; border-radius: 2.5rem; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.6); z-index: 1000; border: 1px solid #334155; }
         .chat-header { background: #10B981; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
         .chat-body { height: 350px; overflow-y: auto; padding: 20px; background: #0F172A; display: flex; flex-direction: column; gap: 12px; }
@@ -58,6 +57,7 @@
         .nav-bawah { background: #1E293B; border-top: 1px solid #334155; box-shadow: 0 -10px 25px rgba(0,0,0,0.3); }
         #toast-global { visibility: hidden; min-width: 250px; background-color: #1E293B; color: #fff; text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 300; left: 50%; bottom: 120px; transform: translateX(-50%); font-size: 12px; font-weight: 800; border: 1px solid #334155; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         #toast-global.show { visibility: visible; animation: slideUp 0.4s, fadeOut 0.4s 2.5s; }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
     </style>
 </head>
 <body class="pb-32">
@@ -83,6 +83,7 @@
         <div id="sapaan-kontainer" class="mb-8 px-1">
             <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Halo, Selamat <span id="waktu-hari">...</span>!</p>
             <h2 class="text-4xl font-black text-white tracking-tighter leading-tight mt-1 uppercase italic text-left">Mau Makan <span class="text-green-600">Apa Hari Ini?</span></h2>
+            <p class="text-xs text-gray-400 mt-2">Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.</p>
         </div>
 
         <div id="halaman-lacak-motor" class="hidden mb-10">
@@ -105,7 +106,7 @@
                     <p id="teks-terima-kasih" class="text-[10px] text-gray-400 italic text-center">"Mohon tunggu ya, driver sedang berjuang menjemput pesananmu!"</p>
                 </div>
 
-                <button onclick="window.location.reload()" class="w-full py-4 bg-[#0F172A] text-white rounded-2xl font-black text-[10px] uppercase shadow-xl active:scale-95 transition">Pesan Menu Lain</button>
+                <button onclick="window.location.reload()" class="w-full py-4 bg-green-600 text-white rounded-2xl font-black text-[10px] uppercase shadow-xl active:scale-95 transition">Pesan Menu Lain</button>
             </div>
         </div>
 
@@ -113,7 +114,7 @@
     </div>
 
     <div id="modal-checkout" class="fixed inset-0 bg-black/80 z-[110] hidden flex items-end justify-center text-left">
-        <div class="bg-[#1E293B] w-full max-w-md rounded-t-[3rem] border-t border-white/10 animasi-up flex flex-col text-left" style="max-height: 92vh;">
+        <div class="bg-[#1E293B] w-full max-w-md rounded-t-[3rem] border-t border-white/10 animasi-up flex flex-col" style="max-height: 92vh;">
             <div class="p-6 pb-2 flex justify-between items-center">
                 <h3 class="text-2xl font-black text-white tracking-tighter uppercase italic text-left">Data Antar</h3>
                 <button onclick="tutupModal()" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl">✕</button>
@@ -129,36 +130,21 @@
                     <p id="v-msg" class="text-[9px] mt-1 ml-2 font-bold"></p>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3 text-left">
-                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">💵</span><p class="text-[9px] font-black mt-1">COD</p></div>
-                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">📱</span><p class="text-[9px] font-black mt-1">QRIS</p></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">💵</span><p class="text-[9px] font-black mt-1 uppercase">COD</p></div>
+                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">📱</span><p class="text-[9px] font-black mt-1 uppercase">QRIS</p></div>
                 </div>
                 <div id="box-total" class="hidden bg-[#064E3B]/30 border-2 border-green-900/50 p-5 rounded-[2rem]">
                     <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 mb-2"><span>Ongkir</span><span id="txt-ongkir-display">Rp 5.000</span></div>
-                    <div class="flex justify-between items-center border-t border-green-900/50 pt-2 text-left">
+                    <div class="flex justify-between items-center border-t border-green-900/50 pt-2">
                         <p class="text-xs font-black text-white uppercase tracking-widest text-left">Total Bayar</p>
-                        <p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter text-left">Rp 0</p>
+                        <p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter">Rp 0</p>
                     </div>
                 </div>
             </div>
             <div class="p-6 bg-[#1E293B] border-t border-white/5">
                 <button onclick="kirimOrderan()" class="w-full bg-green-600 text-white py-5 rounded-2xl font-black text-sm active:scale-95 transition tracking-widest uppercase italic shadow-xl">PESAN SEKARANG</button>
             </div>
-        </div>
-    </div>
-
-    <div id="modal-qris" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-6 text-center" onclick="tutupQRIS()">
-        <div class="bg-white p-6 rounded-[2.5rem] max-w-sm w-full relative shadow-2xl" onclick="event.stopPropagation()">
-            <h3 class="text-gray-900 font-black text-lg mb-4 italic tracking-tighter text-center">SCAN QRIS / TRANSFER DANA</h3>
-            <img src="QRIS.jpg" class="w-full rounded-2xl border border-gray-100 mb-4 shadow-inner" alt="QRIS">
-            <div class="bg-gray-100 p-4 rounded-2xl mb-4 border border-gray-200">
-                <p class="text-[10px] font-bold text-gray-500 uppercase mb-1 text-left">Nomor DANA Admin:</p>
-                <div class="flex items-center justify-between text-left">
-                    <span id="no-dana" class="font-black text-gray-800 text-lg">085600409940</span>
-                    <button id="btn-salin-dana" onclick="salinNomor()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[9px] font-bold uppercase active:scale-90 transition flex items-center gap-1"><i class="fa-solid fa-copy"></i> SALIN</button>
-                </div>
-            </div>
-            <button onclick="tutupQRIS()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-lg italic">SUDAH BAYAR / TUTUP</button>
         </div>
     </div>
 
@@ -174,6 +160,21 @@
         </div>
     </div>
 
+    <div id="modal-qris" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-6 text-center" onclick="tutupQRIS()">
+        <div class="bg-white p-6 rounded-[2.5rem] max-w-sm w-full relative shadow-2xl" onclick="event.stopPropagation()">
+            <h3 class="text-gray-900 font-black text-lg mb-4 italic tracking-tighter">SCAN QRIS / TRANSFER DANA</h3>
+            <img src="QRIS.jpg" class="w-full rounded-2xl border border-gray-100 mb-4 shadow-inner" alt="QRIS">
+            <div class="bg-gray-100 p-4 rounded-2xl mb-4 border border-gray-200 text-left">
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-1">Nomor DANA Admin:</p>
+                <div class="flex items-center justify-between">
+                    <span id="no-dana" class="font-black text-gray-800 text-lg">085600409940</span>
+                    <button id="btn-salin-dana" onclick="salinNomor()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[9px] font-bold uppercase active:scale-90 transition flex items-center gap-1"><i class="fa-solid fa-copy"></i> SALIN</button>
+                </div>
+            </div>
+            <button onclick="tutupQRIS()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-lg italic">SUDAH BAYAR / TUTUP</button>
+        </div>
+    </div>
+
     <div class="fixed bottom-0 left-0 right-0 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
         <button onclick="bukaLacakModern()" class="flex flex-col items-center gap-1 group text-left"><span class="text-xl group-active:scale-75 transition">🔍</span><span class="text-[9px] font-black text-slate-500 uppercase">Lacak</span></button>
         <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl text-center">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase tracking-widest text-left">Beranda</span></button>
@@ -182,19 +183,19 @@
 
     <div id="chatWidget" class="animasi-up">
         <div class="chat-header text-white">
-            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl"></i><div class="text-left text-left"><p class="font-black text-xs leading-none">Live Chat</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 italic tracking-widest text-left">Ref: -</p></div></div>
-            <button onclick="toggleChat()" class="text-white opacity-70 hover:opacity-100 font-bold text-xl">✕</button>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl text-left"></i><div class="text-left text-left"><p class="font-black text-xs leading-none">Live Chat</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 italic tracking-widest text-left">Ref: -</p></div></div>
+            <button onclick="toggleChat()" class="text-white opacity-70 font-bold text-xl text-left">✕</button>
         </div>
         <div id="chatMessages" class="chat-body text-left"></div>
         <div class="p-4 bg-[#1E293B] border-t border-white/5 flex gap-2">
             <input type="text" id="chatInput" onkeypress="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-white/10" placeholder="Ketik pesan...">
-            <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"><i class="fa-solid fa-paper-plane text-center"></i></button>
+            <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition"><i class="fa-solid fa-paper-plane text-center"></i></button>
         </div>
     </div>
 
     <div id="cart-bar" class="fixed bottom-24 left-4 right-4 hidden z-50 animasi-up text-left">
         <div class="bg-[#1E293B] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/5">
-            <div class="flex items-center gap-4 text-left"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg">🛒</div><p id="total-harga-bar" class="font-black text-2xl text-left">Rp 0</p></div>
+            <div class="flex items-center gap-4 text-left"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg text-center">🛒</div><p id="total-harga-bar" class="font-black text-2xl text-left">Rp 0</p></div>
             <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-[10px] uppercase italic text-left">Checkout</button>
         </div>
     </div>
@@ -248,7 +249,7 @@
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
-            if (data && container) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4 text-left"><div class="flex-grow px-3 text-left"><h3 class="font-bold text-[10px] text-white leading-tight uppercase text-left">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1 text-left text-left">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 transition text-center text-left">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5 text-center text-center"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold text-center">-</button><span id="qty-${item.id}" class="font-black text-sm text-white text-center">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold text-center">+</button></div></div>`; }); }
+            if (data && container) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4 text-left"><div class="flex-grow px-3 text-left"><h3 class="font-bold text-[10px] text-white leading-tight uppercase text-left">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 transition text-center">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5 text-center"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold text-center">-</button><span id="qty-${item.id}" class="font-black text-sm text-white text-center">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold text-center">+</button></div></div>`; }); }
         }
 
         function showQtyControl(id, n, h) { document.getElementById(`btn-beli-${id}`).classList.add('hidden'); document.getElementById(`qty-control-${id}`).classList.remove('hidden'); tambahItem(id, n, h); }
@@ -301,30 +302,16 @@
             if(!m) return; 
             m.classList.remove('ngebut-miring');
             
-            // Logika Warna Hijau
             if(stat === 'selesai') {
-                papan.style.backgroundColor = "#064E3B"; // Dark Green
-                papan.style.borderColor = "#10B981"; // Light Green border
+                papan.style.backgroundColor = "#064E3B"; papan.style.borderColor = "#10B981";
                 t.innerText = "PESANAN SELESAI"; 
                 document.getElementById('teks-terima-kasih').innerText = "Mantap! Pesanan sudah sampai di depan rumah kak. Jangan lupa bintang 5-nya ya!";
                 m.style.left = '90%'; m.style.top = '20px';
             } else {
-                papan.style.backgroundColor = "#1E293B"; // Kembali ke Biru gelap awal
-                papan.style.borderColor = "rgba(255,255,255,0.1)";
-                
-                if(stat === 'pending') { 
-                    t.innerText = "DRIVER SEDANG MEMBELI"; 
-                    m.style.left = '10%'; m.style.top = '100px'; 
-                }
-                if(stat === 'proses') { 
-                    t.innerText = "KOKI SEDANG MEMASAK"; 
-                    m.style.left = '10%'; m.style.top = '100px'; 
-                }
-                if(stat === 'dikirim') { 
-                    t.innerText = "DRIVER MENUJU LOKASI KAMU"; 
-                    m.style.left = '45%'; m.style.top = '70px'; 
-                    m.classList.add('ngebut-miring');
-                }
+                papan.style.backgroundColor = "#1E293B"; papan.style.borderColor = "rgba(255,255,255,0.1)";
+                if(stat === 'pending') { t.innerText = "DRIVER SEDANG MEMBELI"; m.style.left = '10%'; m.style.top = '100px'; }
+                if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
+                if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI KAMU"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
             }
         }
 
