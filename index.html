@@ -22,7 +22,6 @@
         #slider { display: flex; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-img { width: 100%; flex-shrink: 0; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.7; }
 
-        /* SHOPEE PATH SYSTEM */
         .shopee-path-container { position: relative; width: 100%; height: 160px; background: rgba(255,255,255,0.02); border-radius: 30px; margin: 30px 0; overflow: visible; }
         .svg-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .route-line { fill: none; stroke: #334155; stroke-width: 3; stroke-dasharray: 8; stroke-linecap: round; }
@@ -31,21 +30,11 @@
         .warung-icon { left: 10%; top: 80%; font-size: 30px; }
         .rumah-icon { right: 10%; top: 20%; font-size: 35px; }
         
-        #motor { 
-            position: absolute; 
-            z-index: 10; 
-            width: 50px; height: 50px; 
-            display: flex; align-items: center; justify-content: center;
-            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
-            transform: translate(-50%, -50%);
-        }
+        #motor { position: absolute; z-index: 10; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); transform: translate(-50%, -50%); }
         #motor-emoji { display: inline-block; transform: scaleX(-1); }
 
         .ngebut-miring { animation: shopeeLean 0.6s infinite alternate ease-in-out; }
-        @keyframes shopeeLean { 
-            0% { transform: translate(-50%, -50%) rotate(15deg) scale(1.1); }
-            100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); }
-        }
+        @keyframes shopeeLean { 0% { transform: translate(-50%, -50%) rotate(15deg) scale(1.1); } 100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); } }
 
         #chatWidget { display: none; position: fixed; bottom: 100px; left: 15px; right: 15px; max-width: 360px; background: #1E293B; border-radius: 2.5rem; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.6); z-index: 1000; border: 1px solid #334155; }
         .chat-header { background: #10B981; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -81,30 +70,25 @@
         <div id="sapaan-kontainer" class="mb-8 px-1">
             <p id="sapaan-pagi" class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Halo, Selamat <span id="waktu-hari">...</span>!</p>
             <h2 class="text-4xl font-black text-white tracking-tighter leading-tight mt-1 uppercase italic text-left">Mau Makan <span class="text-green-600">Apa Hari Ini?</span></h2>
-            <p class="text-xs text-gray-400 mt-2 text-left leading-relaxed">Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.</p>
+            <p class="text-xs text-gray-400 mt-2">Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.</p>
         </div>
 
-        <div id="halaman-lacak-motor" class="hidden mb-10">
+        <div id="halaman-lacak-motor" class="hidden mb-10 text-left">
             <div id="papan-lacak" class="bg-[#1E293B] p-6 rounded-[3.5rem] shadow-2xl border border-white/10 text-center relative transition-all duration-500">
                 <p class="text-[9px] font-black text-green-500 uppercase mb-1 tracking-widest text-center">LIVE TRACKING</p>
                 <h3 id="txt-status" class="text-lg font-black text-white uppercase italic tracking-tighter mb-2 text-center">MENUNGGU...</h3>
-                
                 <div class="shopee-path-container">
                     <svg class="svg-path" viewBox="0 0 400 160">
                         <path d="M 40 130 Q 100 130 150 80 T 250 80 T 360 30" class="route-line"></path>
                     </svg>
                     <div class="point warung-icon">🏪<p class="text-[7px] font-bold text-gray-500 uppercase">Warung</p></div>
                     <div class="point rumah-icon">🏠<p class="text-[7px] font-bold text-gray-500 uppercase">Rumah</p></div>
-                    <div id="motor">
-                        <span class="text-5xl" id="motor-emoji">🛵</span>
-                    </div>
+                    <div id="motor"><span class="text-5xl" id="motor-emoji">🛵</span></div>
                 </div>
-
                 <div class="bg-[#0F172A] p-4 rounded-3xl mb-6 border border-white/5">
                     <p id="teks-terima-kasih" class="text-[10px] text-gray-400 italic text-center">"Mohon tunggu ya, driver sedang berjuang menjemput pesananmu!"</p>
                 </div>
-
-                <button onclick="window.location.reload()" class="w-full py-4 bg-[#0F172A] text-white rounded-2xl font-black text-[10px] uppercase shadow-xl active:scale-95 transition">Pesan Menu Lain</button>
+                <button onclick="window.location.reload()" class="w-full py-4 bg-[#0F172A] text-white rounded-2xl font-black text-[10px] uppercase shadow-xl">Kembali ke Menu</button>
             </div>
         </div>
 
@@ -112,35 +96,33 @@
     </div>
 
     <div id="modal-checkout" class="fixed inset-0 bg-black/80 z-[110] hidden flex items-end justify-center text-left">
-        <div class="bg-[#1E293B] w-full max-w-md rounded-t-[3rem] border-t border-white/10 animasi-up flex flex-col text-left" style="max-height: 92vh;">
+        <div class="bg-[#1E293B] w-full max-w-md rounded-t-[3rem] border-t border-white/10 animasi-up flex flex-col" style="max-height: 92vh;">
             <div class="p-6 pb-2 flex justify-between items-center">
                 <h3 class="text-2xl font-black text-white tracking-tighter uppercase italic text-left">Data Antar</h3>
-                <button onclick="tutupModal()" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl text-center">✕</button>
+                <button onclick="tutupModal()" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl">✕</button>
             </div>
             <div class="p-6 space-y-5 overflow-y-auto flex-1">
                 <input type="text" id="f-nama" class="w-full p-4 rounded-2xl input-dark text-sm font-bold" placeholder="Nama Penerima">
                 <input type="number" id="f-wa" class="w-full p-4 rounded-2xl input-dark text-sm font-bold" placeholder="WhatsApp">
                 <textarea id="f-alamat" oninput="cekAlamat()" rows="2" class="w-full p-4 rounded-2xl input-dark text-sm font-bold" placeholder="Alamat Lengkap"></textarea>
-                
                 <div class="relative">
                     <input type="text" id="f-voucher" class="w-full p-4 rounded-2xl input-dark text-sm font-bold uppercase" placeholder="Kode Voucher">
                     <button onclick="pakaiVoucher()" class="absolute right-2 top-2 bg-green-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Pakai</button>
                     <p id="v-msg" class="text-[9px] mt-1 ml-2 font-bold"></p>
                 </div>
-
-                <div class="grid grid-cols-2 gap-3 text-left">
-                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">💵</span><p class="text-[9px] font-black mt-1 uppercase">COD (TUNAI)</p></div>
-                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">📱</span><p class="text-[9px] font-black mt-1 uppercase">QRIS/TRANSFER</p></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div id="btn-cod" onclick="pilihMetode('COD')" class="metode-card active p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">💵</span><p class="text-[9px] font-black mt-1 uppercase">COD</p></div>
+                    <div id="btn-qris" onclick="pilihMetode('QRIS')" class="metode-card p-4 rounded-2xl flex flex-col items-center"><span class="text-xl">📱</span><p class="text-[9px] font-black mt-1 uppercase">QRIS</p></div>
                 </div>
                 <div id="box-total" class="hidden bg-[#064E3B]/30 border-2 border-green-900/50 p-5 rounded-[2rem]">
                     <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 mb-2"><span>Ongkir</span><span id="txt-ongkir-display">Rp 5.000</span></div>
                     <div class="flex justify-between items-center border-t border-green-900/50 pt-2 text-left">
-                        <p class="text-xs font-black text-white uppercase tracking-widest text-left">Total Bayar</p>
-                        <p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter text-left">Rp 0</p>
+                        <p class="text-xs font-black text-white uppercase tracking-widest">Total Bayar</p>
+                        <p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter">Rp 0</p>
                     </div>
                 </div>
             </div>
-            <div class="p-6 bg-[#1E293B] border-t border-white/5">
+            <div class="p-6 bg-[#1E293B] border-t border-white/5 text-left">
                 <button onclick="kirimOrderan()" class="w-full bg-green-600 text-white py-5 rounded-2xl font-black text-sm active:scale-95 transition tracking-widest uppercase italic shadow-xl">PESAN SEKARANG</button>
             </div>
         </div>
@@ -150,14 +132,14 @@
         <div class="bg-white p-6 rounded-[2.5rem] max-w-sm w-full relative shadow-2xl" onclick="event.stopPropagation()">
             <h3 class="text-gray-900 font-black text-lg mb-4 italic tracking-tighter">SCAN QRIS / TRANSFER DANA</h3>
             <img src="QRIS.jpg" class="w-full rounded-2xl border border-gray-100 mb-4 shadow-inner" alt="QRIS">
-            <div class="bg-gray-100 p-4 rounded-2xl mb-4 border border-gray-200">
-                <p class="text-[10px] font-bold text-gray-500 uppercase mb-1 text-left">Nomor DANA Admin:</p>
+            <div class="bg-gray-100 p-4 rounded-2xl mb-4 border border-gray-200 text-left">
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-1">Nomor DANA Admin:</p>
                 <div class="flex items-center justify-between">
-                    <span id="no-dana" class="font-black text-gray-800 text-lg">085600409940</span>
-                    <button id="btn-salin-dana" onclick="salinNomor()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[9px] font-bold uppercase active:scale-90 transition flex items-center gap-1"><i class="fa-solid fa-copy"></i> SALIN</button>
+                    <span id="no-dana" class="font-black text-gray-800 text-lg text-left">085600409940</span>
+                    <button id="btn-salin-dana" onclick="salinNomor()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[9px] font-black uppercase active:scale-90 transition flex items-center gap-1"><i class="fa-solid fa-copy"></i> SALIN</button>
                 </div>
             </div>
-            <button onclick="tutupQRIS()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-lg italic text-center">SAYA SUDAH BAYAR / TUTUP</button>
+            <button onclick="tutupQRIS()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-lg italic">SUDAH BAYAR / TUTUP</button>
         </div>
     </div>
 
@@ -175,26 +157,26 @@
 
     <div class="fixed bottom-0 left-0 right-0 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
         <button onclick="bukaLacakModern()" class="flex flex-col items-center gap-1 group text-left"><span class="text-xl group-active:scale-75 transition">🔍</span><span class="text-[9px] font-black text-slate-500 uppercase">Lacak</span></button>
-        <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A] text-left"><span class="text-2xl">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase tracking-widest text-left">Beranda</span></button>
-        <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative"><div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1E293B] animate-pulse"></div><span class="text-xl group-active:scale-75 transition">💬</span><span class="text-[9px] font-black text-slate-500 uppercase uppercase">Chat</span></button>
+        <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl text-center">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase tracking-widest text-left">Beranda</span></button>
+        <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative"><div id="dot-notif" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1E293B] animate-pulse"></div><span class="text-xl group-active:scale-75 transition">💬</span><span class="text-[9px] font-black text-slate-500 uppercase">Chat</span></button>
     </div>
 
     <div id="chatWidget" class="animasi-up">
         <div class="chat-header text-white">
-            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl text-left"></i><div class="text-left text-left"><p class="font-black text-xs leading-none">Live Chat</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 italic tracking-widest text-left">Ref: -</p></div></div>
+            <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl text-left"></i><div class="text-left text-left"><p class="font-black text-xs leading-none">Live Chat</p><p id="txt-ref-id" class="text-[9px] font-bold opacity-80 mt-1 italic tracking-widest text-left text-left text-left">Ref: -</p></div></div>
             <button onclick="toggleChat()" class="text-white opacity-70 font-bold text-xl text-left">✕</button>
         </div>
         <div id="chatMessages" class="chat-body text-left"></div>
         <div class="p-4 bg-[#1E293B] border-t border-white/5 flex gap-2">
             <input type="text" id="chatInput" onkeypress="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-white/10" placeholder="Ketik pesan...">
-            <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition"><i class="fa-solid fa-paper-plane text-center"></i></button>
+            <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition text-left"><i class="fa-solid fa-paper-plane text-center"></i></button>
         </div>
     </div>
 
-    <div id="cart-bar" class="fixed bottom-24 left-4 right-4 hidden z-50 animasi-up text-left">
-        <div class="bg-[#1E293B] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/5 text-left">
-            <div class="flex items-center gap-4 text-left"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg text-center">🛒</div><p id="total-harga-bar" class="font-black text-2xl text-left">Rp 0</p></div>
-            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-[10px] uppercase italic text-left">Checkout</button>
+    <div id="cart-bar" class="fixed bottom-24 left-4 right-4 hidden z-50 animasi-up">
+        <div class="bg-[#1E293B] text-white p-5 rounded-[2.5rem] shadow-2xl flex justify-between items-center max-w-md mx-auto border border-white/5 text-left text-left">
+            <div class="flex items-center gap-4 text-left text-left text-left"><div class="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center text-xl shadow-lg text-center">🛒</div><p id="total-harga-bar" class="font-black text-2xl text-left">Rp 0</p></div>
+            <button onclick="bukaModal()" class="bg-white text-black px-8 py-4.5 rounded-2xl font-black text-[10px] uppercase italic">Checkout</button>
         </div>
     </div>
 
@@ -216,38 +198,78 @@
         if (!mySessionId) { mySessionId = "GN-" + Math.random().toString(36).substr(2, 5).toUpperCase(); localStorage.setItem('chatSessionId', mySessionId); }
 
         function setSapaan() { const h = new Date().getHours(); let s = "Pagi"; if(h>=11 && h<15) s="Siang"; else if(h>=15 && h<18) s="Sore"; else if(h>=18 || h<4) s="Malam"; if(document.getElementById('waktu-hari')) document.getElementById('waktu-hari').innerText = s; }
-
-        function showToast(msg) { const t = document.getElementById("toast-global"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
-
         function moveSlide() { currentSlide = (currentSlide + 1) % 2; const slider = document.getElementById('slider'); if(slider) { slider.style.transform = `translateX(-${currentSlide * 100}%)`; document.getElementById('dot0').className = currentSlide === 0 ? "w-8 h-1.5 rounded-full bg-green-500 transition-all" : "w-2 h-1.5 rounded-full bg-white/20 transition-all"; document.getElementById('dot1').className = currentSlide === 1 ? "w-8 h-1.5 rounded-full bg-green-500 transition-all" : "w-2 h-1.5 rounded-full bg-white/20 transition-all"; } }
         setInterval(moveSlide, 5000);
 
-        function salinNomor() {
-            const no = document.getElementById('no-dana').innerText;
-            const btn = document.getElementById('btn-salin-dana');
-            navigator.clipboard.writeText(no).then(() => {
-                showToast("✅ NOMOR DANA DISALIN!");
-                btn.innerHTML = '✅ SALIN';
-                btn.classList.replace('bg-blue-600', 'bg-green-600');
-                setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> SALIN'; btn.classList.replace('bg-green-600', 'bg-blue-600'); }, 3000);
-            });
+        // --- SISTEM PENYIMPANAN CHAT (LOCAL STORAGE) ---
+        function saveChat(text, sender) {
+            let history = JSON.parse(localStorage.getItem('chat_history') || "[]");
+            history.push({ text, sender });
+            localStorage.setItem('chat_history', JSON.stringify(history));
         }
 
-        function pakaiVoucher() {
-            const inp = document.getElementById('f-voucher').value.toUpperCase();
-            const msg = document.getElementById('v-msg');
-            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
-                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; kodeTerpakai = inp;
-                msg.innerText = "✅ VOUCHER AKTIF!"; msg.style.color = "#10B981"; cekAlamat();
-            } else {
-                ongkirSekarang = 5000; msg.innerText = "❌ KODE SALAH / HABIS!"; msg.style.color = "#EF4444"; cekAlamat();
+        function loadChatHistory() {
+            const history = JSON.parse(localStorage.getItem('chat_history') || "[]");
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = '';
+            history.forEach(msg => addBubble(msg.text, msg.sender, false));
+        }
+
+        function addBubble(t, s, save = true) {
+            const b = document.getElementById('chatMessages'), d = document.createElement('div');
+            d.className = (s === 'user') ? 'bubble-user animasi-up' : 'bubble-admin animasi-up';
+            d.innerHTML = t;
+            b.appendChild(d);
+            b.scrollTop = b.scrollHeight;
+            if (save) saveChat(t, s);
+        }
+
+        async function sendChatMessage() {
+            const i = document.getElementById('chatInput');
+            if(!i.value.trim()) return;
+            const msgText = i.value;
+            addBubble(msgText, 'user');
+            const tt = `💬 *CHAT TAMU* \n"${msgText}" \n🆔 *Ref:* ${mySessionId}`;
+            fetch(`https://api.telegram.org/bot${TOKEN_CHAT}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(tt)}&parse_mode=Markdown`);
+            i.value = '';
+        }
+
+        async function pollTelegram() {
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${TOKEN_CHAT}/getUpdates?offset=${lastMsgId + 1}`);
+                const d = await res.json();
+                if (d.ok && d.result.length > 0) {
+                    d.result.forEach(u => {
+                        const msg = u.message;
+                        lastMsgId = u.update_id;
+                        if (msg && msg.from.id.toString() === TELE_CHATID && msg.reply_to_message && msg.reply_to_message.text.includes(mySessionId)) {
+                            addBubble(msg.text, 'admin');
+                            if(document.getElementById('chatWidget').style.display !== 'block') {
+                                document.getElementById('dot-notif').classList.remove('hidden');
+                            }
+                        }
+                    });
+                }
+            } catch (e) {}
+            setTimeout(pollTelegram, 3000);
+        }
+
+        function toggleChat() {
+            const w = document.getElementById('chatWidget');
+            document.getElementById('txt-ref-id').innerText = "Ref: " + mySessionId;
+            const isOpen = w.style.display === 'block';
+            w.style.display = isOpen ? 'none' : 'block';
+            if (!isOpen) {
+                document.getElementById('dot-notif').classList.add('hidden');
+                loadChatHistory();
             }
         }
 
+        // --- SISTEM ORDER & LAINNYA ---
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
-            if (data && container) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4 text-left"><div class="flex-grow px-3 text-left"><h3 class="font-bold text-[10px] text-white leading-tight uppercase text-left">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 transition text-center text-left">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5 text-center text-center"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold text-center">-</button><span id="qty-${item.id}" class="font-black text-sm text-white text-center">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold text-center">+</button></div></div>`; }); }
+            if (data && container) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4"><div class="flex-grow px-3"><h3 class="font-bold text-[10px] text-white leading-tight uppercase">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button id="btn-beli-${item.id}" onclick="showQtyControl('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 transition">Beli</button><div id="qty-control-${item.id}" class="hidden flex items-center justify-between bg-[#0F172A] rounded-3xl p-1.5 mt-5"><button onclick="kurangItem('${item.id}')" class="w-10 h-10 bg-[#1E293B] text-white rounded-2xl font-bold">-</button><span id="qty-${item.id}" class="font-black text-sm text-white">0</span><button onclick="tambahItem('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-10 h-10 bg-green-600 text-white rounded-2xl font-bold">+</button></div></div>`; }); }
         }
 
         function showQtyControl(id, n, h) { document.getElementById(`btn-beli-${id}`).classList.add('hidden'); document.getElementById(`qty-control-${id}`).classList.remove('hidden'); tambahItem(id, n, h); }
@@ -258,20 +280,16 @@
         function cekAlamat() { let t = 0; for (let k in keranjang) t += keranjang[k].harga * keranjang[k].qty; if (document.getElementById('f-alamat').value.length > 1) { document.getElementById('box-total').classList.remove('hidden'); document.getElementById('txt-ongkir-display').innerText = `Rp ${ongkirSekarang.toLocaleString('id-ID')}`; document.getElementById('txt-total-akhir').innerText = `Rp ${(t + ongkirSekarang).toLocaleString('id-ID')}`; } }
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { document.getElementById('modal-checkout').classList.remove('hidden'); }
-        function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
         function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
-        function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); document.getElementById('lacak-error-msg').classList.add('hidden'); }
-        function bukaLacakModern() { document.getElementById('modal-lacak').classList.remove('hidden'); }
+        function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
+        function salinNomor() { const no = document.getElementById('no-dana').innerText; navigator.clipboard.writeText(no).then(() => { const t = document.getElementById("toast-global"); t.innerText = "✅ NOMOR DANA DISALIN!"; t.className = "show"; setTimeout(() => t.className = "", 3000); }); }
 
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
-            if (!n || !a) return showToast("⚠️ Wajib isi Nama & Alamat!"); 
+            if (!n || !a) return alert("Wajib isi Nama & Alamat!"); 
             let tm = 0, lm = []; for (let k in keranjang) { tm += keranjang[k].harga * keranjang[k].qty; lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); } 
             let totalFix = tm + ongkirSekarang;
-            
-            // Format Metode Pembayaran untuk Telegram
             const displayMetode = (metodeBayar === 'QRIS') ? "QRIS / TRANSFER" : "COD (TUNAI)";
-
             const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: totalFix, metode_bayar: metodeBayar }]).select(); 
             if (data) { 
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🎫 Voucher: ${kodeTerpakai || "-"}\n🆔 Ref: ${mySessionId}`; 
@@ -285,42 +303,55 @@
         async function prosesLacakModern() {
             const n = document.getElementById('input-lacak-nama').value;
             const errorArea = document.getElementById('lacak-error-msg');
-            if(!n) { errorArea.innerText = "Ketik nama dulu Bos!"; errorArea.classList.remove('hidden'); return; }
+            if(!n) return;
             const { data } = await sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1);
-            if (data && data.length > 0) {
-                tutupLacakModern(); tampilkanHalamanTracking(data[0].id, data[0].status); 
-            } else { errorArea.innerText = "Pesanan tidak ditemukan!"; errorArea.classList.remove('hidden'); }
+            if (data && data.length > 0) { 
+                tutupLacakModern(); 
+                tampilkanHalamanTracking(data[0].id, data[0].status); 
+            } else { 
+                errorArea.innerText = "Pesanan tidak ditemukan!"; 
+                errorArea.classList.remove('hidden'); 
+            }
+        }
+
+        function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); }
+        function bukaLacakModern() { document.getElementById('modal-lacak').classList.remove('hidden'); }
+
+        function pakaiVoucher() {
+            const inp = document.getElementById('f-voucher').value.toUpperCase();
+            const msg = document.getElementById('v-msg');
+            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
+                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; kodeTerpakai = inp;
+                msg.innerText = "✅ VOUCHER AKTIF!"; msg.style.color = "#10B981"; cekAlamat();
+            } else {
+                ongkirSekarang = 5000; msg.innerText = "❌ KODE SALAH / HABIS!"; msg.style.color = "#EF4444"; cekAlamat();
+            }
         }
 
         function tampilkanHalamanTracking(id, statusAwal) {
-            document.getElementById('halaman-lacak-motor').classList.remove('hidden'); document.getElementById('sapaan-kontainer').classList.add('hidden');
-            document.getElementById('daftar-menu').classList.add('hidden'); document.getElementById('slider-container').classList.add('hidden');
+            document.getElementById('halaman-lacak-motor').classList.remove('hidden'); 
+            document.getElementById('sapaan-kontainer').classList.add('hidden');
+            document.getElementById('daftar-menu').classList.add('hidden'); 
+            document.getElementById('slider-container').classList.add('hidden');
             geserMotor(statusAwal);
             sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
         }
 
         function geserMotor(stat) {
             const m = document.getElementById('motor'), t = document.getElementById('txt-status'), papan = document.getElementById('papan-lacak'); 
-            if(!m) return; 
-            m.classList.remove('ngebut-miring');
-            
+            if(!m) return; m.classList.remove('ngebut-miring');
             if(stat === 'selesai') {
                 papan.style.backgroundColor = "#064E3B"; papan.style.borderColor = "#10B981";
                 t.innerText = "PESANAN SELESAI"; 
                 document.getElementById('teks-terima-kasih').innerText = "Mantap! Pesanan sudah sampai di depan rumah kak. Jangan lupa bintang 5-nya ya!";
                 m.style.left = '90%'; m.style.top = '20px';
             } else {
-                papan.style.backgroundColor = "#1E293B"; papan.style.borderColor = "rgba(255,255,255,0.1)";
+                papan.style.backgroundColor = "#1E293B";
                 if(stat === 'pending') { t.innerText = "DRIVER SEDANG MEMBELI"; m.style.left = '10%'; m.style.top = '100px'; }
                 if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
                 if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI KAMU"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
             }
         }
-
-        function toggleChat() { const w = document.getElementById('chatWidget'); document.getElementById('txt-ref-id').innerText = "Ref: " + mySessionId; w.style.display = (w.style.display === 'block') ? 'none' : 'block'; }
-        async function pollTelegram() { try { const res = await fetch(`https://api.telegram.org/bot${TOKEN_CHAT}/getUpdates?offset=${lastMsgId + 1}`); const d = await res.json(); if (d.ok && d.result.length > 0) { d.result.forEach(u => { const msg = u.message; lastMsgId = u.update_id; if (msg && msg.from.id.toString() === TELE_CHATID && msg.reply_to_message && msg.reply_to_message.text.includes(mySessionId)) { addBubble(msg.text, 'admin'); } }); } } catch (e) {} setTimeout(pollTelegram, 3000); }
-        async function sendChatMessage() { const i = document.getElementById('chatInput'); if(!i.value.trim()) return; addBubble(i.value, 'user'); const tt = `💬 *CHAT TAMU* \n"${i.value}" \n🆔 *Ref:* ${mySessionId}`; fetch(`https://api.telegram.org/bot${TOKEN_CHAT}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(tt)}&parse_mode=Markdown`); i.value = ''; }
-        function addBubble(t, s) { const b = document.getElementById('chatMessages'), d = document.createElement('div'); d.className = (s === 'user') ? 'bubble-user animasi-up' : 'bubble-admin animasi-up'; d.innerHTML = t; b.appendChild(d); b.scrollTop = b.scrollHeight; }
 
         setSapaan(); loadMenu(); pollTelegram();
     </script>
