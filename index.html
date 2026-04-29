@@ -179,7 +179,7 @@
         let metodeBayar = 'COD', lastMsgId = 0, currentSlide = 0;
         let ongkirSekarang = 5000, kodeTerpakai = "";
 
-        const LIST_VOUCHER = { "GRABNDESOPROMO": { diskonOngkir: 2000, kuota: 99 }, "COBA TERUS": { diskonOngkir: 1000, kuota: 100 } };
+        const LIST_VOUCHER = { "GRABNDESOPROMO": { diskonOngkir: 2000, kuota: 1 }, "COBA TERUS": { diskonOngkir: 1000, kuota: 1} };
 
         let mySessionId = localStorage.getItem('chatSessionId');
         if (!mySessionId) { mySessionId = "GN-" + Math.random().toString(36).substr(2, 5).toUpperCase(); localStorage.setItem('chatSessionId', mySessionId); }
