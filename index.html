@@ -126,6 +126,16 @@
         </div>
     </div>
 
+    <!-- MODAL LACAK PESANAN -->
+    <div id="modal-lacak" class="fixed inset-0 bg-black/90 z-[150] hidden flex items-center justify-center p-6 text-left">
+        <div class="bg-[#1E293B] w-full max-w-sm rounded-[3rem] p-8 border border-white/10 shadow-2xl animasi-up">
+            <div class="flex justify-between items-center mb-6"><h3 class="text-xl font-black text-white uppercase italic">Lacak Pesanan</h3><button onclick="tutupLacakModern()" class="text-slate-500 text-xl">✕</button></div>
+            <input type="text" id="input-lacak-nama" class="w-full p-4 rounded-2xl input-dark text-sm font-bold mb-4" placeholder="Ketik Nama Pembeli...">
+            <p id="lacak-error-msg" class="text-[10px] text-red-500 font-bold mb-4 hidden"></p>
+            <button onclick="prosesLacakModern()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-sm uppercase italic">CARI</button>
+        </div>
+    </div>
+
     <div id="modal-checkout" class="fixed inset-0 bg-black/80 z-[110] hidden flex items-end justify-center text-left">
         <div class="bg-[#1E293B] w-full max-w-md rounded-t-[3rem] border-t border-white/10 animasi-up flex flex-col text-left" style="max-height: 92vh;">
             <div class="p-6 pb-2 flex justify-between items-center"><h3 class="text-2xl font-black text-white tracking-tighter uppercase italic">Data Antar</h3><button onclick="tutupModal()" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-white text-xl">✕</button></div>
@@ -258,53 +268,35 @@
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { if(Object.keys(keranjang).length === 0) return showToast("⚠️ Keranjang kosong Bos!"); document.getElementById('modal-checkout').classList.remove('hidden'); toggleCart(); }
 
-        // --- FUNGSI KIRIM ORDERAN (INTEGRASI TRIPAY + LACAK) ---
+        // --- SISTEM LACAK MODEREN ---
+        function bukaLacakModern() { document.getElementById('modal-lacak').classList.remove('hidden'); }
+        function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); }
+        async function prosesLacakModern() {
+            const n = document.getElementById('input-lacak-nama').value; if(!n) return;
+            const { data } = await sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1);
+            if (data && data.length > 0) {
+                if(data[0].status === 'selesai') { document.getElementById('lacak-error-msg').innerText = "Pesanan selesai!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); return; }
+                tutupLacakModern(); tampilkanHalamanTracking(data[0].id, data[0].status); 
+            } else { document.getElementById('lacak-error-msg').innerText = "Gak ketemu Bos!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); }
+        }
+
         async function kirimOrderan() { 
-            const n = document.getElementById('f-nama').value, 
-                  a = document.getElementById('f-alamat').value, 
-                  w = document.getElementById('f-wa').value; 
-            
+            const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
             if (!n || !a) return showToast("⚠️ Wajib isi Nama & Alamat!"); 
-            
-            let tm = 0, lm = []; 
-            for (let k in keranjang) { 
-                tm += keranjang[k].harga * keranjang[k].qty; 
-                lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); 
-            } 
-            
+            let tm = 0, lm = []; for (let k in keranjang) { tm += keranjang[k].harga * keranjang[k].qty; lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); } 
             let totalFix = tm + ongkirSekarang;
             const displayMetode = (metodeBayar === 'QRIS') ? "QRIS / TRANSFER" : "COD (TUNAI)";
-            
-            // 1. Simpan Data ke Supabase
-            const { data, error } = await sb.from('pesanan_ojek').insert([{ 
-                nama_pembeli: n, 
-                alamat_kirim: a + " [" + lm.join(", ") + "]", 
-                no_wa: w, 
-                status: 'pending', 
-                total_harga: totalFix, 
-                metode_bayar: metodeBayar 
-            }]).select(); 
-
+            const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: totalFix, metode_bayar: metodeBayar }]).select(); 
             if (data) { 
-                // 2. Kirim Notifikasi ke Telegram Admin
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
                 fetch(`https://api.telegram.org/bot${TOKEN_ORDER}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); 
-
-                // 3. Logika Pembayaran & Lacak Otomatis
                 if (metodeBayar === 'QRIS') {
                     showToast("🚀 Mengarahkan ke Pembayaran...");
-                    // Buka tracking di latar belakang sebelum pindah halaman
                     tampilkanHalamanTracking(data[0].id, 'pending'); 
-                    setTimeout(() => {
-                        // Kirim total harga + nomor WA ke sistem kasir PHP
-                        window.location.href = `https://grabndeso.wuaze.com/index.php?harga=${totalFix}&wa=${w}`;
-                    }, 2000);
+                    setTimeout(() => { window.location.href = `https://grabndeso.wuaze.com/index.php?harga=${totalFix}&wa=${w}`; }, 2000);
                 } else {
                     tampilkanHalamanTracking(data[0].id, 'pending'); 
-                    tutupModal(); 
-                    keranjang = {}; 
-                    localStorage.removeItem('grabndeso_cart'); 
-                    updateCartUI();
+                    tutupModal(); keranjang = {}; localStorage.removeItem('grabndeso_cart'); updateCartUI();
                 }
             } 
         }
@@ -327,6 +319,13 @@
                 if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
                 if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
             }
+        }
+
+        function pakaiVoucher() {
+            const inp = document.getElementById('f-voucher').value.toUpperCase();
+            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
+                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; document.getElementById('v-msg').innerText = "✅ VOUCHER AKTIF!"; document.getElementById('v-msg').style.color = "#10B981"; cekAlamat();
+            } else { ongkirSekarang = 5000; document.getElementById('v-msg').innerText = "❌ KODE SALAH / HABIS!"; document.getElementById('v-msg').style.color = "#EF4444"; cekAlamat(); }
         }
 
         setSapaan(); loadMenu(); pollTelegram(); updateCartUI();
