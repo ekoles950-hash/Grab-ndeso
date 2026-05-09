@@ -78,6 +78,7 @@
             <p class="text-xs text-gray-400 mt-2">Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.</p>
         </div>
 
+        <!-- FITUR LACAK MOTOR -->
         <div id="halaman-lacak-motor" class="hidden mb-10 text-left">
             <div id="papan-lacak" class="bg-[#1E293B] p-6 rounded-[3.5rem] shadow-2xl border border-white/10 text-center relative transition-all duration-500">
                 <p class="text-[9px] font-black text-green-500 uppercase mb-1 tracking-widest text-center">LIVE TRACKING</p>
@@ -257,7 +258,7 @@
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { if(Object.keys(keranjang).length === 0) return showToast("⚠️ Keranjang kosong Bos!"); document.getElementById('modal-checkout').classList.remove('hidden'); toggleCart(); }
 
-        // --- FUNGSI KIRIM ORDERAN (INTEGRASI TRIPAY) ---
+        // --- FUNGSI KIRIM ORDERAN (INTEGRASI TRIPAY + LACAK) ---
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, 
                   a = document.getElementById('f-alamat').value, 
@@ -289,12 +290,15 @@
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
                 fetch(`https://api.telegram.org/bot${TOKEN_ORDER}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); 
 
-                // 3. Logika Pembayaran Otomatis
+                // 3. Logika Pembayaran & Lacak Otomatis
                 if (metodeBayar === 'QRIS') {
                     showToast("🚀 Mengarahkan ke Pembayaran...");
+                    // Buka tracking di latar belakang sebelum pindah halaman
+                    tampilkanHalamanTracking(data[0].id, 'pending'); 
                     setTimeout(() => {
-                        window.location.href = `https://grabndeso.wuaze.com/index.php?harga=${totalFix}`;
-                    }, 1500);
+                        // Kirim total harga + nomor WA ke sistem kasir PHP
+                        window.location.href = `https://grabndeso.wuaze.com/index.php?harga=${totalFix}&wa=${w}`;
+                    }, 2000);
                 } else {
                     tampilkanHalamanTracking(data[0].id, 'pending'); 
                     tutupModal(); 
@@ -323,13 +327,6 @@
                 if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
                 if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
             }
-        }
-
-        function pakaiVoucher() {
-            const inp = document.getElementById('f-voucher').value.toUpperCase();
-            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
-                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; document.getElementById('v-msg').innerText = "✅ VOUCHER AKTIF!"; document.getElementById('v-msg').style.color = "#10B981"; cekAlamat();
-            } else { ongkirSekarang = 5000; document.getElementById('v-msg').innerText = "❌ KODE SALAH / HABIS!"; document.getElementById('v-msg').style.color = "#EF4444"; cekAlamat(); }
         }
 
         setSapaan(); loadMenu(); pollTelegram(); updateCartUI();
