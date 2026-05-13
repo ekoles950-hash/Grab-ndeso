@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -19,12 +19,13 @@
 
         header { background: #0F172A; padding: 20px 0; text-align: center; position: relative; }
         .cart-trigger { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; }
-        #cart-badge { position: absolute; top: -8px; right: -8px; background: #EF4444; color: white; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 50px; border: 2px solid #0F172A; }
+        #cart-badge { position: absolute; -top: 8px; -right: 8px; background: #EF4444; color: white; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 50px; border: 2px solid #0F172A; }
 
         #slider-container { width: 100%; overflow: hidden; border-radius: 2.5rem; border: 1px solid rgba(255,255,255,0.1); }
         #slider { display: flex; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-img { width: 100%; flex-shrink: 0; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.7; }
 
+        /* SHOPEE PATH SYSTEM */
         .shopee-path-container { position: relative; width: 100%; height: 160px; background: rgba(255,255,255,0.02); border-radius: 30px; margin: 30px 0; overflow: visible; }
         .svg-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .route-line { fill: none; stroke: #334155; stroke-width: 3; stroke-dasharray: 8; stroke-linecap: round; }
@@ -36,10 +37,12 @@
         .ngebut-miring { animation: shopeeLean 0.6s infinite alternate ease-in-out; }
         @keyframes shopeeLean { 0% { transform: translate(-50%, -50%) rotate(15deg) scale(1.1); } 100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); } }
 
+        /* FIX FITUR CHAT & CART DRAWER */
         #chatWidget, #cartDrawer { display: none; position: fixed; bottom: 100px; left: 15px; right: 15px; max-width: 380px; background: #1E293B; border-radius: 2rem; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.8); z-index: 2000; border: 1px solid #334155; margin: auto; }
         .drawer-header { background: #10B981; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.1); }
         .drawer-body { height: 380px; overflow-y: auto; padding: 15px; background: #0F172A; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
         
+        /* FIX GELEMBUNG CHAT */
         .bubble-admin { background: #10B981; color: white; padding: 10px 14px; border-radius: 18px 18px 18px 4px; font-size: 13px; align-self: flex-start; max-width: 80%; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .bubble-user { background: #334155; color: white; padding: 10px 14px; border-radius: 18px 18px 4px 18px; font-size: 13px; align-self: flex-end; max-width: 80%; line-height: 1.4; border: 1px solid #475569; }
         
@@ -78,7 +81,6 @@
             <p class="text-xs text-gray-400 mt-2">Pilih menu favoritmu di bawah, rasanya dijamin bikin nagih! Mager? Tenang, ojek kami siap anter sat-set.</p>
         </div>
 
-        <!-- FITUR LACAK MOTOR -->
         <div id="halaman-lacak-motor" class="hidden mb-10 text-left">
             <div id="papan-lacak" class="bg-[#1E293B] p-6 rounded-[3.5rem] shadow-2xl border border-white/10 text-center relative transition-all duration-500">
                 <p class="text-[9px] font-black text-green-500 uppercase mb-1 tracking-widest text-center">LIVE TRACKING</p>
@@ -98,7 +100,6 @@
         <div id="daftar-menu" class="grid grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- Modals & Drawers -->
     <div id="cartDrawer" class="animasi-up">
         <div class="drawer-header text-white">
             <div class="flex items-center gap-3"><i class="fa-solid fa-basket-shopping text-xl"></i><p class="font-black text-xs uppercase italic">Keranjang Belanja</p></div>
@@ -119,20 +120,11 @@
             <div class="flex items-center gap-3"><i class="fa-solid fa-comments text-xl"></i><div><p class="font-black text-xs leading-none">Live Chat</p><p id="txt-ref-id" class="text-[8px] opacity-70 mt-1 uppercase">Ref: -</p></div></div>
             <button onclick="toggleChat()" class="text-white opacity-70 font-bold text-xl">✕</button>
         </div>
-        <div id="chatMessages" class="drawer-body"></div>
+        <div id="chatMessages" class="drawer-body">
+            </div>
         <div class="p-4 bg-[#1E293B] border-t border-white/5 flex gap-2">
             <input type="text" id="chatInput" onkeypress="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-[#0F172A] text-white text-xs p-4 rounded-2xl outline-none border border-white/10 focus:border-green-600" placeholder="Ketik pesan...">
             <button onclick="sendChatMessage()" class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg active:scale-90 transition"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-    </div>
-
-    <!-- MODAL LACAK PESANAN -->
-    <div id="modal-lacak" class="fixed inset-0 bg-black/90 z-[150] hidden flex items-center justify-center p-6 text-left">
-        <div class="bg-[#1E293B] w-full max-w-sm rounded-[3rem] p-8 border border-white/10 shadow-2xl animasi-up">
-            <div class="flex justify-between items-center mb-6"><h3 class="text-xl font-black text-white uppercase italic">Lacak Pesanan</h3><button onclick="tutupLacakModern()" class="text-slate-500 text-xl">✕</button></div>
-            <input type="text" id="input-lacak-nama" class="w-full p-4 rounded-2xl input-dark text-sm font-bold mb-4" placeholder="Ketik Nama Pembeli...">
-            <p id="lacak-error-msg" class="text-[10px] text-red-500 font-bold mb-4 hidden"></p>
-            <button onclick="prosesLacakModern()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-sm uppercase italic">CARI</button>
         </div>
     </div>
 
@@ -151,7 +143,23 @@
         </div>
     </div>
 
-    <!-- Nav Bawah -->
+    <div id="modal-qris" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-6 text-center" onclick="tutupQRIS()">
+        <div class="bg-white p-6 rounded-[2.5rem] max-w-sm w-full relative" onclick="event.stopPropagation()">
+            <img src="QRIS.jpg" class="w-full rounded-2xl border border-gray-100 mb-4" alt="QRIS">
+            <div class="bg-gray-100 p-4 rounded-2xl mb-4 border border-gray-200 flex justify-between items-center"><span id="no-dana" class="font-black text-gray-800 text-lg text-left">085600409940</span><button id="btn-salin-dana" onclick="salinNomor()" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[9px] font-bold uppercase">SALIN</button></div>
+            <button onclick="tutupQRIS()" class="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-xs uppercase italic">SUDAH BAYAR / TUTUP</button>
+        </div>
+    </div>
+
+    <div id="modal-lacak" class="fixed inset-0 bg-black/90 z-[150] hidden flex items-center justify-center p-6 text-left">
+        <div class="bg-[#1E293B] w-full max-w-sm rounded-[3rem] p-8 border border-white/10 shadow-2xl animasi-up">
+            <div class="flex justify-between items-center mb-6"><h3 class="text-xl font-black text-white uppercase italic">Lacak Pesanan</h3><button onclick="tutupLacakModern()" class="text-slate-500 text-xl">✕</button></div>
+            <input type="text" id="input-lacak-nama" class="w-full p-4 rounded-2xl input-dark text-sm font-bold mb-4" placeholder="Ketik Nama Pembeli...">
+            <p id="lacak-error-msg" class="text-[10px] text-red-500 font-bold mb-4 hidden"></p>
+            <button onclick="prosesLacakModern()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-sm uppercase italic">CARI</button>
+        </div>
+    </div>
+
     <div class="fixed bottom-0 left-0 right-0 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
         <button onclick="bukaLacakModern()" class="flex flex-col items-center gap-1 group text-left"><span class="text-xl group-active:scale-75 transition">🔍</span><span class="text-[9px] font-black text-slate-500 uppercase">Lacak</span></button>
         <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl text-center">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase tracking-widest text-left">Beranda</span></button>
@@ -171,7 +179,7 @@
         let metodeBayar = 'COD', lastMsgId = 0, currentSlide = 0;
         let ongkirSekarang = 5000, kodeTerpakai = "";
 
-        const LIST_VOUCHER = { "GRABNDESOPROMO": { diskonOngkir: 4000, kuota: 1 }, "COBA TERUS": { diskonOngkir: 1000, kuota: 1} };
+        const LIST_VOUCHER = { "GRABNDESOPROMO": { diskonOngkir: 2000, kuota: 99 }, "COBA TERUS": { diskonOngkir: 1000, kuota: 100 } };
 
         let mySessionId = localStorage.getItem('chatSessionId');
         if (!mySessionId) { mySessionId = "GN-" + Math.random().toString(36).substr(2, 5).toUpperCase(); localStorage.setItem('chatSessionId', mySessionId); }
@@ -181,6 +189,7 @@
         function moveSlide() { currentSlide = (currentSlide + 1) % 2; const slider = document.getElementById('slider'); if(slider) { slider.style.transform = `translateX(-${currentSlide * 100}%)`; document.getElementById('dot0').className = currentSlide === 0 ? "w-8 h-1.5 rounded-full bg-green-500 transition-all" : "w-2 h-1.5 rounded-full bg-white/20 transition-all"; document.getElementById('dot1').className = currentSlide === 1 ? "w-8 h-1.5 rounded-full bg-green-500 transition-all" : "w-2 h-1.5 rounded-full bg-white/20 transition-all"; } }
         setInterval(moveSlide, 5000);
 
+        // --- KERANJANG SYSTEM ---
         function updateCartUI() {
             const container = document.getElementById('cartItems');
             const badge = document.getElementById('cart-badge');
@@ -201,6 +210,7 @@
         function kurangQty(id) { keranjang[id].qty -= 1; if (keranjang[id].qty <= 0) delete keranjang[id]; updateCartUI(); }
         function toggleCart() { const d = document.getElementById('cartDrawer'); d.style.display = (d.style.display === 'block') ? 'none' : 'block'; }
 
+        // --- CHAT SYSTEM FIX ---
         function saveChat(text, sender) {
             let history = JSON.parse(localStorage.getItem('chat_history') || "[]");
             history.push({ text, sender });
@@ -217,7 +227,7 @@
             d.className = (s === 'user') ? 'bubble-user animasi-up' : 'bubble-admin animasi-up';
             d.innerHTML = t;
             b.appendChild(d);
-            b.scrollTop = b.scrollHeight;
+            b.scrollTop = b.scrollHeight; // Auto scroll ke bawah
             if (save) saveChat(t, s);
         }
         async function sendChatMessage() {
@@ -251,6 +261,7 @@
             if (!isOpen) { document.getElementById('dot-notif').classList.add('hidden'); loadChatHistory(); }
         }
 
+        // --- ORDER & STATUS ---
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
@@ -267,19 +278,9 @@
         }
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { if(Object.keys(keranjang).length === 0) return showToast("⚠️ Keranjang kosong Bos!"); document.getElementById('modal-checkout').classList.remove('hidden'); toggleCart(); }
-
-        // --- SISTEM LACAK MODEREN ---
-        function bukaLacakModern() { document.getElementById('modal-lacak').classList.remove('hidden'); }
-        function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); }
-        async function prosesLacakModern() {
-            const n = document.getElementById('input-lacak-nama').value; if(!n) return;
-            const { data } = await sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1);
-            if (data && data.length > 0) {
-                if(data[0].status === 'selesai') { document.getElementById('lacak-error-msg').innerText = "Pesanan selesai!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); return; }
-                tutupLacakModern(); tampilkanHalamanTracking(data[0].id, data[0].status); 
-            } else { document.getElementById('lacak-error-msg').innerText = "Gak ketemu Bos!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); }
-        }
-
+        function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
+        function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
+        function salinNomor() { const no = document.getElementById('no-dana').innerText; navigator.clipboard.writeText(no).then(() => { showToast("✅ NOMOR DANA DISALIN!"); }); }
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
             if (!n || !a) return showToast("⚠️ Wajib isi Nama & Alamat!"); 
@@ -290,15 +291,27 @@
             if (data) { 
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
                 fetch(`https://api.telegram.org/bot${TOKEN_ORDER}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); 
-                if (metodeBayar === 'QRIS') {
-                    showToast("🚀 Mengarahkan ke Pembayaran...");
-                    tampilkanHalamanTracking(data[0].id, 'pending'); 
-                    setTimeout(() => { window.location.href = `https://grabndeso.wuaze.com/index.php?harga=${totalFix}&wa=${w}`; }, 2000);
-                } else {
-                    tampilkanHalamanTracking(data[0].id, 'pending'); 
-                    tutupModal(); keranjang = {}; localStorage.removeItem('grabndeso_cart'); updateCartUI();
-                }
+                if(metodeBayar === 'QRIS') bukaQRIS();
+                tampilkanHalamanTracking(data[0].id, 'pending'); tutupModal(); keranjang = {}; localStorage.removeItem('grabndeso_cart'); updateCartUI();
             } 
+        }
+
+        async function prosesLacakModern() {
+            const n = document.getElementById('input-lacak-nama').value; if(!n) return;
+            const { data } = await sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1);
+            if (data && data.length > 0) {
+                if(data[0].status === 'selesai') { document.getElementById('lacak-error-msg').innerText = "Pesanan selesai!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); return; }
+                tutupLacakModern(); tampilkanHalamanTracking(data[0].id, data[0].status); 
+            } else { document.getElementById('lacak-error-msg').innerText = "Gak ketemu Bos!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); }
+        }
+        function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); }
+        function bukaLacakModern() { document.getElementById('modal-lacak').classList.remove('hidden'); }
+
+        function pakaiVoucher() {
+            const inp = document.getElementById('f-voucher').value.toUpperCase();
+            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
+                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; document.getElementById('v-msg').innerText = "✅ VOUCHER AKTIF!"; document.getElementById('v-msg').style.color = "#10B981"; cekAlamat();
+            } else { ongkirSekarang = 5000; document.getElementById('v-msg').innerText = "❌ KODE SALAH / HABIS!"; document.getElementById('v-msg').style.color = "#EF4444"; cekAlamat(); }
         }
 
         function tampilkanHalamanTracking(id, statusAwal) {
@@ -319,13 +332,6 @@
                 if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
                 if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
             }
-        }
-
-        function pakaiVoucher() {
-            const inp = document.getElementById('f-voucher').value.toUpperCase();
-            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
-                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; document.getElementById('v-msg').innerText = "✅ VOUCHER AKTIF!"; document.getElementById('v-msg').style.color = "#10B981"; cekAlamat();
-            } else { ongkirSekarang = 5000; document.getElementById('v-msg').innerText = "❌ KODE SALAH / HABIS!"; document.getElementById('v-msg').style.color = "#EF4444"; cekAlamat(); }
         }
 
         setSapaan(); loadMenu(); pollTelegram(); updateCartUI();
