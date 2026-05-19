@@ -20,9 +20,14 @@
                 <h1 class="text-2xl font-black italic text-blue-500 tracking-tighter">BASECAMP COFFEE <span class="text-white">| MONITORING TOP UP</span></h1>
                 <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest">Sengkuni Net & PT FAMILI - Khusus Transaksi Saldo</p>
             </div>
-            <button onclick="loadTransaksi()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl uppercase tracking-wider transition-all active:scale-95">
-                🔄 Refresh Data
-            </button>
+            <div class="flex gap-2">
+                <button onclick="risetDatabaseLama()" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-5 py-3 rounded-xl uppercase tracking-wider transition-all active:scale-95 shadow-lg">
+                    🗑️ Riset Data Sukses
+                </button>
+                <button onclick="loadTransaksi()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-xl uppercase tracking-wider transition-all active:scale-95 shadow-lg">
+                    🔄 Refresh Data
+                </button>
+            </div>
         </div>
 
         <div class="table-container rounded-2xl overflow-hidden shadow-2xl">
@@ -64,12 +69,11 @@
 
         async function loadTransaksi() {
             const tbody = document.getElementById('tabel-body');
-            
             const { data, error } = await sb
                 .from('pesanan_pulsa')
                 .select('*')
                 .order('created_at', { ascending: false })
-                .limit(25);
+                .limit(40);
 
             if (error) {
                 tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-red-400">Gagal memuat: ${error.message}</td></tr>`;
@@ -84,7 +88,6 @@
             tbody.innerHTML = '';
             data.forEach(trx => {
                 const waktu = new Date(trx.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                
                 let badgeColor = 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20';
                 if (trx.status === 'success') badgeColor = 'bg-green-500/10 text-green-400 border border-green-500/20';
 
@@ -127,14 +130,29 @@
                 return;
             }
 
-            // Kirim notifikasi sukses otomatis ke Telegram biar HP bunyi mantap
             const pesanSukses = `✅ *TOP UP BERHASIL (SUCCESS)* ✅\n\n📦 *Produk:* ${namaProduk}\n🎯 *Tujuan:* ${noTujuan}\n⚡ *Status:* LUNAS / PROSED`;
             const url = `https://api.telegram.org/bot${TELE_TOKEN}/sendMessage?chat_id=${TELE_CHAT_ID}&text=${encodeURIComponent(pesanSukses)}&parse_mode=Markdown`;
-            
             fetch(url, { mode: 'no-cors' }).then(() => {
-                alert("Transaksi Berhasil Diperbarui & Notif Sent!");
                 loadTransaksi();
             });
+        }
+
+        // FUNGSI RISET DATABASE KHUSUS KONTROL ADMIN MAS EKO
+        async function risetDatabaseLama() {
+            if (!confirm("⚠️ PERINGATAN KASIR!\n\nApakah Mas Eko yakin mau menghapus semua data transaksi 'SUCCESS' yang numpuk di database Supabase? Data lama akan dibersihkan total!")) return;
+
+            // Hapus semua baris yang statusnya sudah 'success' agar Supabase kosong & ringan kembali
+            const { error } = await sb
+                .from('pesanan_pulsa')
+                .delete()
+                .eq('status', 'success');
+
+            if (error) {
+                alert("Gagal meriset data: " + error.message);
+            } else {
+                alert("🎉 Sukses! Database dibersihkan total, transaksi aman ter-reset!");
+                loadTransaksi();
+            }
         }
     </script>
 </body>
