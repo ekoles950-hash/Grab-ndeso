@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basecamp Coffee - Admin Panel Top Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F172A; color: white; }
+        .table-container { background-color: #1E293B; border: 1px solid #334155; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-800 pb-6 gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-2xl font-black italic text-blue-500 tracking-tighter">BASECAMP COFFEE <span class="text-white">| ADMIN PANEL</span></h1>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-widest">Sengkuni Net & PT FAMILI - Monitoring Transaksi</p>
+            </div>
+            <button onclick="loadTransaksi()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3 rounded-xl uppercase tracking-wider transition-all active:scale-95">
+                🔄 Refresh Data
+            </button>
+        </div>
+
+        <div class="table-container rounded-2xl overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-slate-800 bg-[#1e2e4a]">
+                <h2 class="font-extrabold text-sm uppercase tracking-wider text-blue-400">Antrean Top Up Masuk</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-[10px] uppercase tracking-widest text-slate-400 bg-slate-900/50">
+                            <th class="p-4">Waktu</th>
+                            <th class="p-4">Produk / SKU</th>
+                            <th class="p-4">No Tujuan</th>
+                            <th class="p-4">Harga</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-body" class="text-sm font-semibold divide-y divide-slate-800">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-slate-500 animate-pulse">Memuat data transaksi...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Konfigurasi Database Grabndeso
+        const SUPABASE_URL = 'https://butydxuauhtvwojvpixt.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_yO2CBmW5iJ8UKXw802hvXA_nAz3gr9X';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Konfigurasi CallMeBot (Nanti ganti token 'GANTI_PAKAI_APIKEY' kalau WA/Telegram bot-nya sudah balas)
+        const CALLMEBOT_APIKEY = 'GANTI_PAKAI_APIKEY'; 
+        const NOMOR_WA_MAS_EKO = '6281313726330';
+
+        // Load data otomatis saat halaman dibuka
+        document.addEventListener("DOMContentLoaded", loadTransaksi);
+
+        async function loadTransaksi() {
+            const tbody = document.getElementById('tabel-body');
+            
+            // Mengambil data topup terbaru dari tabel pesanan_ojek
+            const { data, error } = await sb
+                .from('pesanan_ojek')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(20);
+
+            if (error) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-400">Gagal memuat: ${error.message}</td></tr>`;
+                return;
+            }
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">Belum ada transaksi top up masuk.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            data.forEach(trx => {
+                const waktu = new Date(trx.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                
+                // Atur warna badge status
+                let badgeColor = 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20';
+                if (trx.status === 'success') badgeColor = 'bg-green-500/10 text-green-400 border border-green-500/20';
+                if (trx.status === 'failed') badgeColor = 'bg-red-500/10 text-red-400 border border-red-500/20';
+
+                // Buat baris tabel baru
+                const row = `
+                    <tr class="hover:bg-slate-800/30 transition-colors">
+                        <td class="p-4 text-slate-400 text-xs">${waktu} WIB</td>
+                        <td class="p-4">
+                            <div class="font-bold text-white">${trx.nama_pembeli}</div>
+                            <div class="text-[10px] text-blue-400 font-mono mt-0.5">${trx.alamat_kirim || 'SKU: -'}</div>
+                        </td>
+                        <td class="p-4 font-mono tracking-wider text-slate-300">${trx.no_wa}</td>
+                        <td class="p-4 text-white">Rp ${parseInt(trx.total_harga).toLocaleString('id-ID')}</td>
+                        <td class="p-4">
+                            <span class="px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider ${badgeColor}">
+                                ${trx.status}
+                            </span>
+                        </td>
+                        <td class="p-4 text-center">
+                            ${trx.status === 'pending' ? `
+                                <button onclick="prosesTransaksi('${trx.id}', '${trx.no_wa}', '${trx.nama_pembeli}')" 
+                                    class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-lg uppercase tracking-wide transition-all shadow-lg active:scale-95">
+                                    ✅ Proses via WA
+                                </button>
+                            ` : `<span class="text-slate-500 text-xs font-normal">Selesai</span>`}
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        async function prosesTransaksi(id, noTujuan, namaProduk) {
+            if (!confirm(`Proses transaksi ke nomor ${noTujuan}?`)) return;
+
+            // 1. Update status transaksi di Supabase menjadi 'success'
+            const { error } = await sb
+                .from('pesanan_ojek')
+                .update({ status: 'success' })
+                .eq('id', id);
+
+            if (error) {
+                alert("Gagal update status: " + error.message);
+                return;
+            }
+
+            // 2. Kirim Notifikasi otomatis ke WA Mas Eko via CallMeBot
+            const pesanNotif = `✅ ORDERAN DIPROSES GRABNDESO ✅\n\nProduk: ${namaProduk}\nTujuan: ${noTujuan}\nStatus: SUCCESS\n\n*Silakan cek saldo provider server utama.*`;
+            
+            const urlBot = `https://api.callmebot.com/whatsapp.php?phone=${NOMOR_WA_MAS_EKO}&text=${encodeURIComponent(pesanNotif)}&apikey=${CALLMEBOT_APIKEY}`;
+            
+            fetch(urlBot, { mode: 'no-cors' })
+            .then(() => {
+                alert("Transaksi Berhasil Diproses & Notif WA Dikirim!");
+                loadTransaksi(); // Refresh tabel setelah diproses
+            })
+            .catch(err => {
+                console.error(err);
+                loadTransaksi();
+            });
+        }
+    </script>
+</body>
+</html>
