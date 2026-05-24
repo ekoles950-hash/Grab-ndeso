@@ -32,7 +32,10 @@
             <h1 class="text-xl font-black text-gray-800 italic uppercase leading-none">Grab<span class="text-green-600">Ndeso</span></h1>
             <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-1">Status: <span class="text-green-500">Online</span></p>
         </div>
-        <button onclick="logout()" class="text-[9px] font-black text-red-500 border border-red-100 px-4 py-2 rounded-full uppercase tracking-tighter">Keluar</button>
+        <div class="flex items-center gap-2">
+            <button onclick="risetOrderan()" class="text-[9px] font-black text-amber-600 border border-amber-200 bg-amber-50 px-4 py-2 rounded-full uppercase tracking-tighter active:scale-95 transition">⚠️ Riset Data</button>
+            <button onclick="logout()" class="text-[9px] font-black text-red-500 border border-red-100 px-4 py-2 rounded-full uppercase tracking-tighter">Keluar</button>
+        </div>
     </nav>
 
     <div class="flex bg-white shadow-sm mb-6 text-left">
@@ -42,7 +45,7 @@
     </div>
 
     <div id="list-orderan" class="p-5 space-y-6">
-        </div>
+    </div>
 
     <script>
         const SUPABASE_URL = 'https://butydxuauhtvwojvpixt.supabase.co';
@@ -125,11 +128,29 @@
 
         async function updateStatus(id, statusBaru) {
             await sb.from('pesanan_ojek').update({ status: statusBaru }).eq('id', id);
-            // Kalau mau pindah tab otomatis setelah klik:
             if(statusBaru === 'proses') switchTab('proses');
             else if(statusBaru === 'dikirim') switchTab('dikirim');
             else if(statusBaru === 'selesai') switchTab('pending'); 
             else loadOrders();
+        }
+
+        // FUNGSI UTK RISET SEMUA ORDERAN KEMBALI KE PENDING (KUSUS ADMIN)
+        async function risetOrderan() {
+            const konfirmasi = confirm("Bos, yakin mau reset SEMUA status orderan yang aktif (proses & dikirim) kembali ke status 'Baru'?");
+            if (konfirmasi) {
+                // Mengubah status 'proses' dan 'dikirim' kembali menjadi 'pending'
+                const { error } = await sb
+                    .from('pesanan_ojek')
+                    .update({ status: 'pending' })
+                    .in('status', ['proses', 'dikirim']);
+
+                if (error) {
+                    alert("Gagal meriset data: " + error.message);
+                } else {
+                    alert("Semua data berhasil direset ke status Baru!");
+                    switchTab('pending');
+                }
+            }
         }
 
         function switchTab(t) {
