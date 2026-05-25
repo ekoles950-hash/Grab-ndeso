@@ -18,15 +18,12 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         header { background: #0F172A; padding: 20px 0; text-align: center; position: relative; }
-        
-        /* ADJUSTMENT BADGE KERANJANG DI NAV BAWAH */
-        #cart-badge { position: absolute; top: -4px; right: -4px; background: #EF4444; color: white; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 50px; border: 2px solid #1E293B; }
 
         #slider-container { width: 100%; overflow: hidden; border-radius: 2.5rem; border: 1px solid rgba(255,255,255,0.1); }
         #slider { display: flex; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-img { width: 100%; flex-shrink: 0; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.7; }
 
-        /* SHOPEE PATH SYSTEM (WARUNG DI KIRI -> RUMAH DI KANAN) */
+        /* SHOPEE PATH SYSTEM */
         .shopee-path-container { position: relative; width: 100%; height: 160px; background: rgba(255,255,255,0.02); border-radius: 30px; margin: 30px 0; overflow: visible; }
         .svg-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .route-line { fill: none; stroke: #334155; stroke-width: 3; stroke-dasharray: 8; stroke-linecap: round; }
@@ -38,16 +35,12 @@
         .ngebut-miring { animation: shopeeLean 0.6s infinite alternate ease-in-out; }
         @keyframes shopeeLean { 0% { transform: translate(-50%, -50%) rotate(15deg) scale(1.1); } 100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); } }
 
-        /* ANIMASI TEKS BERKEDIP */
-        .teks-kedip { animation: kedipEfek 1s infinite alternate; }
-        @keyframes kedipEfek { from { opacity: 1; } to { opacity: 0.4; } }
-
-        /* DRAWER CHAT & CART */
+        /* FIX FITUR CHAT & CART DRAWER */
         #chatWidget, #cartDrawer { display: none; position: fixed; bottom: 100px; left: 15px; right: 15px; max-width: 380px; background: #1E293B; border-radius: 2rem; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.8); z-index: 2000; border: 1px solid #334155; margin: auto; }
         .drawer-header { background: #10B981; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.1); }
         .drawer-body { height: 380px; overflow-y: auto; padding: 15px; background: #0F172A; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
         
-        /* GELEMBUNG CHAT */
+        /* FIX GELEMBUNG CHAT */
         .bubble-admin { background: #10B981; color: white; padding: 10px 14px; border-radius: 18px 18px 18px 4px; font-size: 13px; align-self: flex-start; max-width: 80%; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .bubble-user { background: #334155; color: white; padding: 10px 14px; border-radius: 18px 18px 4px 18px; font-size: 13px; align-self: flex-end; max-width: 80%; line-height: 1.4; border: 1px solid #475569; }
         
@@ -55,18 +48,12 @@
         #toast-global { visibility: hidden; min-width: 250px; background-color: #1E293B; color: #fff; text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 3000; left: 50%; bottom: 120px; transform: translateX(-50%); font-size: 12px; font-weight: 800; border: 1px solid #334155; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         #toast-global.show { visibility: visible; animation: slideUp 0.4s, fadeOut 0.4s 2.5s; }
 
-        /* CUSTOM NOTIFICATION MODAL GRABNDESO */
-        .custom-modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .custom-modal-content { background-color: #1E293B; border: 1px solid #334155; border-radius: 2.5rem; width: 100%; max-width: 360px; padding: 30px 24px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: modalSwoosh 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes modalSwoosh { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-icon-wrapper { margin-bottom: 16px; display: flex; justify-content: center; }
-        .modal-title { color: #ffffff; font-size: 1.4rem; font-weight: 800; margin: 0 0 8px 0; font-style: italic; text-transform: uppercase; }
-        .modal-message { color: #94A3B8; font-size: 0.9rem; margin: 0 0 20px 0; line-height: 1.5; }
-        .modal-tagihan-box { background-color: #0F172A; border: 1px solid #334155; border-radius: 1.5rem; padding: 14px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
-        .tagihan-label { color: #94A3B8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
-        .tagihan-value { color: #10B981; font-weight: 800; font-size: 1.2rem; }
-        .modal-btn-oke { width: 100%; background-color: #10B981; color: white; border: none; padding: 16px; font-size: 0.9rem; font-weight: 800; border-radius: 1.5rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
-        .modal-btn-oke:active { transform: scale(0.95); }
+        /* ANIMASI BERKEDIP ONGKIR */
+        @keyframes blink-ongkir {
+            0%, 100% { color: #F59E0B; opacity: 1; transform: scale(1); }
+            50% { color: #10B981; opacity: 0.7; transform: scale(1.05); }
+        }
+        .ongkir-blink { animation: blink-ongkir 1s infinite ease-in-out; display: inline-block; }
     </style>
 </head>
 <body class="pb-32">
@@ -151,14 +138,19 @@
                 <div class="relative"><input type="text" id="f-voucher" class="w-full p-4 rounded-2xl input-dark text-sm font-bold uppercase" placeholder="Kode Voucher"><button onclick="pakaiVoucher()" class="absolute right-2 top-2 bg-green-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase">Pakai</button><p id="v-msg" class="text-[9px] mt-1 ml-2 font-bold"></p></div>
                 <div class="grid grid-cols-2 gap-3"><div onclick="pilihMetode('COD')" id="btn-cod" class="metode-card active p-4 rounded-2xl">💵 COD</div><div onclick="pilihMetode('QRIS')" id="btn-qris" class="metode-card p-4 rounded-2xl">📱 QRIS</div></div>
                 
+                <div id="detail-cod-info" class="bg-slate-800 p-4 rounded-2xl border border-dashed border-slate-600">
+                    <p class="text-[11px] text-amber-400 font-bold uppercase"><i class="fa-solid fa-circle-info mr-1"></i> Informasi Sistem COD :</p>
+                    <p class="text-[10px] text-gray-400 mt-1 leading-relaxed">Silakan siapkan uang pas saat driver tiba di lokasi Anda untuk mempercepat transaksi penyerahan hidangan.</p>
+                </div>
+
                 <div id="box-total" class="hidden bg-[#064E3B]/30 border-2 border-green-900/50 p-5 rounded-[2rem]">
-                    <div class="flex justify-between items-center text-xs font-black text-slate-300 uppercase tracking-wider mb-1">
-                        <span>Ongkos Kirim</span>
-                        <span id="txt-ongkir-display" class="text-white text-sm">Rp 5.000</span>
+                    <div class="flex justify-between items-center text-[11px] font-bold text-slate-400 mb-1">
+                        <span>Ongkir</span>
+                        <span id="txt-ongkir-display" class="font-black text-xl ongkir-blink">Rp 5.000</span>
                     </div>
-                    <div class="flex justify-between items-center border-t border-green-900/50 pt-3 mt-1">
-                        <p class="text-sm font-black text-white uppercase tracking-wider">Total Bayar</p>
-                        <p id="txt-total-akhir" class="font-black text-green-400 text-3xl tracking-tighter teks-kedip">Rp 0</p>
+                    <div class="flex justify-between items-center border-t border-green-900/50 pt-2">
+                        <p class="text-xs font-black text-white uppercase">Total Bayar</p>
+                        <p id="txt-total-akhir" class="font-black text-green-500 text-2xl tracking-tighter">Rp 0</p>
                     </div>
                 </div>
             </div>
@@ -183,24 +175,11 @@
         </div>
     </div>
 
-    <div id="successModal" class="custom-modal-backdrop">
-        <div class="custom-modal-content">
-            <div class="modal-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            </div>
-            <h3 class="modal-title text-white">Pesanan Berhasil!</h3>
-            <p class="modal-message">Silakan bayar di tempat saat driver sampai.</p>
-            <div class="modal-tagihan-box">
-                <span class="tagihan-label">Total Tagihan:</span>
-                <span class="tagihan-value" id="modalTotalTagihan">Rp 0</span>
-            </div>
-            <button class="modal-btn-oke" onclick="closeSuccessModal()">OKE</button>
-        </div>
-    </div>
-
     <div class="fixed bottom-0 left-0 right-0 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
         <button onclick="bukaLacakModern()" class="flex flex-col items-center gap-1 group text-left"><span class="text-xl group-active:scale-75 transition">🔍</span><span class="text-[9px] font-black text-slate-500 uppercase">Lacak</span></button>
-        <button onclick="toggleCart()" class="flex flex-col items-center gap-1 group relative"><span class="text-xl group-active:scale-75 transition">🛒</span><span id="cart-badge" class="hidden">0</span><span class="text-[9px] font-black text-slate-500 uppercase">Keranjang</span></button>
+        
+        <button onclick="toggleCart()" class="flex flex-col items-center gap-1 group relative"><span class="text-xl group-active:scale-75 transition">🛒</span><span id="cart-badge" class="hidden absolute top-0 right-2 bg-red-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border border-[#1E293B]">0</span><span class="text-[9px] font-black text-slate-500 uppercase">Keranjang</span></button>
+        
         <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl text-center">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase tracking-widest text-left">Beranda</span></button>
         <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative"><div id="dot-notif" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1E293B] animate-pulse"></div><span class="text-xl group-active:scale-75 transition">💬</span><span class="text-[9px] font-black text-slate-500 uppercase">Chat</span></button>
     </div>
@@ -266,7 +245,7 @@
             d.className = (s === 'user') ? 'bubble-user animasi-up' : 'bubble-admin animasi-up';
             d.innerHTML = t;
             b.appendChild(d);
-            b.scrollTop = b.scrollHeight; 
+            b.scrollTop = b.scrollHeight;
             if (save) saveChat(t, s);
         }
         async function sendChatMessage() {
@@ -300,13 +279,27 @@
             if (!isOpen) { document.getElementById('dot-notif').classList.add('hidden'); loadChatHistory(); }
         }
 
-        // --- MENU & CHECKOUT ---
+        // --- ORDER & STATUS ---
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
             if (data && container) { container.innerHTML = ''; data.forEach(item => { container.innerHTML += `<div class="bg-[#1E293B] rounded-[2.5rem] p-3 border border-white/5 flex flex-col text-left"><img src="${item.foto_url}" class="w-full h-36 object-cover rounded-[2rem] mb-4 text-left"><div class="flex-grow px-3 text-left"><h3 class="font-bold text-[10px] text-white leading-tight uppercase text-left">${item.nama_makanan}</h3><p class="text-green-500 font-black text-sm mt-1 text-left">Rp ${item.harga.toLocaleString('id-ID')}</p></div><button onclick="masukKeranjang('${item.id}', '${item.nama_makanan}', ${item.harga})" class="w-full bg-white/5 text-white py-4 rounded-[1.5rem] text-[9px] font-black uppercase mt-5 border border-white/5 active:bg-green-600 transition text-center">Beli</button></div>`; }); }
         }
-        function pilihMetode(m) { metodeBayar = m; document.getElementById('btn-cod').classList.toggle('active', m === 'COD'); document.getElementById('btn-qris').classList.toggle('active', m === 'QRIS'); }
+        
+        function pilihMetode(m) { 
+            metodeBayar = m; 
+            document.getElementById('btn-cod').classList.toggle('active', m === 'COD'); 
+            document.getElementById('btn-qris').classList.toggle('active', m === 'QRIS'); 
+            
+            // Tampilkan rincian info tambahan jika memilih COD
+            const infoCod = document.getElementById('detail-cod-info');
+            if(m === 'COD') {
+                infoCod.classList.remove('hidden');
+            } else {
+                infoCod.classList.add('hidden');
+            }
+        }
+
         function cekAlamat() { 
             let tm = 0; for (let k in keranjang) tm += keranjang[k].harga * keranjang[k].qty;
             if (document.getElementById('f-alamat').value.length > 1) { 
@@ -316,124 +309,80 @@
             } 
         }
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
-        function bukaModal() { if(Object.keys(keranjang).length === 0) return showToast("⚠️ Keranjang kosong Bos!"); document.getElementById('modal-checkout').classList.remove('hidden'); toggleCart(); }
+        function bukaModal() { if(Object.keys(keranjang).length === 0) return showToast("⚠️ Keranjang kosong Bos!"); document.getElementById('modal-checkout').classList.remove('hidden'); if(document.getElementById('cartDrawer').style.display === 'block') toggleCart(); }
         function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
         function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
         function salinNomor() { const no = document.getElementById('no-dana').innerText; navigator.clipboard.writeText(no).then(() => { showToast("✅ NOMOR DANA DISALIN!"); }); }
-        
-        function showSuccessModal(totalTagihan) {
-            document.getElementById('modalTotalTagihan').innerText = totalTagihan;
-            document.getElementById('successModal').style.display = 'flex';
-        }
-        function closeSuccessModal() {
-            document.getElementById('successModal').style.display = 'none';
-        }
-
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
             if (!n || !a) return showToast("⚠️ Wajib isi Nama & Alamat!"); 
             let tm = 0, lm = []; for (let k in keranjang) { tm += keranjang[k].harga * keranjang[k].qty; lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); } 
             let totalFix = tm + ongkirSekarang;
             const displayMetode = (metodeBayar === 'QRIS') ? "QRIS / TRANSFER" : "COD (TUNAI)";
-            
             const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: totalFix, metode_bayar: metodeBayar }]).select(); 
             if (data) { 
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
                 fetch(`https://api.telegram.org/bot${TOKEN_ORDER}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); 
-                
-                if(metodeBayar === 'COD') {
-                    showSuccessModal(`Rp ${totalFix.toLocaleString('id-ID')}`);
-                }
-                
                 if(metodeBayar === 'QRIS') bukaQRIS();
                 tampilkanHalamanTracking(data[0].id, 'pending'); tutupModal(); keranjang = {}; localStorage.removeItem('grabndeso_cart'); updateCartUI();
             } 
-        }
-
-        // --- MODERN TRACKING SYSTEM (FIXED POSITION) ---
-        function bukaLacakModern() { 
-            document.getElementById('modal-lacak').classList.remove('hidden'); 
-            document.getElementById('lacak-error-msg').classList.add('hidden');
-        }
-
-        function tutupLacakModern() { 
-            document.getElementById('modal-lacak').classList.add('hidden'); 
         }
 
         async function prosesLacakModern() {
             const n = document.getElementById('input-lacak-nama').value; if(!n) return;
             const { data } = await sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1);
             if (data && data.length > 0) {
-                if(data[0].status === 'selesai') { 
-                    document.getElementById('lacak-error-msg').innerText = "Pesanan selesai!"; 
-                    document.getElementById('lacak-error-msg').classList.remove('hidden'); 
-                    return; 
-                }
-                tutupLacakModern(); 
-                tampilkanHalamanTracking(data[0].id, data[0].status); 
-            } else { 
-                document.getElementById('lacak-error-msg').innerText = "Gak ketemu Bos!"; 
-                document.getElementById('lacak-error-msg').classList.remove('hidden'); 
+                if(data[0].status === 'selesai') { document.getElementById('lacak-error-msg').innerText = "Pesanan selesai!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); return; }
+                tutupLacakModern(); tampilkanHalamanTracking(data[0].id, data[0].status); 
+            } else { document.getElementById('lacak-error-msg').innerText = "Gak ketemu Bos!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); }
+        }
+        function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); }
+        function bukaLacakModern() { document.getElementById('modal-lacak').classList.remove('hidden'); }
+
+        function pakaiVoucher() {
+            const inp = document.getElementById('f-voucher').value.toUpperCase();
+            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
+                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; document.getElementById('v-msg').innerText = "✅ VOUCHER AKTIF!"; document.getElementById('v-msg').style.color = "#10B981"; cekAlamat();
+            } else { ongkirSekarang = 5000; document.getElementById('v-msg').innerText = "❌ KODE SALAH / HABIS!"; document.getElementById('v-msg').style.color = "#EF4444"; cekAlamat(); }
+        }
+
+        function tampilkanHalamanTracking(id, statusAwal) {
+            document.getElementById('halaman-lacak-motor').classList.remove('hidden'); document.getElementById('sapaan-kontainer').classList.add('hidden');
+            document.getElementById('daftar-menu').classList.add('hidden'); document.getElementById('slider-container').classList.add('hidden');
+            geserMotor(statusAwal);
+            sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
+        }
+
+        function geserMotor(stat) {
+            const m = document.getElementById('motor'), t = document.getElementById('txt-status'), papan = document.getElementById('papan-lacak'); if(!m) return; m.classList.remove('ngebut-miring');
+            if(stat === 'selesai') {
+                papan.style.backgroundColor = "#064E3B"; papan.style.borderColor = "#10B981"; t.innerText = "PESANAN SELESAI"; 
+                document.getElementById('teks-terima-kasih').innerText = "Mantap! Pesanan sampai! Jangan lupa bintang 5!"; m.style.left = '90%'; m.style.top = '20px';
+            } else {
+                papan.style.backgroundColor = "#1E293B";
+                if(stat === 'pending') { t.innerText = "DRIVER SEDANG MEMBELI"; m.style.left = '10%'; m.style.top = '100px'; }
+                if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
+                if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
             }
         }
 
-        function tampilkanHalamanTracking(orderId, statusAwal) {
-            document.getElementById('sapaan-kontainer').classList.add('hidden');
-            document.getElementById('slider-container').classList.add('hidden');
-            document.getElementById('daftar-menu').classList.add('hidden');
-            document.getElementById('halaman-lacak-motor').classList.remove('hidden');
-            
-            updateKordinatMotor(statusAwal);
-
-            sb.channel('lacak-orderan')
-            .on('postgres_changes', { event: 'UPDATE', filter: `id=eq.${orderId}`, schema: 'public', table: 'pesanan_ojek' }, payload => {
-                const newStatus = payload.new.status;
-                updateKordinatMotor(newStatus);
-            }).subscribe();
-        }
-
-        function updateKordinatMotor(status) {
-            const motor = document.getElementById('motor');
-            const txtStatus = document.getElementById('txt-status');
-            const txtMsg = document.getElementById('teks-terima-kasih');
-            
-            if(!motor) return;
-            motor.className = "ngebut-miring";
-
-            if (status === 'pending') {
-                txtStatus.innerText = "MENUNGGU DRIVER...";
-                txtMsg.innerText = `"Mohon tunggu ya, pesananmu sedang diproses warung!"`;
-                // Pas di posisi WARUNG (Left: 10%, Top: 80%)
-                motor.style.left = "10%";
-                motor.style.top = "80%";
-            } else if (status === 'proses' || status === 'driver_membeli') {
-                txtStatus.innerText = "DRIVER SEDANG MEMBELI...";
-                txtMsg.innerText = `"Driver sudah di warung, makananmu sedang dibuat!"`;
-                // Sedikit maju dari warung
-                motor.style.left = "35%";
-                motor.style.top = "75%";
-            } else if (status === 'antar' || status === 'driver_menuju_lokasi') {
-                txtStatus.innerText = "DRIVER MENJU LOKASI...";
-                txtMsg.innerText = `"Ojek gas pol membawa makanan hangat menuju rumahmu!"`;
-                // Pertengahan jalur menuju rumah
-                motor.style.left = "65%";
-                motor.style.top = "45%";
-            } else if (status === 'sampai' || status === 'selesai') {
-                txtStatus.innerText = "DRIVER SUDAH SAMPAI!";
-                txtMsg.innerText = `"Driver sudah didepan rumah, silahkan cek keluar lur!"`;
-                // Pas menimpa posisi RUMAH (Left: 90%, Top: 20%)
-                motor.style.left = "90%";
-                motor.style.top = "20%";
-                motor.className = ""; // Berhenti bergetar/miring saat sampai
-            }
-        }
-
-        window.onload = function() {
-            setSapaan();
-            loadMenu();
-            updateCartUI();
-            pollTelegram();
-        }
+        setSapaan(); loadMenu(); pollTelegram(); updateCartUI();
     </script>
 </body>
+<div id="promo-download" class="max-w-md mx-auto px-5 pt-4">
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 rounded-3xl shadow-xl flex items-center justify-between border border-white/10 animasi-up">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                <i class="fa-solid fa-mobile-screen-button text-white text-xl"></i>
+            </div>
+            <div>
+                <h4 class="text-white font-black text-[11px] uppercase italic">Grab Ndeso versi apklikasi</h4>
+                <p class="text-white/70 text-[9px]">Lebih ringan, hemat kuota & sat-set!</p>
+            </div>
+        </div>
+        <a href="/download.html" class="bg-white text-blue-700 px-4 py-2 rounded-xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition">
+            INSTAL
+        </a>
+    </div>
+</div>
 </html>
