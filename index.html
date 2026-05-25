@@ -54,6 +54,12 @@
             50% { color: #10B981; opacity: 0.7; transform: scale(1.05); }
         }
         .ongkir-blink { animation: blink-ongkir 1s infinite ease-in-out; display: inline-block; }
+
+        /* MODAL ANIMATION */
+        .modal-fade-in { animation: fadeInBackground 0.3s forwards; }
+        .modal-scale-in { animation: scaleUpModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        @keyframes fadeInBackground { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleUpModal { from { transform: scale(0.9) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
     </style>
 </head>
 <body class="pb-32">
@@ -158,6 +164,27 @@
         </div>
     </div>
 
+    <div id="modal-sukses-cod" class="fixed inset-0 bg-black/75 z-[300] hidden flex items-center justify-center p-4 text-center modal-fade-in" backdrop-filter="blur(12px)">
+        <div class="bg-[#1E293B] border border-gray-800 rounded-[2.5rem] p-6 max-w-sm w-full text-center shadow-2xl relative modal-scale-in">
+            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-500/10 text-[#10B981] mb-4 border border-emerald-500/20">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-extrabold text-white mb-2 tracking-wide uppercase italic">Pesanan Berhasil!</h3>
+            <div class="text-gray-400 text-xs space-y-2 leading-relaxed px-1">
+                <p>Pesanan kamu sudah masuk sistem Grab Ndeso. Silakan bayar tunai di tempat saat driver tiba.</p>
+                <div class="bg-[#0F172A] rounded-2xl p-3 border border-white/5 mt-3">
+                    <span class="text-[9px] text-gray-500 block uppercase font-bold tracking-wider mb-0.5">Total Tagihan (COD)</span>
+                    <span id="modal-cod-total-txt" class="text-xl font-black text-[#10B981]">Rp 0</span>
+                </div>
+            </div>
+            <button id="btn-tutup-sukses-cod" class="w-full bg-green-600 hover:bg-green-700 text-white font-black text-xs uppercase italic py-4 rounded-xl mt-5 shadow-lg shadow-green-950/50 active:scale-95 transition-all">
+                Oke, Siap Mantap!
+            </button>
+        </div>
+    </div>
+
     <div id="modal-qris" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-6 text-center" onclick="tutupQRIS()">
         <div class="bg-white p-6 rounded-[2.5rem] max-w-sm w-full relative" onclick="event.stopPropagation()">
             <img src="QRIS.jpg" class="w-full rounded-2xl border border-gray-100 mb-4" alt="QRIS">
@@ -190,7 +217,7 @@
                 <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-xl">📱</div>
                 <div class="text-left">
                     <p class="text-[11px] font-black uppercase text-white">Yuk Download Aplikasi!</p>
-                    <p class="text-[9px] text-white/70 font-bold">Dapatkan pengalaman pesan lebih cepat & hemat.</p>
+                    <p class="text-[9px] text-white/70 font-bold">Dapatkan pengalaman pesantren lebih cepat & hemat.</p>
                 </div>
             </div>
             <button class="bg-white text-blue-700 px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-md">Instal</button>
@@ -304,7 +331,6 @@
             document.getElementById('btn-cod').classList.toggle('active', m === 'COD'); 
             document.getElementById('btn-qris').classList.toggle('active', m === 'QRIS'); 
             
-            // Tampilkan rincian info tambahan jika memilih COD
             const infoCod = document.getElementById('detail-cod-info');
             if(m === 'COD') {
                 infoCod.classList.remove('hidden');
@@ -324,9 +350,16 @@
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { if(Object.keys(keranjang).length === 0) return showToast("⚠️ Keranjang kosong Bos!"); document.getElementById('modal-checkout').classList.remove('hidden'); if(document.getElementById('cartDrawer').style.display === 'block') toggleCart(); }
         function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
-        function bukaQRIS() { document.getElementById('modal-qris').remove('hidden'); }
+        function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
         function salinNomor() { const no = document.getElementById('no-dana').innerText; navigator.clipboard.writeText(no).then(() => { showToast("✅ NOMOR DANA DISALIN!"); }); }
         
+        // FUNGSI UNTUK MENAMPILKAN / MENUTUP POP-UP COD MODERN 
+        function tampilkanModalSuksesCod(total) {
+            document.getElementById('modal-cod-total-txt').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+            const m = document.getElementById('modal-sukses-cod');
+            m.classList.remove('hidden');
+        }
+
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
             if (!n || !a) return showToast("⚠️ Wajib isi Nama & Alamat!"); 
@@ -334,18 +367,29 @@
             let totalFix = tm + ongkirSekarang;
             const displayMetode = (metodeBayar === 'QRIS') ? "QRIS / TRANSFER" : "COD (TUNAI)";
             
-            // Tampilkan alert konfirmasi sukses COD khusus jika user memilih COD
-            if(metodeBayar === 'COD') {
-                alert(`Pesanan kamu berhasil!\n\nSilakan bayar tunai di tempat saat driver tiba.\nTotal Tagihan: Rp ${totalFix.toLocaleString('id-ID')}`);
-            }
+            // SIMPAN DATA SEBELUM ASYNC SUPABASE AGAR BISA DIPASANG KE PROMISE JALUR POP-UP
+            const eksekusiOrderan = async () => {
+                const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: totalFix, metode_bayar: metodeBayar }]).select(); 
+                if (data) { 
+                    const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
+                    fetch(`https://api.telegram.org/bot${TOKEN_ORDER}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); 
+                    if(metodeBayar === 'QRIS') bukaQRIS();
+                    tampilkanHalamanTracking(data[0].id, 'pending'); tutupModal(); keranjang = {}; localStorage.removeItem('grabndeso_cart'); updateCartUI();
+                } 
+            };
 
-            const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: totalFix, metode_bayar: metodeBayar }]).select(); 
-            if (data) { 
-                const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
-                fetch(`https://api.telegram.org/bot${TOKEN_ORDER}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); 
-                if(metodeBayar === 'QRIS') bukaQRIS();
-                tampilkanHalamanTracking(data[0].id, 'pending'); tutupModal(); keranjang = {}; localStorage.removeItem('grabndeso_cart'); updateCartUI();
-            } 
+            // JIKA COD, TRIGGER CUSTOM MODAL MODERN SEBAGAI PENGGANTI WINDOW ALERT KLASIK
+            if(metodeBayar === 'COD') {
+                tampilkanModalSuksesCod(totalFix);
+                // Daftarkan event klik sekali saja untuk tombol pop-up barumu agar melanjutkan alur tracking
+                document.getElementById('btn-tutup-sukses-cod').onclick = function() {
+                    document.getElementById('modal-sukses-cod').classList.add('hidden');
+                    eksekusiOrderan();
+                };
+            } else {
+                // Jalur QRIS langsung jalan normal
+                eksekusiOrderan();
+            }
         }
 
         async function prosesLacakModern() {
@@ -376,17 +420,15 @@
         function geserMotor(stat) {
             const m = document.getElementById('motor'), t = document.getElementById('txt-status'), papan = document.getElementById('papan-lacak'); if(!m) return; m.classList.remove('ngebut-miring');
             if(stat === 'selesai') {
-                papan.style.backgroundColor = "#064E3B"; papan.style.borderColor = "#10B981"; t.innerText = "PESANAN SELESAI"; 
-                document.getElementById('teks-terima-kasih').innerText = "Mantap! Pesanan sampai! Jangan lupa bintang 5!"; m.style.left = '90%'; m.style.top = '20px';
+                papan.style.backgroundColor = "#064E3B"; t.innerText = "SAMPAI TUJUAN 🏁"; m.style.left = "90%"; m.style.top = "20%"; document.getElementById('teks-terima-kasih').innerText = "Matur nuwun! Pesananmu sudah sampai rumah. Selamat menikmati hidangan!";
+            } else if(stat === 'proses') {
+                t.innerText = "DRIVER OTW 🛵💨"; m.classList.add('ngebut-miring'); m.style.left = "50%"; m.style.top = "50%"; document.getElementById('teks-terima-kasih').innerText = "Driver andalan kami sedang ngebut membawa makanan hangatmu!";
             } else {
-                papan.style.backgroundColor = "#1E293B";
-                if(stat === 'pending') { t.innerText = "DRIVER SEDANG MEMBELI"; m.style.left = '10%'; m.style.top = '100px'; document.getElementById('teks-terima-kasih').innerText = "Mohon tunggu ya, driver sedang berjuang menjemput pesananmu!"; }
-                if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; document.getElementById('teks-terima-kasih').innerText = "Hidanganmu sedang dimasak dengan higienis & sepenuh hati!"; }
-                if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); document.getElementById('teks-terima-kasih').innerText = "Driver meluncur ke arahmu! Jika memilih metode COD, siapkan uang pas ya!"; }
+                t.innerText = "MENUNGGU DRIVER...⏳"; m.style.left = "10%"; m.style.top = "80%"; document.getElementById('teks-terima-kasih').innerText = "Mohon tunggu ya, pesananmu sedang dikonfirmasi dan disiapkan!";
             }
         }
 
-        setSapaan(); loadMenu(); pollTelegram(); updateCartUI();
+        window.onload = function() { setSapaan(); loadMenu(); updateCartUI(); pollTelegram(); };
     </script>
 </body>
 </html>
