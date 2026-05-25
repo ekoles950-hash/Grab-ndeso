@@ -26,7 +26,7 @@
         #slider { display: flex; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-img { width: 100%; flex-shrink: 0; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.7; }
 
-        /* SHOPEE PATH SYSTEM (WARUNG KIRI -> RUMAH KANAN) */
+        /* SHOPEE PATH SYSTEM (WARUNG DI KIRI -> RUMAH DI KANAN) */
         .shopee-path-container { position: relative; width: 100%; height: 160px; background: rgba(255,255,255,0.02); border-radius: 30px; margin: 30px 0; overflow: visible; }
         .svg-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .route-line { fill: none; stroke: #334155; stroke-width: 3; stroke-dasharray: 8; stroke-linecap: round; }
@@ -38,16 +38,16 @@
         .ngebut-miring { animation: shopeeLean 0.6s infinite alternate ease-in-out; }
         @keyframes shopeeLean { 0% { transform: translate(-50%, -50%) rotate(15deg) scale(1.1); } 100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); } }
 
-        /* ANIMASI TEKS BERKEDIP (BLINKING TEXT EFFECT) */
+        /* ANIMASI TEKS BERKEDIP */
         .teks-kedip { animation: kedipEfek 1s infinite alternate; }
         @keyframes kedipEfek { from { opacity: 1; } to { opacity: 0.4; } }
 
-        /* FIX FITUR CHAT & CART DRAWER */
+        /* DRAWER CHAT & CART */
         #chatWidget, #cartDrawer { display: none; position: fixed; bottom: 100px; left: 15px; right: 15px; max-width: 380px; background: #1E293B; border-radius: 2rem; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.8); z-index: 2000; border: 1px solid #334155; margin: auto; }
         .drawer-header { background: #10B981; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.1); }
         .drawer-body { height: 380px; overflow-y: auto; padding: 15px; background: #0F172A; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
         
-        /* FIX GELEMBUNG CHAT */
+        /* GELEMBUNG CHAT */
         .bubble-admin { background: #10B981; color: white; padding: 10px 14px; border-radius: 18px 18px 18px 4px; font-size: 13px; align-self: flex-start; max-width: 80%; line-height: 1.4; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .bubble-user { background: #334155; color: white; padding: 10px 14px; border-radius: 18px 18px 4px 18px; font-size: 13px; align-self: flex-end; max-width: 80%; line-height: 1.4; border: 1px solid #475569; }
         
@@ -60,7 +60,7 @@
         .custom-modal-content { background-color: #1E293B; border: 1px solid #334155; border-radius: 2.5rem; width: 100%; max-width: 360px; padding: 30px 24px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: modalSwoosh 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes modalSwoosh { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-icon-wrapper { margin-bottom: 16px; display: flex; justify-content: center; }
-        .modal-title { color: #ffffff; font-size: 1.4rem; font-weight: 800; margin: 0 0 8px 0; font-style: italic; text-transform: uppercase; tracking-tighter: true; }
+        .modal-title { color: #ffffff; font-size: 1.4rem; font-weight: 800; margin: 0 0 8px 0; font-style: italic; text-transform: uppercase; }
         .modal-message { color: #94A3B8; font-size: 0.9rem; margin: 0 0 20px 0; line-height: 1.5; }
         .modal-tagihan-box { background-color: #0F172A; border: 1px solid #334155; border-radius: 1.5rem; padding: 14px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
         .tagihan-label { color: #94A3B8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
@@ -300,7 +300,7 @@
             if (!isOpen) { document.getElementById('dot-notif').classList.add('hidden'); loadChatHistory(); }
         }
 
-        // --- ORDER & STATUS ---
+        // --- MENU & CHECKOUT ---
         async function loadMenu() {
             const { data } = await sb.from('menu_makanan').select('*').eq('stok_tersedia', true);
             const container = document.getElementById('daftar-menu');
@@ -321,7 +321,6 @@
         function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
         function salinNomor() { const no = document.getElementById('no-dana').innerText; navigator.clipboard.writeText(no).then(() => { showToast("✅ NOMOR DANA DISALIN!"); }); }
         
-        // --- JAVASCRIPT LOGIC UNTUK CUSTOM MODAL NOTIFIKASI ---
         function showSuccessModal(totalTagihan) {
             document.getElementById('modalTotalTagihan').innerText = totalTagihan;
             document.getElementById('successModal').style.display = 'flex';
@@ -351,7 +350,7 @@
             } 
         }
 
-        // --- PENYEMPURNAAN REVISI KODE YANG TERPOTONG ---
+        // --- MODERN TRACKING SYSTEM (FIXED POSITION) ---
         function bukaLacakModern() { 
             document.getElementById('modal-lacak').classList.remove('hidden'); 
             document.getElementById('lacak-error-msg').classList.add('hidden');
@@ -386,7 +385,6 @@
             
             updateKordinatMotor(statusAwal);
 
-            // Real-time listener dari Supabase untuk update pergerakan ojek otomatis
             sb.channel('lacak-orderan')
             .on('postgres_changes', { event: 'UPDATE', filter: `id=eq.${orderId}`, schema: 'public', table: 'pesanan_ojek' }, payload => {
                 const newStatus = payload.new.status;
@@ -405,28 +403,31 @@
             if (status === 'pending') {
                 txtStatus.innerText = "MENUNGGU DRIVER...";
                 txtMsg.innerText = `"Mohon tunggu ya, pesananmu sedang diproses warung!"`;
+                // Pas di posisi WARUNG (Left: 10%, Top: 80%)
                 motor.style.left = "10%";
                 motor.style.top = "80%";
             } else if (status === 'proses' || status === 'driver_membeli') {
                 txtStatus.innerText = "DRIVER SEDANG MEMBELI...";
                 txtMsg.innerText = `"Driver sudah di warung, makananmu sedang dibuat!"`;
+                // Sedikit maju dari warung
                 motor.style.left = "35%";
-                motor.style.top = "70%";
+                motor.style.top = "75%";
             } else if (status === 'antar' || status === 'driver_menuju_lokasi') {
                 txtStatus.innerText = "DRIVER MENJU LOKASI...";
                 txtMsg.innerText = `"Ojek gas pol membawa makanan hangat menuju rumahmu!"`;
+                // Pertengahan jalur menuju rumah
                 motor.style.left = "65%";
-                motor.style.top = "50%";
-            } else if (status === 'sampai') {
+                motor.style.top = "45%";
+            } else if (status === 'sampai' || status === 'selesai') {
                 txtStatus.innerText = "DRIVER SUDAH SAMPAI!";
                 txtMsg.innerText = `"Driver sudah didepan rumah, silahkan cek keluar lur!"`;
+                // Pas menimpa posisi RUMAH (Left: 90%, Top: 20%)
                 motor.style.left = "90%";
                 motor.style.top = "20%";
-                motor.className = ""; 
+                motor.className = ""; // Berhenti bergetar/miring saat sampai
             }
         }
 
-        // Jalankan inisialisasi awal saat web dimuat
         window.onload = function() {
             setSapaan();
             loadMenu();
