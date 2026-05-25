@@ -92,7 +92,7 @@
                     <div class="point rumah-icon">🏠<p class="text-[7px] font-bold text-gray-500 uppercase">Rumah</p></div>
                     <div id="motor"><span class="text-5xl" id="motor-emoji">🛵</span></div>
                 </div>
-                <div class="bg-[#0F172A] p-4 rounded-3xl mb-6 border border-white/5">
+                <div class="bg-[#0F172A] p-4 rounded-3xl mb-6 border border border-white/5">
                     <p id="teks-terima-kasih" class="text-[10px] text-gray-400 italic text-center">"Mohon tunggu ya, driver sedang berjuang menjemput pesananmu!"</p>
                 </div>
                 <button onclick="window.location.reload()" class="w-full py-4 bg-[#0F172A] text-white rounded-2xl font-black text-[10px] uppercase shadow-xl">Kembali ke Menu</button>
@@ -182,6 +182,19 @@
         
         <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl text-center">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase tracking-widest text-left">Beranda</span></button>
         <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative"><div id="dot-notif" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1E293B] animate-pulse"></div><span class="text-xl group-active:scale-75 transition">💬</span><span class="text-[9px] font-black text-slate-500 uppercase">Chat</span></button>
+    </div>
+
+    <div id="promo-download" class="max-w-md mx-auto px-5 pt-4">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 rounded-3xl shadow-xl flex items-center justify-between border border-white/10 animasi-up">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-xl">📱</div>
+                <div class="text-left">
+                    <p class="text-[11px] font-black uppercase text-white">Yuk Download Aplikasi!</p>
+                    <p class="text-[9px] text-white/70 font-bold">Dapatkan pengalaman pesan lebih cepat & hemat.</p>
+                </div>
+            </div>
+            <button class="bg-white text-blue-700 px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-md">Instal</button>
+        </div>
     </div>
 
     <script>
@@ -311,14 +324,21 @@
         function tutupModal() { document.getElementById('modal-checkout').classList.add('hidden'); }
         function bukaModal() { if(Object.keys(keranjang).length === 0) return showToast("⚠️ Keranjang kosong Bos!"); document.getElementById('modal-checkout').classList.remove('hidden'); if(document.getElementById('cartDrawer').style.display === 'block') toggleCart(); }
         function tutupQRIS() { document.getElementById('modal-qris').classList.add('hidden'); }
-        function bukaQRIS() { document.getElementById('modal-qris').classList.remove('hidden'); }
+        function bukaQRIS() { document.getElementById('modal-qris').remove('hidden'); }
         function salinNomor() { const no = document.getElementById('no-dana').innerText; navigator.clipboard.writeText(no).then(() => { showToast("✅ NOMOR DANA DISALIN!"); }); }
+        
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
             if (!n || !a) return showToast("⚠️ Wajib isi Nama & Alamat!"); 
             let tm = 0, lm = []; for (let k in keranjang) { tm += keranjang[k].harga * keranjang[k].qty; lm.push(`${keranjang[k].nama} (x${keranjang[k].qty})`); } 
             let totalFix = tm + ongkirSekarang;
             const displayMetode = (metodeBayar === 'QRIS') ? "QRIS / TRANSFER" : "COD (TUNAI)";
+            
+            // Tampilkan alert konfirmasi sukses COD khusus jika user memilih COD
+            if(metodeBayar === 'COD') {
+                alert(`Pesanan kamu berhasil!\n\nSilakan bayar tunai di tempat saat driver tiba.\nTotal Tagihan: Rp ${totalFix.toLocaleString('id-ID')}`);
+            }
+
             const { data } = await sb.from('pesanan_ojek').insert([{ nama_pembeli: n, alamat_kirim: a + " [" + lm.join(", ") + "]", no_wa: w, status: 'pending', total_harga: totalFix, metode_bayar: metodeBayar }]).select(); 
             if (data) { 
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
@@ -360,29 +380,13 @@
                 document.getElementById('teks-terima-kasih').innerText = "Mantap! Pesanan sampai! Jangan lupa bintang 5!"; m.style.left = '90%'; m.style.top = '20px';
             } else {
                 papan.style.backgroundColor = "#1E293B";
-                if(stat === 'pending') { t.innerText = "DRIVER SEDANG MEMBELI"; m.style.left = '10%'; m.style.top = '100px'; }
-                if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
-                if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
+                if(stat === 'pending') { t.innerText = "DRIVER SEDANG MEMBELI"; m.style.left = '10%'; m.style.top = '100px'; document.getElementById('teks-terima-kasih').innerText = "Mohon tunggu ya, driver sedang berjuang menjemput pesananmu!"; }
+                if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; document.getElementById('teks-terima-kasih').innerText = "Hidanganmu sedang dimasak dengan higienis & sepenuh hati!"; }
+                if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); document.getElementById('teks-terima-kasih').innerText = "Driver meluncur ke arahmu! Jika memilih metode COD, siapkan uang pas ya!"; }
             }
         }
 
         setSapaan(); loadMenu(); pollTelegram(); updateCartUI();
     </script>
 </body>
-<div id="promo-download" class="max-w-md mx-auto px-5 pt-4">
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 rounded-3xl shadow-xl flex items-center justify-between border border-white/10 animasi-up">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
-                <i class="fa-solid fa-mobile-screen-button text-white text-xl"></i>
-            </div>
-            <div>
-                <h4 class="text-white font-black text-[11px] uppercase italic">Grab Ndeso versi apklikasi</h4>
-                <p class="text-white/70 text-[9px]">Lebih ringan, hemat kuota & sat-set!</p>
-            </div>
-        </div>
-        <a href="/download.html" class="bg-white text-blue-700 px-4 py-2 rounded-xl font-black text-[10px] uppercase shadow-lg active:scale-95 transition">
-            INSTAL
-        </a>
-    </div>
-</div>
 </html>
