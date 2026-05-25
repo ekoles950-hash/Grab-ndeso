@@ -26,11 +26,11 @@
         #slider { display: flex; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
         .slide-img { width: 100%; flex-shrink: 0; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.7; }
 
-        /* SHOPEE PATH SYSTEM */
+        /* SHOPEE PATH SYSTEM (WARUNG KIRI -> RUMAH KANAN) */
         .shopee-path-container { position: relative; width: 100%; height: 160px; background: rgba(255,255,255,0.02); border-radius: 30px; margin: 30px 0; overflow: visible; }
         .svg-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .route-line { fill: none; stroke: #334155; stroke-width: 3; stroke-dasharray: 8; stroke-linecap: round; }
-        .point point { position: absolute; z-index: 5; transform: translate(-50%, -50%); text-align: center; }
+        .point { position: absolute; z-index: 5; transform: translate(-50%, -50%); text-align: center; }
         .warung-icon { left: 10%; top: 80%; font-size: 30px; }
         .rumah-icon { right: 10%; top: 20%; font-size: 35px; }
         #motor { position: absolute; z-index: 10; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); transform: translate(-50%, -50%); }
@@ -60,7 +60,7 @@
         .custom-modal-content { background-color: #1E293B; border: 1px solid #334155; border-radius: 2.5rem; width: 100%; max-width: 360px; padding: 30px 24px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: modalSwoosh 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes modalSwoosh { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-icon-wrapper { margin-bottom: 16px; display: flex; justify-content: center; }
-        .modal-title { color: #ffffff; font-size: 1.4rem; font-weight: 800; margin: 0 0 8px 0; italic: true; text-transform: uppercase; tracking-tighter: true; }
+        .modal-title { color: #ffffff; font-size: 1.4rem; font-weight: 800; margin: 0 0 8px 0; font-style: italic; text-transform: uppercase; tracking-tighter: true; }
         .modal-message { color: #94A3B8; font-size: 0.9rem; margin: 0 0 20px 0; line-height: 1.5; }
         .modal-tagihan-box { background-color: #0F172A; border: 1px solid #334155; border-radius: 1.5rem; padding: 14px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
         .tagihan-label { color: #94A3B8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
@@ -200,9 +200,7 @@
 
     <div class="fixed bottom-0 left-0 right-0 p-3 flex justify-around items-center z-[100] nav-bawah max-w-md mx-auto rounded-t-[2.5rem]">
         <button onclick="bukaLacakModern()" class="flex flex-col items-center gap-1 group text-left"><span class="text-xl group-active:scale-75 transition">🔍</span><span class="text-[9px] font-black text-slate-500 uppercase">Lacak</span></button>
-        
         <button onclick="toggleCart()" class="flex flex-col items-center gap-1 group relative"><span class="text-xl group-active:scale-75 transition">🛒</span><span id="cart-badge" class="hidden">0</span><span class="text-[9px] font-black text-slate-500 uppercase">Keranjang</span></button>
-        
         <button onclick="location.reload()" class="flex flex-col items-center gap-1 group"><div class="bg-green-600 p-3.5 rounded-2xl shadow-xl -mt-10 border-4 border-[#0F172A]"><span class="text-2xl text-center">🏠</span></div><span class="text-[9px] font-black text-green-500 uppercase tracking-widest text-left">Beranda</span></button>
         <button onclick="toggleChat()" class="flex flex-col items-center gap-1 group relative"><div id="dot-notif" class="hidden absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#1E293B] animate-pulse"></div><span class="text-xl group-active:scale-75 transition">💬</span><span class="text-[9px] font-black text-slate-500 uppercase">Chat</span></button>
     </div>
@@ -332,7 +330,6 @@
             document.getElementById('successModal').style.display = 'none';
         }
 
-        // REVISI LOGIKA PEMBERITAHUAN COD DENGAN CUSTOM MODAL MODERN
         async function kirimOrderan() { 
             const n = document.getElementById('f-nama').value, a = document.getElementById('f-alamat').value, w = document.getElementById('f-wa').value; 
             if (!n || !a) return showToast("⚠️ Wajib isi Nama & Alamat!"); 
@@ -345,7 +342,6 @@
                 const pt = `🚨 *ORDER BARU* 🚨\n👤 Nama: ${n}\n📍 Alamat: ${a}\n🍱 Pesanan: ${lm.join(", ")}\n💰 Total: Rp ${totalFix.toLocaleString('id-ID')}\n💳 Metode: ${displayMetode}\n🆔 Ref: ${mySessionId}`; 
                 fetch(`https://api.telegram.org/bot${TOKEN_ORDER}/sendMessage?chat_id=${TELE_CHATID}&text=${encodeURIComponent(pt)}&parse_mode=Markdown`); 
                 
-                // MENGGANTI ALERT LAMA MENJADI CUSTOM MODAL MODERN KHUSUS UNTUK METODE COD
                 if(metodeBayar === 'COD') {
                     showSuccessModal(`Rp ${totalFix.toLocaleString('id-ID')}`);
                 }
@@ -355,59 +351,88 @@
             } 
         }
 
+        // --- PENYEMPURNAAN REVISI KODE YANG TERPOTONG ---
+        function bukaLacakModern() { 
+            document.getElementById('modal-lacak').classList.remove('hidden'); 
+            document.getElementById('lacak-error-msg').classList.add('hidden');
+        }
+
+        function tutupLacakModern() { 
+            document.getElementById('modal-lacak').classList.add('hidden'); 
+        }
+
         async function prosesLacakModern() {
             const n = document.getElementById('input-lacak-nama').value; if(!n) return;
             const { data } = await sb.from('pesanan_ojek').select('*').ilike('nama_pembeli', `%${n}%`).order('created_at', {ascending: false}).limit(1);
             if (data && data.length > 0) {
-                if(data[0].status === 'selesai') { document.getElementById('lacak-error-msg').innerText = "Pesanan selesai!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); return; }
-                tutupLacakModern(); tampilkanHalamanTracking(data[0].id, data[0].status); 
-            } else { document.getElementById('lacak-error-msg').innerText = "Gak ketemu Bos!"; document.getElementById('lacak-error-msg').classList.remove('hidden'); }
-        }
-        function tutupLacakModern() { document.getElementById('modal-lacak').classList.add('hidden'); }
-        function bukaLacakModern() { document.getElementById('modal-lacak').classList.remove('hidden'); }
-
-        function pakaiVoucher() {
-            const inp = document.getElementById('f-voucher').value.toUpperCase();
-            if(LIST_VOUCHER[inp] && LIST_VOUCHER[inp].kuota > 0) {
-                ongkirSekarang = 5000 - LIST_VOUCHER[inp].diskonOngkir; document.getElementById('v-msg').innerText = "✅ VOUCHER AKTIF!"; document.getElementById('v-msg').style.color = "#10B981"; cekAlamat();
-            } else { ongkirSekarang = 5000; document.getElementById('v-msg').innerText = "❌ KODE SALAH / HABIS!"; document.getElementById('v-msg').style.color = "#EF4444"; cekAlamat(); }
-        }
-
-        function tampilkanHalamanTracking(id, statusAwal) {
-            document.getElementById('halaman-lacak-motor').classList.remove('hidden'); document.getElementById('sapaan-kontainer').classList.add('hidden');
-            document.getElementById('daftar-menu').classList.add('hidden'); document.getElementById('slider-container').classList.add('hidden');
-            geserMotor(statusAwal);
-            sb.channel('track-' + id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pesanan_ojek', filter: 'id=eq.'+id }, (p) => { geserMotor(p.new.status); }).subscribe();
-        }
-
-        function geserMotor(stat) {
-            const m = document.getElementById('motor'), t = document.getElementById('txt-status'), papan = document.getElementById('papan-lacak'); if(!m) return; m.classList.remove('ngebut-miring');
-            if(stat === 'selesai') {
-                papan.style.backgroundColor = "#064E3B"; papan.style.borderColor = "#10B981"; t.innerText = "PESANAN SELESAI"; 
-                document.getElementById('teks-terima-kasih').innerText = "Mantap! Pesanan sampai! Jangan lupa bintang 5!"; m.style.left = '90%'; m.style.top = '20px';
-            } else {
-                papan.style.backgroundColor = "#1E293B";
-                if(stat === 'pending') { t.innerText = "DRIVER SEDANG MEMBELI"; m.style.left = '10%'; m.style.top = '100px'; }
-                if(stat === 'proses') { t.innerText = "KOKI SEDANG MEMASAK"; m.style.left = '10%'; m.style.top = '100px'; }
-                if(stat === 'dikirim') { t.innerText = "DRIVER MENUJU LOKASI"; m.style.left = '45%'; m.style.top = '70px'; m.classList.add('ngebut-miring'); }
+                if(data[0].status === 'selesai') { 
+                    document.getElementById('lacak-error-msg').innerText = "Pesanan selesai!"; 
+                    document.getElementById('lacak-error-msg').classList.remove('hidden'); 
+                    return; 
+                }
+                tutupLacakModern(); 
+                tampilkanHalamanTracking(data[0].id, data[0].status); 
+            } else { 
+                document.getElementById('lacak-error-msg').innerText = "Gak ketemu Bos!"; 
+                document.getElementById('lacak-error-msg').classList.remove('hidden'); 
             }
         }
 
-        setSapaan(); loadMenu(); pollTelegram(); updateCartUI();
+        function tampilkanHalamanTracking(orderId, statusAwal) {
+            document.getElementById('sapaan-kontainer').classList.add('hidden');
+            document.getElementById('slider-container').classList.add('hidden');
+            document.getElementById('daftar-menu').classList.add('hidden');
+            document.getElementById('halaman-lacak-motor').classList.remove('hidden');
+            
+            updateKordinatMotor(statusAwal);
+
+            // Real-time listener dari Supabase untuk update pergerakan ojek otomatis
+            sb.channel('lacak-orderan')
+            .on('postgres_changes', { event: 'UPDATE', filter: `id=eq.${orderId}`, schema: 'public', table: 'pesanan_ojek' }, payload => {
+                const newStatus = payload.new.status;
+                updateKordinatMotor(newStatus);
+            }).subscribe();
+        }
+
+        function updateKordinatMotor(status) {
+            const motor = document.getElementById('motor');
+            const txtStatus = document.getElementById('txt-status');
+            const txtMsg = document.getElementById('teks-terima-kasih');
+            
+            if(!motor) return;
+            motor.className = "ngebut-miring";
+
+            if (status === 'pending') {
+                txtStatus.innerText = "MENUNGGU DRIVER...";
+                txtMsg.innerText = `"Mohon tunggu ya, pesananmu sedang diproses warung!"`;
+                motor.style.left = "10%";
+                motor.style.top = "80%";
+            } else if (status === 'proses' || status === 'driver_membeli') {
+                txtStatus.innerText = "DRIVER SEDANG MEMBELI...";
+                txtMsg.innerText = `"Driver sudah di warung, makananmu sedang dibuat!"`;
+                motor.style.left = "35%";
+                motor.style.top = "70%";
+            } else if (status === 'antar' || status === 'driver_menuju_lokasi') {
+                txtStatus.innerText = "DRIVER MENJU LOKASI...";
+                txtMsg.innerText = `"Ojek gas pol membawa makanan hangat menuju rumahmu!"`;
+                motor.style.left = "65%";
+                motor.style.top = "50%";
+            } else if (status === 'sampai') {
+                txtStatus.innerText = "DRIVER SUDAH SAMPAI!";
+                txtMsg.innerText = `"Driver sudah didepan rumah, silahkan cek keluar lur!"`;
+                motor.style.left = "90%";
+                motor.style.top = "20%";
+                motor.className = ""; 
+            }
+        }
+
+        // Jalankan inisialisasi awal saat web dimuat
+        window.onload = function() {
+            setSapaan();
+            loadMenu();
+            updateCartUI();
+            pollTelegram();
+        }
     </script>
 </body>
-<div id="promo-download" class="max-w-md mx-auto px-5 pt-4">
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 rounded-3xl shadow-xl flex items-center justify-between border border-white/10 animasi-up">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
-                <i class="fa-solid fa-mobile-screen-button text-white text-xl"></i>
-            </div>
-            <div>
-                <h4 class="text-white font-black text-[11px] uppercase italic">Grab Ndeso versi aplikasi</h4>
-                <p class="text-white/70 text-[9px]">Lebih ringan, hemat kuota & sat-set!</p>
-            </div>
-        </div>
-        <a href="/download.html" class="bg-white text-blue-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider">Download</a>
-    </div>
-</div>
 </html>
